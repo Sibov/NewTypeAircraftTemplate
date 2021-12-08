@@ -1,0 +1,18 @@
+{
+  "name": "F117 Nighthawk Mod",
+  "description": "Adds the F-117 nighthawk to vtol vr! \r\nIMPORTANT:\r\n-For the mod to work in multiplayer, be sure to load the nighthawk mod AFTER loading the multiplayer mod",
+  "dll_file": "CustomAircraftTemplate.dll",
+  "last_edit": 637638603128120716,
+  "pub_id": "",
+  "json_version": "",
+  "version": "1.0.3",
+  "tagline": "Stealthy boi",
+  "repository": "https://github.com/LSantos2003/VTOL-VR-Custom-Aircraft-Template.git",
+  "is_public": true,
+  "unlisted": false,
+  "preview_image": "preview.png",
+  "web_preview_image": "web_preview.png",
+  "dependencies": [],
+  "mod_dependencies": null,
+  "ContentType": 0
+}
