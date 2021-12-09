@@ -132,6 +132,7 @@ namespace CustomAircraftTemplate
 
                 Debug.Log("OPSStartPatch 00");
                 GameObject f26EjectorSeat = AircraftAPI.GetChildWithName(gameObject2, "EjectorSeat", false);
+                f26EjectorSeat.transform.localScale = new Vector3(0.92f, 0.92f, 0.92f);
                 f26EjectorSeat.transform.SetParent(Main.aircraftMirage.transform);
 
                 Vector3 PlaneLocation = gameObject2.transform.position;
