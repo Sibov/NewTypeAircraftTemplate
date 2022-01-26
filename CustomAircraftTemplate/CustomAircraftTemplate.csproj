@@ -31,11 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CustomClasses\DashVertGauge.cs" />
+    <Compile Include="MirageSpecific.cs" />
     <Compile Include="Multiplayer\AiSetup.cs" />
     <Compile Include="HelperScripts\AircraftAPI.cs" />
     <Compile Include="AircraftInfo.cs" />
     <Compile Include="AircraftSetup.cs" />
-    <Compile Include="CustomClasses\CustomLandingGear.cs" />
     <Compile Include="HelperScripts\FileLoader.cs" />
     <Compile Include="Multiplayer\MpPlugin.cs" />
     <Compile Include="Patches\CheckScripts.cs" />

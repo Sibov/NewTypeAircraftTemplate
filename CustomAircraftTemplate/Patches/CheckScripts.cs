@@ -123,5 +123,25 @@ namespace CustomAircraftTemplate
             return true;
         }
     }
+
+    [HarmonyPatch(typeof(DashAttitudeIndicator), "Update")]
+    public class DashAttPatch
+    {
+        public static bool Prefix(DashAttitudeIndicator __instance)
+        {
+            Debug.unityLogger.logEnabled = Main.logging;
+            Quaternion b = Quaternion.Euler(0f, 0f, -__instance.flightInfo.roll);
+            Quaternion b2 = Quaternion.Euler(__instance.flightInfo.pitch, 0f, 0f);
+            Quaternion b3 = Quaternion.Euler(0f, __instance.flightInfo.heading, 0f);
+
+            __instance.rollTf.localRotation = Quaternion.Slerp(__instance.rollTf.localRotation, b, __instance.lerpRate * Time.deltaTime);
+            __instance.pitchTf.localRotation = Quaternion.Slerp(__instance.pitchTf.localRotation, b2, __instance.lerpRate * Time.deltaTime);
+          //  __instance.rollTf.localRotation = Quaternion.Slerp(__instance.rollTf.localRotation, b3, __instance.lerpRate * Time.deltaTime);
+
+            return false;
+        }
+
+        }
     
+
 }

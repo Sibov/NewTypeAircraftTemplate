@@ -19,6 +19,7 @@ namespace CustomAircraftTemplate
 
         //Stores a prefab of the aircraft in order to spawn it in whenever you want
         public static GameObject aircraftPrefab;
+        public static GameObject aircraftLoadoutConfiguratorPrefab;
         public static GameObject debugTools;
         public static GameObject aircraftMirage;
         public static int i=0;
@@ -37,7 +38,9 @@ namespace CustomAircraftTemplate
             Debug.Log("ML3");
 
             pathToBundle = Path.Combine(instance.ModFolder, AircraftInfo.AircraftAssetbundleName);
-            aircraftPrefab = FileLoader.GetAssetBundleAsGameObject(pathToBundle, AircraftInfo.AircraftPrefabName);
+            AssetBundle bundleLoad = FileLoader.GetAssetBundleAsGameObject(pathToBundle, AircraftInfo.AircraftAssetbundleName);
+            aircraftPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftPrefabName);
+            aircraftLoadoutConfiguratorPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftLoadoutConfigurator);
             Debug.Log("ML1");
             HarmonyInstance harmonyInstance = HarmonyInstance.Create(AircraftInfo.HarmonyId);
             harmonyInstance.PatchAll();
@@ -111,10 +114,11 @@ namespace CustomAircraftTemplate
         private void SceneLoaded(VTOLScenes scene)
         {
             //If you want something to happen in only one (or more) scenes, this is where you define it.
-
+            Debug.unityLogger.logEnabled = Main.logging;
             //For example, lets say you're making a mod which only does something in the ready room and the loading scene. This is how your code could look:
-             switch (scene)
+            switch (scene)
             {
+                
                 case VTOLScenes.VehicleConfiguration:
                     Debug.Log("Reload the configurator");
                     StartCoroutine(InitWaiter());
@@ -133,7 +137,8 @@ namespace CustomAircraftTemplate
 
         private IEnumerator InitWaiter()
         {
-            Debug.Log("InitWaiter Started");
+        Debug.unityLogger.logEnabled = Main.logging;
+        Debug.Log("InitWaiter Started");
             yield return new WaitForSeconds(3f);
            // TriggerLCRefresh();
             yield break;

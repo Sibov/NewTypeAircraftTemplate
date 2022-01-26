@@ -149,7 +149,7 @@ namespace CustomAircraftTemplate
         public static GameObject GetChildWithName(GameObject obj, string name, bool check)
         {
 
-
+            Debug.unityLogger.logEnabled = Main.logging;
             Transform[] children = obj.GetComponentsInChildren<Transform>(true);
             foreach (Transform child in children)
             {
@@ -167,6 +167,7 @@ namespace CustomAircraftTemplate
 
         public static void TestRadarDetection()
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             Radar radar = Main.aircraftMirage.GetComponent<Radar>();
             Debug.Log("Radar Count = " + radar.detectedUnits.Count);
         }
@@ -174,6 +175,7 @@ namespace CustomAircraftTemplate
         //Loads a png into the game
         public static IEnumerator CreatePlaneMenuItem()
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(Path.Combine(Main.instance.ModFolder, AircraftInfo.PreviewPngFileName));
             yield return www.SendWebRequest();
 
@@ -219,6 +221,10 @@ namespace CustomAircraftTemplate
 
 
 
-
+       
     }
+
+
+
+
 }

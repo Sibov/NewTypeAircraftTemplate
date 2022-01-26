@@ -11,27 +11,183 @@ using UnityEngine.UI;
 
 namespace CustomAircraftTemplate
 {
+    
+    [HarmonyPatch(typeof(LoadoutConfigurator), "UpdateNodes")]
+    public class UpdateNodesPatch
+    {
+        private static int aircraftNodeLength;
+
+        public static bool Prefix(LoadoutConfigurator __instance)
+        {
+            __instance.wm.gameObject.GetComponent<MassUpdater>().UpdateMassObjects();
+            Debug.Log("HpNodes Length = " + __instance.hpNodes.Length);
+            aircraftNodeLength = Main.aircraftMirage.GetComponent<WeaponManager>().hardpointTransforms.Length;
+            Debug.Log("aircraft HpNodes Length = " + aircraftNodeLength);
+
+            for (int i = 0; i< aircraftNodeLength; i++)
+            {
+                Debug.Log("HpNodes Count: " + i);
+                __instance.hpNodes[i].configurator = __instance;
+                __instance.hpNodes[i].UpdateInfo(__instance.equips[i], i);
+            }
+            __instance.fullInfo.UpdateUI();
+            return false;
+        }
+    }
+
+
+  
 
     [HarmonyPatch(typeof(VehicleConfigSceneSetup), "Start")]
     public class VehicleConfigStartPatch
     {
+        private static GameObject f26LC;
+
+        public static bool Prefix(VehicleConfigSceneSetup __instance)
+        {
+            Debug.unityLogger.logEnabled = Main.logging;
+            Traverse traverse = Traverse.Create(__instance);
+            if (PilotSaveManager.currentVehicle == null)
+            {
+                LoadingSceneController.LoadSceneImmediate("ReadyRoom");
+                return true;
+            }
+            Debug.Log("VCS1.0");
+            PilotSaveManager.LoadPilotsFromFile();
+            Debug.Log("VCS1.1");
+            PlayerVehicle currentVehicle = PilotSaveManager.currentVehicle;
+            Debug.Log("VCS1.1.1");
+            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftPrefab);
+            Main.aircraftMirage = gameObject;
+            Debug.Log("VCS1.1.2");
+            gameObject.transform.position = __instance.loadoutSpawnTransform.TransformPoint(currentVehicle.loadoutSpawnOffset);
+            Debug.Log("VCS1.1.3");
+            gameObject.transform.rotation = __instance.loadoutSpawnTransform.rotation;
+            Debug.Log("VCS1.2");
+            PlayerVehicleSetup component = gameObject.GetComponent<PlayerVehicleSetup>();
+            component.SetToConfigurationState();
+            WheelsController component2 = gameObject.GetComponent<WheelsController>();
+            Debug.Log("VCS1.3");
+            if (component2)
+            {
+                component2.SetBrakeLock(1);
+            }
+            Debug.Log("VCS1.4");
+            gameObject.SetActive(true);
+            GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftLoadoutConfiguratorPrefab);
+            
+            gameObject2.transform.position = __instance.loadoutSpawnTransform.position;
+            gameObject2.transform.rotation = __instance.loadoutSpawnTransform.rotation;
+            gameObject2.SetActive(true);
+            Debug.Log("VCS1.5");
+            traverse.Field("config").SetValue(gameObject2.GetComponent<LoadoutConfigurator>());
+            traverse.Field("config").Field("wm").SetValue(gameObject.GetComponent<WeaponManager>());
+            LoadoutConfigurator LC1 = gameObject2.GetComponent<LoadoutConfigurator>();
+            Debug.Log("VCS1.6");
+            component.StartUsingConfigurator(LC1);
+            CampaignSave campaignSave = PilotSaveManager.current.GetVehicleSave(PilotSaveManager.currentVehicle.vehicleName).GetCampaignSave(PilotSaveManager.currentCampaign.campaignID);
+            Debug.Log("VCS1.7");
+            List<string> allAvailableEquipStrings = new List<string>();
+            if (PilotSaveManager.currentCampaign.isCustomScenarios && PilotSaveManager.currentCampaign.isStandaloneScenarios)
+            {
+                Debug.Log("VCS1.8");
+                List<string> allowedEquips = VTResources.GetScenario(PilotSaveManager.currentScenario.scenarioID, PilotSaveManager.currentCampaign).allowedEquips;
+                foreach (string item in allowedEquips)
+                {
+                    allAvailableEquipStrings.Add(item);
+                }
+                if (campaignSave.currentWeapons != null)
+                {
+                    for (int i = 0; i < campaignSave.currentWeapons.Length; i++)
+                    {
+                        if (!allowedEquips.Contains(campaignSave.currentWeapons[i]))
+                        {
+                            campaignSave.currentWeapons[i] = string.Empty;
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                Debug.Log("VCS1.9");
+                foreach (string item2 in campaignSave.availableWeapons)
+                {
+                    allAvailableEquipStrings.Add(item2);
+                }
+            }
+            Debug.Log("VCS1.10");
+            traverse.Field("config").Field("availableEquipStrings").SetValue(allAvailableEquipStrings);
+            Debug.Log("VCS1.10.1");
+            PilotSaveManager.currentScenario.initialSpending = 0f;
+            Debug.Log("VCS1.10.1" + " : " + LC1.name + ": " + campaignSave.campaignName);
+            LC1.Initialize(campaignSave, false);
+            Debug.Log("VCS1.11");
+            if (PilotSaveManager.currentScenario.forcedEquips != null)
+            {
+                Debug.Log("VCS1.12");
+                foreach (CampaignScenario.ForcedEquip forcedEquip in PilotSaveManager.currentScenario.forcedEquips)
+                {
+                    LC1.AttachImmediate(forcedEquip.weaponName, forcedEquip.hardpointIdx);
+                    LC1.lockedHardpoints.Add(forcedEquip.hardpointIdx);
+                }
+            }
+            if (campaignSave.currentWeapons != null)
+            {
+                for (int k = 0; k < campaignSave.currentWeapons.Length; k++)
+                {
+                    if (!LC1.lockedHardpoints.Contains(k) && !string.IsNullOrEmpty(campaignSave.currentWeapons[k]))
+                    {
+                        LC1.AttachImmediate(campaignSave.currentWeapons[k], k);
+                    }
+                }
+            }
+            Debug.Log("VCS1.13");
+            ScreenFader.FadeIn(1f);
+           return false;
+        }
+
         public static void Postfix(VehicleConfigSceneSetup __instance)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
+            GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+            foreach (GameObject go in allObjects)
+            {
+                if (go.activeInHierarchy)
+                    Debug.Log(go + " is an active object");
+            }
+
+            f26LC = GameObject.Find("FA26-LoadoutConfigurator(Clone)");
+            Debug.Log("foundlc: " + f26LC);
+            UnityEngine.Object.Destroy(f26LC);
             Traverse traverse = Traverse.Create(__instance);
             Debug.Log("VCS patch");
-            Main.aircraftMirage = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftPrefab);
-            object value = traverse.Field("config").GetValue();
-            Traverse traverse2 = Traverse.Create(value);
-            traverse2.Field("wm").SetValue(Main.aircraftMirage.GetComponent<WeaponManager>());
 
+            try
+            {
+                Debug.Log("VCS patch a");
+
+                WeaponManager Comp = Main.aircraftMirage.GetComponent<WeaponManager>();
+            }
+            catch (NullReferenceException ex)
+            {
+                Debug.Log("VCS patch b");
+
+                Main.aircraftMirage = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftPrefab);
+                traverse.Field("config").Field("wm").SetValue(Main.aircraftMirage.GetComponent<WeaponManager>());
+                
+            }
+            Debug.Log("VCS patch c"); 
         }
     }
-
+    
     [HarmonyPatch(typeof(LoadoutConfigurator), "Initialize")]
     public class LoadoutConfigStartPatch
     {
+
         public static bool Prefix(LoadoutConfigurator __instance)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             bool flag = !AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B;
             bool result;
             if (flag)
@@ -40,12 +196,8 @@ namespace CustomAircraftTemplate
             }
             else
             {
-                Transform transform = AircraftAPI.GetChildWithName(__instance.gameObject, "vtImage", false).transform;
-                for (int i = 10; i <= 15; i++)
-                {
-                    transform.Find("HardpointInfo (" + i + ")").gameObject.SetActive(false);
-                    Debug.Log("Hardpoint cleared: " + i);
-                }
+                Transform transform = AircraftAPI.GetChildWithName(__instance.gameObject, "vtImage", true).transform;
+                
                 for (int j = 0; j <= 9; j++)
                 {
                     __instance.lockedHardpoints.Remove(j);
@@ -57,6 +209,7 @@ namespace CustomAircraftTemplate
 
         public static void Postfix(LoadoutConfigurator __instance)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             bool flag = !AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B;
             if (!flag)
             {
@@ -86,9 +239,12 @@ namespace CustomAircraftTemplate
                 Debug.Log("fuel: " + __instance.fuel);
                 Debug.Log("wm: " + __instance.wm);
                 Debug.Log("wmhp: " + __instance.wm.hardpointTransforms.Length);
+                int transformsSize = __instance.wm.hardpointTransforms.Length;
                 Transform[] hardpointTransforms = __instance.wm.hardpointTransforms;
                 Traverse traverse2 = Traverse.Create(__instance);
                 traverse2.Field("hpTransforms").SetValue(hardpointTransforms);
+                traverse2.Field("hpTransforms").Field("Size").SetValue(transformsSize);
+
                 __instance.CalculateTotalThrust();
                 Vector3 position = __instance.transform.position;
                 Quaternion rotation = __instance.transform.rotation;
@@ -123,6 +279,7 @@ namespace CustomAircraftTemplate
         //Coroutine that detaches all the weapons
         public static IEnumerator DetachRoutine(LoadoutConfigurator config)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             yield return new WaitForSeconds(1);
 
             Debug.Log("Hardpoint count: " + config.wm.hardpointTransforms.Length);
@@ -141,7 +298,7 @@ namespace CustomAircraftTemplate
         public static bool Prefix(LoadoutConfigurator __instance, HPEquippable equip)
         {
 
-
+            Debug.unityLogger.logEnabled = Main.logging;
             if (!AircraftInfo.AircraftSelected) return true;
 
             Debug.Log("Name:" + AircraftInfo.AircraftName);
@@ -234,8 +391,7 @@ namespace CustomAircraftTemplate
                 allowedhardpointbyweapon.Add("h70-x14ld", "4,5");
 
 
-                Dictionary<string, string> weaponnamechanges = new Dictionary<string, string>();
-                weaponnamechanges.Add("af_aim9", "Magic II");
+               
 
                 Debug.Log("Before Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
 
@@ -252,14 +408,7 @@ namespace CustomAircraftTemplate
                 }
 
 
-                if (weaponnamechanges.ContainsKey(equip.name))
-                {
-                    equip.shortName = (string)weaponnamechanges[equip.name];
-                    equip.fullName = (string)weaponnamechanges[equip.name];
-                    
-
-                    Debug.Log("Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
-                }
+                
             }
             //equip.allowedHardpoints = "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15";
 
@@ -273,6 +422,7 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(LoadoutConfigurator __instance, int hpIdx, string weaponName)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             Debug.Log("Running AttachRoutine");
             Debug.Log("Running AttachRoutine 1");
             AttachRoutinePatch.StartConfigRoutine(hpIdx, weaponName, __instance);
@@ -281,6 +431,7 @@ namespace CustomAircraftTemplate
 
         public static void StartConfigRoutine(int hpIdx, string weaponName, LoadoutConfigurator __instance)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             try
             {
                 __instance.StartCoroutine(AttachRoutinePatch.attachRoutine(hpIdx, weaponName, __instance));
@@ -291,7 +442,7 @@ namespace CustomAircraftTemplate
                 bool flag2 = flag;
                 if (flag2)
                 {
-                    Debug.LogError("TEMPERZ YOU PARENTED IT TO THE WRONG THING AGAIN YOU NIMWIT");
+                    Debug.LogError("Wrong parenting!");
                 }
                 throw ex;
             }
@@ -299,6 +450,7 @@ namespace CustomAircraftTemplate
 
         public static IEnumerator attachRoutine(int hpIdx, string weaponName, LoadoutConfigurator __instance)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             Debug.Log("Running Attach Routine");
             Debug.Log(string.Concat(new object[]
             {
@@ -682,7 +834,8 @@ namespace CustomAircraftTemplate
 
         public static bool Prefix(LoadoutConfigurator __instance)
         {
-            Loadout loadout = new Loadout();
+        Debug.unityLogger.logEnabled = CustomAircraftTemplate.Main.logging;
+        Loadout loadout = new Loadout();
             
             loadout.normalizedFuel = __instance.fuel / 3160;
             Debug.Log("Fuel: " + loadout.normalizedFuel);

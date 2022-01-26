@@ -32,8 +32,8 @@ namespace CustomAircraftTemplate
 
         public static void SetUpEOTS()
         {
-            
 
+            Debug.unityLogger.logEnabled = Main.logging;
             if (Main.i == 1) { return; };
 
             Debug.Log("SetEOT1");
@@ -124,9 +124,28 @@ namespace CustomAircraftTemplate
         }
 
 
+        public static void SetUpGauges()
+        {
+            Battery componentInChildren = Main.aircraftMirage.GetComponentInChildren<Battery>(true);
+            FlightInfo componentInChildren2 = Main.aircraftMirage.GetComponentInChildren<FlightInfo>(true);
+            GameObject childWithName3 = AircraftAPI.GetChildWithName(Main.aircraftMirage, "ClimbGauge",false);
+            DashVertGauge dashVertGauge = childWithName3.AddComponent<DashVertGauge>();
+            dashVertGauge.battery = componentInChildren;
+            dashVertGauge.dialHand = AircraftAPI.GetChildWithName(childWithName3, "dialHand", false).transform;
+            dashVertGauge.axis = new Vector3(0f, 1f, 0f);
+            dashVertGauge.arcAngle = 360f;
+            dashVertGauge.maxValue = 5f;
+            dashVertGauge.lerpRate = 8f;
+            dashVertGauge.loop = true;
+            dashVertGauge.gizmoRadius = 0.02f;
+            dashVertGauge.gizmoHeight = 0.005f;
+            dashVertGauge.doCalibration = true;
+            dashVertGauge.calibrationSpeed = 1f;
+            dashVertGauge.info = componentInChildren2;
+            dashVertGauge.measures = Main.aircraftMirage.GetComponent<MeasurementManager>();
+        }
 
-
-        public static void ScaleNavMap()
+            public static void ScaleNavMap()
         {
             Transform mfd1 = AircraftAPI.GetChildWithName(Fa26, "MFD1",false).transform;
             Transform mapParent = AircraftAPI.GetChildWithName(Fa26, "MapParent", false).transform;

@@ -30,7 +30,7 @@ namespace CustomAircraftTemplate
 
         //Name of the prefab of your aircraft from the assetbundle
         public const string AircraftPrefabName = "Mirage2000.prefab";
-
+        public const string AircraftLoadoutConfigurator = "MirageLoadoutConfigurator.prefab";
 
 
 

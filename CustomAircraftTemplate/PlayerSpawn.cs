@@ -27,62 +27,7 @@ using Rewired.Utils.Interfaces;
 
 namespace CustomAircraftTemplate
 {
-
-    [HarmonyPatch(typeof(Actor), "Awake")]
-    public class UnitSpawnRCSPatch
-    {
-        public static void Postfix(Actor __instance)
-        {
-            Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("RCS Patch: " + __instance.name);
-            Debug.Log("RCS Patch: 1.1 ");
-
-
-            //List<Actor> allUnitList = TargetManager.instance.allActors;
-            //Debug.Log("no of units =" + allUnitList.Count);
-            Debug.Log("RCS Patch: 1.3 ");
-
-            /*
-            foreach (Actor Unit in allUnitList)
-            {
-                try
-                {
-                    Debug.Log("RCS Patch: 1.4 ");
-
-                    RadarCrossSection unitsRCSComponent = Unit.GetComponentInChildren<RadarCrossSection>(true);
-                    Debug.Log(Unit.name + " : " + unitsRCSComponent);
-                }
-                catch
-                {
-                */
-
-            Debug.Log("No RCS");
-            GameObject UnitGO = __instance.gameObject;
-            Debug.Log("No RCS 1");
-            RadarCrossSection RCSforUnit = UnitGO.GetComponent<RadarCrossSection>();
-            if (RCSforUnit == null)
-            {
-                RadarCrossSection UnitRCS = UnitGO.AddComponent<RadarCrossSection>();
-                Debug.Log("No RCS 2");
-                UnitRCS.weaponManager = UnitGO.GetComponent<WeaponManager>();
-
-                Debug.Log("No RCS 3");
-                UnitRCS.size = 7f;
-                Debug.Log("No RCS 4");
-                UnitRCS.overrideMultiplier = 1f;
-                Debug.Log("No RCS 5");
-
-                List<RadarCrossSection.RadarReturn> UnitRCSReturns = new List<RadarCrossSection.RadarReturn>();
-                Debug.Log("No RCS 6");
-                UnitRCSReturns = Main.aircraftMirage.GetComponent<RadarCrossSection>().returns;
-                UnitRCS.enabled = true;
-            }
-
-            return;
-        }
-
-    }
-
+    
 
 
 
@@ -118,7 +63,7 @@ namespace CustomAircraftTemplate
                 Vector3 position2 = new Vector3(2, 2.66f, 2);
                 GameObject vehiclePrefab2 = vehicle.vehiclePrefab;
                 GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(vehiclePrefab2, Main.aircraftMirage.transform.position, Main.aircraftMirage.transform.rotation);
-                vehicle.vehiclePrefab = Main.aircraftPrefab;
+                //vehicle.vehiclePrefab = Main.aircraftPrefab;
                 Actor actor = __instance.actor = (FlightSceneManager.instance.playerActor = Main.aircraftMirage.GetComponent<Actor>());
 
                 actor.actorName = PilotSaveManager.current.pilotName;
@@ -394,6 +339,12 @@ namespace CustomAircraftTemplate
                 CockpitWindAudioController cockpitWindNoiseAC = cockpitWindNoise.GetComponent<CockpitWindAudioController>();
                 cockpitWindNoiseAC.flightInfo = mirageFlightInfo;
 
+
+                
+
+                Debug.Log("OPSStartPatch 1.27");
+                AircraftSetup.SetUpGauges();
+
             }
             return false;
         }
@@ -481,67 +432,14 @@ namespace CustomAircraftTemplate
                 UnityEngine.Object.Destroy(FA26Aircraft);
 
                 __instance.SetOpticalTargeter(Main.aircraftMirage.GetComponentInChildren<OpticalTargeter>(true));
-                /*  f26EjectorSeat.SetActive(true);
-                 
-
-                  Debug.Log("PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
-                  if (Main.aircraftMirage) { Debug.Log("Already here"); }
-                  else
-                  {
-                      Debug.Log("New Spawn");
-                      //Main.aircraftMirage = GameObject.Instantiate(Main.aircraftPrefab, PlaneLocation, PlaneRotation);
-                  }
-                  //Main.aircraftMirage = Main.aircraftPrefab;
-
-                  Debug.Log("00");
-
-                  Main.aircraftMirage.transform.position = PlaneLocation;
-                  Main.aircraftMirage.transform.localPosition = new Vector3(0, -2.66f, 0);
-                  Main.aircraftMirage.transform.rotation = PlaneRotation;
-                  Debug.Log("01");
-                  /*
-                  Main.playerGameObject = Main.aircraftMirage;
-
-
-
-                  Debug.Log("1");
-                  aircraftSeat = AircraftAPI.GetChildWithName(Main.aircraftMirage, "EjectorSeatLocation", false);
-                  f26EjectorSeat.transform.SetParent(aircraftSeat.transform);
-                  f26EjectorSeat.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-                  f26EjectorSeat.transform.localPosition = new Vector3(0f, 0f, 0f);
-                  Debug.Log("2");
-
-
-
-
-                  ///REMOVE THIS LINE ITS TO TEST WHAT IS UNDER THE PLAYEROBJECT
-
-
-                  AircraftSetup.Fa26 = Main.playerGameObject;
-                  AircraftSetup.customAircraft = Main.aircraftMirage;
-
-
-
-                  //Changes depth and scale of the hud to make it legible
-                  //               AircraftSetup.SetUpHud();
-
-
-                  //Fixes the weird shifting nav map bug. Must be called after unity mover
-                  //             AircraftSetup.ScaleNavMap();
-
-
-
-
-
-                  Debug.Log("Disabling mesh");
-
-              */
+                
 
             }
         }
 
         public static void Postfix(WeaponManager __instance)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             Debug.Log("pf1");
 
 
@@ -731,127 +629,15 @@ namespace CustomAircraftTemplate
 
         }
     }
-
-    [HarmonyPatch(typeof(Radar), "ProcessUnit")]
-    public static class PatchRadarProcessingForGroundAttack
-    {
-        public static RaycastHit raycastHit;
-
-        public static bool Prefix(Radar __instance, Actor a, float dotThresh, bool hasMapGen)
-        {
-
-
-            if (!a || !a.gameObject.activeSelf || a.name == "Enemy Infantry MANPADS" || a.name == "Enemy Infantry" || a.name == "Allied Infantry MANPADS" || a.name == "Allied Infantry")
-            {
-                return false;
-            }
-            if (a.finalCombatRole == Actor.Roles.Air || a.role == Actor.Roles.GroundArmor || a.role == Actor.Roles.Ground)
-            {
-                Debug.Log("Simon found: " + a.actorName);
-                if (!__instance.detectAircraft)
-                {
-                    return false;
-
-                }
-
-            }
-            else if (a.role == Actor.Roles.Missile)
-            {
-                if (!__instance.detectMissiles)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (a.finalCombatRole != Actor.Roles.Ship)
-                {
-                    return false;
-                }
-                if (!__instance.detectShips)
-                {
-                    return false;
-                }
-            }
-            if (!a.alive)
-            {
-                return false;
-            }
-            Vector3 position = a.position;
-            float sqrMagnitude = (position - __instance.rotationTransform.position).sqrMagnitude;
-
-
-
-            if (sqrMagnitude >= 150000 && !Radar.ADV_RADAR)
-            {
-                return false;
-            }
-            Vector3 vector = __instance.rotationTransform.InverseTransformPoint(position);
-            vector.y = 0f;
-            if (Vector3.Dot(vector.normalized, Vector3.forward) < dotThresh)
-            {
-                return false;
-            }
-            Quaternion localRotation = __instance.rotationTransform.localRotation;
-            float y = VectorUtils.SignedAngle(__instance.rotationTransform.parent.forward, Vector3.ProjectOnPlane(position - __instance.rotationTransform.position, __instance.rotationTransform.parent.up), __instance.rotationTransform.right);
-            __instance.rotationTransform.localRotation = Quaternion.Euler(0f, y, 0f);
-            if (Vector3.Dot((position - __instance.radarTransform.position).normalized, __instance.radarTransform.forward) > 0.32)
-            {
-                Traverse traverseT1 = Traverse.Create(__instance);
-                bool myChunkColliderEnabledPatched = (bool)traverseT1.Field("myChunkColliderEnabled").GetValue();
-
-
-                bool flag = !hasMapGen || VTMapGenerator.fetch.IsChunkColliderEnabled(a.position);
-                //RaycastHit raycastHit;
-                if (myChunkColliderEnabledPatched && Physics.Linecast(__instance.radarTransform.position, position, out raycastHit, 1) && (raycastHit.point - position).sqrMagnitude > 10000f)
-                {
-                    __instance.rotationTransform.localRotation = localRotation;
-                    return false;
-                }
-                if (flag && Physics.Linecast(position, __instance.radarTransform.position, out raycastHit, 1) && (raycastHit.point - __instance.radarTransform.position).sqrMagnitude > 10000f)
-                {
-                    Hitbox component = raycastHit.collider.GetComponent<Hitbox>();
-                    if (!component || component.actor != a)
-                    {
-                        __instance.rotationTransform.localRotation = localRotation;
-                        return false;
-                    }
-
-
-                }
-                if (hasMapGen && (!myChunkColliderEnabledPatched || !flag))
-                {
-                    __instance.StartCoroutine(__instance.HeightmapOccludeCheck(a));
-                    __instance.rotationTransform.localRotation = localRotation;
-                    return false;
-                }
-                Radar.SendRadarDetectEvent(a, __instance.myActor, __instance.radarSymbol, __instance.detectionPersistanceTime, __instance.rotationTransform.position, __instance.transmissionStrength);
-                if (Radar.ADV_RADAR)
-                {
-                    float radarSignalStrength = Radar.GetRadarSignalStrength(__instance.radarTransform.position, a);
-                    float num = __instance.transmissionStrength * radarSignalStrength / sqrMagnitude;
-                    if (num < 1f / __instance.receiverSensitivity)
-                    {
-
-                        __instance.rotationTransform.localRotation = localRotation;
-                        return false;
-                    }
-
-
-                }
-                __instance.DetectActor(a);
-            }
-            __instance.rotationTransform.localRotation = localRotation;
-            return false;
-
-        }
-    }
+    
+   
     [HarmonyPatch(typeof(HUDMaskToggler), "SetMask")]
     public static class HUDMaskTogglePatch
     {
 
         public static bool Prefix(bool maskEnabled, HUDMaskToggler __instance)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             Debug.Log("SetMask 1.0");
             if (__instance.alwaysFPVOnly && maskEnabled)
             {
@@ -924,20 +710,4 @@ namespace CustomAircraftTemplate
 
 
 
-    /*   [HarmonyPatch(typeof(PlayerVehicleSetup), "SetupOCCam")]
-       public static class CloudOCPatch
-       {
-
-
-           public static void Postfix(PlayerVehicleSetup __instance, Camera cam)
-           {
-               OC.OverCloudCamera overCloudCamera = cam.gameObject.GetComponent<OC.OverCloudCamera>();
-               overCloudCamera.downsampleFactor = OC.DownSampleFactor.Eight;
-               overCloudCamera.renderAtmosphere = false;
-               overCloudCamera.lightSampleCount = OC.SampleCount.Low;
-               overCloudCamera.scatteringMaskSamples = OC.SampleCount.Low;
-               overCloudCamera.renderScatteringMask = false;
-               overCloudCamera.includeCascadedShadows = false;
-           }
-       }*/
 }

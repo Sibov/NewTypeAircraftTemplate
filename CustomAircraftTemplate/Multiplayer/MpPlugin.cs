@@ -15,6 +15,7 @@ namespace CustomAircraftTemplate
 
         public void MPlock()
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             FlightLogger.Log($"Found Multiplayer set {AircraftInfo.AircraftName} mp");
             if (MPActive)
                 return;
@@ -30,6 +31,7 @@ namespace CustomAircraftTemplate
 
         private void MPRespawnHook(PlayerManager.CustomPlaneDef def)
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             FlightLogger.Log("MP Respawn Hook");
             if (PlayerManager.LoadedCustomPlaneString == AircraftInfo.AircraftName && PlayerManager.PlayerIsCustomPlane)
             {
@@ -40,7 +42,7 @@ namespace CustomAircraftTemplate
 
         public void MPRadio(GameObject f26)
         {
-            
+            Debug.unityLogger.logEnabled = Main.logging;
             Debug.Log("MP Radio Start");
 
             GameObject mpradiobutton1 = AircraftAPI.GetChildWithName(f26, "1", false);
@@ -73,7 +75,7 @@ namespace CustomAircraftTemplate
 
         private void ClientAircraftSpawned(PlayerManager.CustomPlaneDef def)
         {
-            
+            Debug.unityLogger.logEnabled = Main.logging;
             bool flag = def.CustomPlaneString == AircraftInfo.AircraftName;
             if (flag)
             {
@@ -86,11 +88,13 @@ namespace CustomAircraftTemplate
 
         private void RegisterCustomPlane()
         {
+            Debug.unityLogger.logEnabled = Main.logging;
             PlayerManager.RegisterCustomPlane(AircraftInfo.AircraftName, "F/A-26B");
         }
 
         public void SetCustomPlaneMP()
         {
+
             AircraftInfo.AircraftSelected = true;
             PlayerManager.SetCustomPlane(AircraftInfo.AircraftName);
             
