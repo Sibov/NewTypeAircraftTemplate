@@ -15,7 +15,7 @@ namespace CustomAircraftTemplate
         protected override float GetMeteredValue()
         {
 
-            //DebugDebugFlightLogger.Log(measures.ConvertedVerticalSpeed(info.verticalSpeed).ToString());
+            //Debug//DebugFlightLogger.Log(measures.ConvertedVerticalSpeed(info.verticalSpeed).ToString());
             return measures.ConvertedVerticalSpeed(info.verticalSpeed) / 4000f;
         }
 

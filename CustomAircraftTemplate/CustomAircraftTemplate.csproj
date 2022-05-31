@@ -31,14 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AircraftSetup.cs" />
     <Compile Include="CustomClasses\DashVertGauge.cs" />
-    <Compile Include="MirageSpecific.cs" />
-    <Compile Include="Multiplayer\AiSetup.cs" />
+    <Compile Include="HelperScripts\ObjectExtensions.cs" />
+    <Compile Include="MirageElements.cs" />
     <Compile Include="HelperScripts\AircraftAPI.cs" />
     <Compile Include="AircraftInfo.cs" />
-    <Compile Include="AircraftSetup.cs" />
     <Compile Include="HelperScripts\FileLoader.cs" />
-    <Compile Include="Multiplayer\MpPlugin.cs" />
     <Compile Include="Patches\CheckScripts.cs" />
     <Compile Include="Patches\InternalBayPatch.cs" />
     <Compile Include="Patches\LoadoutConfigPatch.cs" />
@@ -68,6 +67,10 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_Data\Managed\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Facepunch.Steamworks.Win64, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_Data\Managed\Facepunch.Steamworks.Win64.dll</HintPath>
+    </Reference>
     <Reference Include="FastObjImporter">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_Data\Managed\FastObjImporter.dll</HintPath>
     </Reference>
@@ -75,8 +78,12 @@
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_Data\Managed\HttpAuth.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="ModLoader">
+    <Reference Include="ModLoader, Version=5.1.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_ModLoader\ModLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_ModLoader\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_Data\Managed\Mono.Security.dll</HintPath>
@@ -361,6 +368,9 @@
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_Data\Managed\Valve.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="VTPatcher">
+      <HintPath>..\..\..\..\..\..\Steam\steamapps\common\VTOL VR\VTOLVR_ModLoader\VTPatcher.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

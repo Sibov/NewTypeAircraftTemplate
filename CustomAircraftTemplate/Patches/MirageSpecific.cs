@@ -28,17 +28,18 @@ using Rewired.Utils.Interfaces;
 namespace CustomAircraftTemplate
 {
 
-    public class MirageSpecific
+    public static class MirageSpecific
     {
 
         public static void SetupArmingText()
         {
+            
             Debug.unityLogger.logEnabled = Main.logging;
             Debug.Log("Setup Arming Text");
 
         }
     }
-}
+
     //Fixes Radar so it can see ground units, it applies an RCS to all units
     [HarmonyPatch(typeof(Radar), "ProcessUnit")]
     public static class PatchRadarProcessingForGroundAttack
@@ -197,6 +198,8 @@ namespace CustomAircraftTemplate
 
     }
 
-   
+}
+
+
 
 
