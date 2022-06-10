@@ -11,26 +11,28 @@ namespace CustomAircraftTemplate
 
         //READ ME, IMPORTANT!!!!!!!!
         //You must change HarmonyId in order for your custom aircraft mod to be compatable with other aircraft mods
-        public const string HarmonyId = "Bovine.Mirage";
+        public const string HarmonyId = "Bovine.SU35";
 
         //Stores if your custom aircraft is selected.
         //This is what prevents your aircraft from constantly replacing the FA-26
         public static bool AircraftSelected = false;
 
         //Info about your aircraft
-        public const string AircraftName = "Mirage 2000C-X";
-        public const string AircraftNickName = "Mirage";
-        public const string AircraftDescription = "\"Mirage 2000\" A fourth generation multi-role fighter developed as an alternative to the American and Russian fourth generation strike fighters.";
+        public const float maxInternalFuel = 11500;
+        public const Int32 AircraftMPIdentifier = 6;
+        public const string customAircraftPV = "SU-35.asset";
+        public const string AircraftName = "Sukhoi SU-35";
+        public const string AircraftNickName = "Flanker";
+        public const string AircraftDescription = "Sukhoi SU-35 Flanker";
 
         //Names of the various files you need to put in your builds folder
         public const string PreviewPngFileName = "Mirage2000preview.png";
-        public const string AircraftAssetbundleName = "mirage2000";
-        public const string UnityMoverFileName = "MiragePositions.surg";
-        public const string AIUnityMoverFileName = "MiragePositionsAI.surg";
+        public const string AircraftAssetbundleName = "su35";
+        
 
         //Name of the prefab of your aircraft from the assetbundle
-        public const string AircraftPrefabName = "Mirage2000.prefab";
-        public const string AircraftLoadoutConfigurator = "MirageLoadoutConfigurator.prefab";
+        public const string AircraftPrefabName = "SU-35.prefab";
+        public const string AircraftLoadoutConfigurator = "SU35-LoadoutConfigurator.prefab";
 
 
 

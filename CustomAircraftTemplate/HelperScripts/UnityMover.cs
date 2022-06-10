@@ -35,7 +35,7 @@ namespace CustomAircraftTemplate
         public void load(bool doCockpit = true)
         {
 
-            Debug.Log("load1");
+            ////Debug.Log("load1");
             if (gs == null)
                 return;
             List<customTransform> listCustomTraans = new List<customTransform>();
@@ -86,7 +86,7 @@ namespace CustomAircraftTemplate
                                 // ts.gameObject.GetComponent<MeshRenderer>().enabled = true;
 
                                 if (render == "dontrender")
-                                    AircraftAPI.DisableMesh(ts.gameObject, null, true);
+                                   
                                 //ts.gameObject.GetComponent<MeshRenderer>().enabled = false;
 
                                 ts.localPosition = trans.positions;
@@ -129,7 +129,7 @@ namespace CustomAircraftTemplate
                     }
                 }
             }
-            Debug.Log("load2");
+            ////Debug.Log("load2");
         }
 
 
