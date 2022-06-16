@@ -52,11 +52,28 @@ namespace CustomAircraftTemplate
 
                 rt = tgCam.targetTexture;
             }
+            
             catch
             {
+                try
+                {
+                    //Debug.Log("SetEOT2.1");
+                    tgp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EOTS", true);
+                    //Debug.Log("SetEOT2.1.1");
+                    targetCamera = AircraftAPI.GetChildWithName(tgp, "TargetingCam", true);
+                    //Debug.Log("SetEOT2.1.2");
+                    tgCam = targetCamera.GetComponent<Camera>();
+                    //Debug.Log("SetEOT2.1.3");
+                    tgOptTargeter = tgp.GetComponent<OpticalTargeter>();
+                    //Debug.Log("SetEOT2.1.4");
+                    TMFD = Main.aircraftCustom.GetComponentInChildren<TargetingMFDPage>(true);
+                    //Debug.Log("SetEOT2.1.1");
+                }
                 //Debug.Log("SetEOT2.2");
-                return;
-            }
+                catch
+                { return; }
+
+                }
 
             //Debug.Log("SetEOT3");
 
