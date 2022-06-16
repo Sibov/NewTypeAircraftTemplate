@@ -36,6 +36,8 @@ namespace CustomAircraftTemplate
     [HarmonyPatch(typeof(MultiplayerSpawn), "SetupSpawnedVehicle")]
     public class SU35_MS_SetupSpawnedVehicle_Prefix
     {
+        private static EjectionSeat prefabES;
+
         public static void Prefix(MultiplayerSpawn __instance, GameObject vehicleObj)
         {
             Main.i = 0;
@@ -334,19 +336,24 @@ namespace CustomAircraftTemplate
 
             WeaponInfo.GetComponent<HMDWeaponInfo>().wm = wem;
 
-            //Debug.Log("MSSSV 1.27");
+            Debug.Log("MSSSV 1.27");
             // MirageElements.SetUpGauges();
             //  MirageElements.IdentifiedRadarTargetsSetup();
-
+            prefabES = aircraftSeat.GetComponent<EjectionSeat>();
+            UnityEngine.Component.Destroy(prefabES);
              GameObject MPSyncs = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MPSyncs", false);
+            Debug.Log("MSSSV 1.28");
             EjectSync ejectSyncs = MPSyncs.GetComponent<EjectSync>();
-
+            Debug.Log("MSSSV 1.29");
             EjectionSeat ejectionSeat = f26seatholder.GetComponent<EjectionSeat>();
+            Debug.Log("MSSSV 1.30");
             ejectSyncs.localEjector = ejectionSeat;
             return;
         }
 
     }
+
+  
 
     [HarmonyPatch(typeof(WeaponManager), "ReattachWeapons")]
     public class SU35_ReattachWeapons_post
