@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateSU35
 {
     /*
     [HarmonyPatch(typeof(InternalWeaponBay), nameof(InternalWeaponBay.Awake))]

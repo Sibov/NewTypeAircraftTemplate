@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateSU35
 {
 
     public class customTransform

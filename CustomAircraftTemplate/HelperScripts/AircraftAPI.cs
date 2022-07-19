@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateSU35
 {
     class AircraftAPI
     {

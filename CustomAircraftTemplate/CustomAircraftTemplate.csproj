@@ -7,8 +7,8 @@
     <ProjectGuid>{7BB21F11-6675-4E25-AB78-E420A6B129C2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CustomAircraftTemplate</RootNamespace>
-    <AssemblyName>CustomAircraftTemplate</AssemblyName>
+    <RootNamespace>CustomAircraftTemplateSU35</RootNamespace>
+    <AssemblyName>CustomAircraftTemplateSU35</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

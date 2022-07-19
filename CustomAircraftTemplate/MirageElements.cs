@@ -11,7 +11,7 @@ using TMPro;
 
 
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateSU35
 {
     public class MirageElements : MonoBehaviour
     {
@@ -38,34 +38,34 @@ namespace CustomAircraftTemplate
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return;
             //Debug.unityLogger.logEnabled = Main.logging;
-                  //Debug.Log("Setup Arming Text");
+                  Debug.Log("SU35 Setup Arming Text");
 
                   WeaponManager wm = Main.aircraftCustom.GetComponent<WeaponManager>();
                   int aircraftNodeLength = wm.hardpointTransforms.Length;
-                  //Debug.Log("Setup Arming Text 1.0: Length = " + aircraftNodeLength);
+                  Debug.Log("SU35 Setup Arming Text 1.0: Length = " + aircraftNodeLength);
                   GameObject aircraft = AircraftAPI.GetChildWithName(Main.aircraftCustom, "WeaponArmingButtons", false);
-                  //Debug.Log("Setup Arming Text 1.1");
+                  Debug.Log("SU35 Setup Arming Text 1.1");
                   for (int i = 0; i < aircraftNodeLength; i++)
                   {
                       string textArmingItem = "Text" + i;
                        equippedItem = wm.GetEquip(i);
-                      //Debug.Log("Setup Arming Text 1.1.1");
+                      Debug.Log("SU35 Setup Arming Text 1.1.1");
 
 
                       GameObject textItem = AircraftAPI.GetChildWithName(aircraft, textArmingItem, false);
-                      //Debug.Log("Setup Arming Text 1.1.2");
+                      Debug.Log("SU35 Setup Arming Text 1.1.2");
                       if (equippedItem != null && equippedItem.armable)
                       {
-                          //Debug.Log("Setup Arming Text 1.2: " + i + " , Item: " + equippedItem.shortName);
+                          Debug.Log("SU35 Setup Arming Text 1.2: " + i + " , Item: " + equippedItem.shortName);
                           nameLength = equippedItem.shortName.Length;
                           shortenedEquipName = equippedItem.shortName.Substring(0, 1) + equippedItem.shortName.Substring(nameLength-2, 2);
                       }
                       else
                       {
-                          //Debug.Log("Setup Arming Text 1.2.2 ");
+                          Debug.Log("SU35 Setup Arming Text 1.2.2 ");
                           shortenedEquipName = "NON";
                       }
-                      //Debug.Log("Setup Arming Text 1.3");
+                      Debug.Log("SU35 Setup Arming Text 1.3");
                       Text textComponentItem = textItem.GetComponent<Text>();
                       textComponentItem.text = shortenedEquipName;
 
@@ -126,15 +126,15 @@ namespace CustomAircraftTemplate
 
         public static void IdentifiedRadarTargetsSetup()
         {
-            //Debug.Log("IRTS 1.1");
+            Debug.Log("SU35 IRTS 1.1");
             Main.miniicp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MiniMFDICP", false);
-            //Debug.Log("IRTS 1.2");
+            Debug.Log("SU35 IRTS 1.2");
             radarcontactlistobj = AircraftAPI.GetChildWithName(Main.miniicp, "RadarContactList", false);
             Main.radarcontactlist = radarcontactlistobj.GetComponent<TextMeshPro>();
-            //Debug.Log("IRTS 1.3");
+            Debug.Log("SU35 IRTS 1.3");
             GameObject radarObject = AircraftAPI.GetChildWithName(Main.aircraftCustom, "Radar2", false);
              Main.radar = radarObject.GetComponentInChildren<Radar>();
-            //Debug.Log("IRTS 1.4");
+            Debug.Log("SU35 IRTS 1.4");
             
         }
         public static void IdentifiedRadarTargets()
@@ -142,12 +142,12 @@ namespace CustomAircraftTemplate
             
             i = 0;
             oldcumText = "";
-            //Debug.Log("IRT 1.1");
+            Debug.Log("SU35 IRT 1.1");
             foreach (Actor unit in Main.radar.detectedUnits)
             {
-                //Debug.Log("unit: " + unit);
+                Debug.Log("SU35 unit: " + unit);
                 text = i + ": " + unit.actorName + " \n";
-                //Debug.Log("text: " + text);
+                Debug.Log("SU35 text: " + text);
                 cumText = oldcumText + text;
                 oldcumText = cumText;
                 i++;
@@ -174,7 +174,7 @@ namespace CustomAircraftTemplate
 
             if (clockDisplayLocalTextComp != null)
             {
-                //Debug.Log("found text mesh");
+                Debug.Log("SU35 found text mesh");
                 clockDisplayLocalTextComp.text = timeNow;
             }
         }
@@ -201,7 +201,7 @@ namespace CustomAircraftTemplate
                 }
                 if (a.finalCombatRole == Actor.Roles.Air || a.role == Actor.Roles.GroundArmor || a.role == Actor.Roles.Ground)
                 {
-                    //Debug.Log("Radar found: " + a.actorName);
+                    Debug.Log("SU35 Radar found: " + a.actorName);
                     if (!__instance.detectAircraft)
                     {
                         return false;

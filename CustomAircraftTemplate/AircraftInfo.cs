@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateSU35
 {
     public class AircraftInfo
     {
@@ -21,14 +21,14 @@ namespace CustomAircraftTemplate
         public const float maxInternalFuel = 11500;
         public const Int32 AircraftMPIdentifier = 6;
         public const string customAircraftPV = "SU-35.asset";
-        public const string AircraftName = "Sukhoi SU-35";
-        public const string AircraftNickName = "Flanker";
-        public const string AircraftDescription = "Sukhoi SU-35 Flanker";
+        
+        public const string pilottype = "F/A-26B";
 
         //Names of the various files you need to put in your builds folder
         public const string PreviewPngFileName = "Mirage2000preview.png";
         public const string AircraftAssetbundleName = "su35";
         
+
 
         //Name of the prefab of your aircraft from the assetbundle
         public const string AircraftPrefabName = "SU-35.prefab";
