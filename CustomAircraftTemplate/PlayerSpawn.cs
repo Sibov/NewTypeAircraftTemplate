@@ -1,38 +1,10 @@
 ﻿using Harmony;
 using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Timers;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
-using System.Reflection;
-using System.IO;
-using Valve.Newtonsoft.Json;
-using Harmony;
-using TMPro;
-using Rewired.Platforms;
-using Rewired.Utils;
-using Rewired.Utils.Interfaces;
-using ModLoader;
 using VTOLVR.Multiplayer;
-using VTNetworking;
-using Steamworks;
 
 namespace CustomAircraftTemplate
 {
-
-
     [HarmonyPatch(typeof(MultiplayerSpawn), "SetupSpawnedVehicle")]
     public class SU35_MS_SetupSpawnedVehicle_Prefix
     {
@@ -40,24 +12,26 @@ namespace CustomAircraftTemplate
 
         public static void Prefix(MultiplayerSpawn __instance, GameObject vehicleObj)
         {
-            Main.i = 0;
+            Main aircraftMod = Main.Instance;
+
+            aircraftMod.hasInitEots = false;
             //Debug.Log("MSSSV 1.0");
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
             {
                 return;
             }
 
-            Main.aircraftLoaded = true;
-            Main.aircraftCustom = vehicleObj;
+            aircraftMod.aircraftLoaded = true;
+            aircraftMod.aircraftCustom = vehicleObj;
             //Debug.Log("MSSSV 1.1");
 
-            GameObject BONew = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffectNew", false);
+            GameObject BONew = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutEffectNew", false);
             //Debug.Log("MSSSV 1.2");
 
-            Main.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
+            aircraftMod.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
             //Debug.Log("MSSSV 1.3");
 
-            Rigidbody componentRB = Main.aircraftCustom.GetComponent<Rigidbody>();
+            Rigidbody componentRB = aircraftMod.aircraftCustom.GetComponent<Rigidbody>();
             //Debug.Log("MSSSV 1.4");
             Vector3 position2 = new Vector3(200, 200.66f, 200);
             GameObject vehiclePrefab2 = VTResources.GetPlayerVehicle("F/A-26B").vehiclePrefab;
@@ -65,15 +39,16 @@ namespace CustomAircraftTemplate
             GameObject f26seatholder = AircraftAPI.GetChildWithName(vehiclePrefab2, "EjectorSeat", false);
             //Debug.Log("MSSSV 1.5");
 
-            GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(f26seatholder, position2, Main.aircraftCustom.transform.rotation);
+            GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(f26seatholder, position2,
+                aircraftMod.aircraftCustom.transform.rotation);
             //Debug.Log("MSSSV 1.6");
 
             gameObject2.transform.localScale = new Vector3(0.92f, 0.92f, 0.92f);
-            gameObject2.transform.SetParent(Main.aircraftCustom.transform);
+            gameObject2.transform.SetParent(aircraftMod.aircraftCustom.transform);
             //Debug.Log("MSSSV 1.6");
             gameObject2.SetActive(true);
             //Debug.Log("MSSSV 1.7");
-            GameObject aircraftSeat = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EjectorSeatLocation", false);
+            GameObject aircraftSeat = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "EjectorSeatLocation", false);
             gameObject2.transform.SetParent(aircraftSeat.transform);
             gameObject2.transform.SetParent(aircraftSeat.transform);
             //Debug.Log("MSSSV 1.8");
@@ -81,8 +56,7 @@ namespace CustomAircraftTemplate
             gameObject2.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
             gameObject2.transform.localPosition = new Vector3(0f, 0f, 0f);
             //Debug.Log("MSSSV 1.9");
-            Main.aircraftCustom.SetActive(false);
-
+            aircraftMod.aircraftCustom.SetActive(false);
 
             //FloatingOriginShifter floatingOriginShifter = Main.aircraftCustom.GetComponent<FloatingOriginShifter>();
 
@@ -90,10 +64,10 @@ namespace CustomAircraftTemplate
             //floatingOriginShifter.enabled = false;
             //floatingOriginShifter.enabled = true;
 
-            GameObject cameraEye = AircraftAPI.GetChildWithName(Main.aircraftCustom, "Camera (eye)", false);
+            GameObject cameraEye = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "Camera (eye)", false);
             //Debug.Log("MSSSV 1.2.2");
             Camera cameraEyeCamera = cameraEye.GetComponent<Camera>();
-            GameObject hudCanvas = AircraftAPI.GetChildWithName(Main.aircraftCustom, "HUDCanvas", false);
+            GameObject hudCanvas = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "HUDCanvas", false);
             //Debug.Log("MSSSV 1.2.3");
             Canvas hudCanvasCanvasComp = hudCanvas.GetComponent<Canvas>();
             hudCanvasCanvasComp.worldCamera = cameraEyeCamera;
@@ -104,7 +78,7 @@ namespace CustomAircraftTemplate
             HUDElevationLadder elevationLadderComp = elevationLadder.GetComponent<HUDElevationLadder>();
             elevationLadderComp.headTransform = cameraEyeTf;
             //Debug.Log("MSSSV 1.2.4.2");
-            GameObject sideStickObject = AircraftAPI.GetChildWithName(Main.aircraftCustom, "SideStickObjects", false);
+            GameObject sideStickObject = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "SideStickObjects", false);
             GameObject autoAdjust = AircraftAPI.GetChildWithName(sideStickObject, "AutoAdjust", false);
             GameObject autoAdjustCanvas = AircraftAPI.GetChildWithName(autoAdjust, "Canvas", false);
             //Debug.Log("MSSSV 1.2.4.3");
@@ -113,12 +87,12 @@ namespace CustomAircraftTemplate
             autoAdjustCanvasCompCanvas.worldCamera = cameraEyeCamera;
             //Debug.Log("MSSSV 1.2.4.4");
 
-            GameObject dashCanvas = AircraftAPI.GetChildWithName(Main.aircraftCustom, "DashCanvas", false);
+            GameObject dashCanvas = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "DashCanvas", false);
             Canvas dashCanvasCompCanvas = dashCanvas.GetComponent<Canvas>();
             //Debug.Log("MSSSV 1.2.4.5");
 
             dashCanvasCompCanvas.worldCamera = cameraEyeCamera;
-            GameObject spectatorCam = AircraftAPI.GetChildWithName(Main.aircraftCustom, "SpectatorCam", false);
+            GameObject spectatorCam = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "SpectatorCam", false);
             //Debug.Log("MSSSV 1.2.4.5");
 
             FlybyCameraMFDPage flybyCameraMFDPage = spectatorCam.GetComponent<FlybyCameraMFDPage>();
@@ -128,15 +102,15 @@ namespace CustomAircraftTemplate
 
             AudioListenerPosition cameraEyeALP = cameraEye.GetComponent<AudioListenerPosition>();
 
-            cameraEyeALP.SetParentRigidbody(Main.aircraftCustom.GetComponent<Rigidbody>());
-            cameraEyeALP.rb = Main.aircraftCustom.GetComponent<Rigidbody>();
+            cameraEyeALP.SetParentRigidbody(aircraftMod.aircraftCustom.GetComponent<Rigidbody>());
+            cameraEyeALP.rb = aircraftMod.aircraftCustom.GetComponent<Rigidbody>();
 
 
             //Debug.Log("MSSSV 1.2.4.6");
 
 
             //cameraEye.GetComponent<AudioListenerPosition>().rb = Main.aircraftCustom.GetComponent<Rigidbody>();
-            TargetingMFDPage componentInChildren8 = Main.aircraftCustom.GetComponentInChildren<TargetingMFDPage>(true);
+            TargetingMFDPage componentInChildren8 = aircraftMod.aircraftCustom.GetComponentInChildren<TargetingMFDPage>(true);
             //Debug.Log("MSSSV 1.2.4.6");
 
 
@@ -152,8 +126,8 @@ namespace CustomAircraftTemplate
             helmetController.hudMaskToggler = hudCanvas.GetComponent<HUDMaskToggler>();
             //Debug.Log("MSSSV 1.2.4.6.2");
 
-            helmetController.battery = AircraftAPI.GetChildWithName(Main.aircraftCustom, "battery", false).GetComponent<Battery>();
-            GameObject hmcsPowerInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "hmcsPowerInteractable", false);
+            helmetController.battery = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "battery", false).GetComponent<Battery>();
+            GameObject hmcsPowerInteractable = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "hmcsPowerInteractable", false);
             //Debug.Log("MSSSV 1.2.4.7");
 
             HUDWeaponInfo hudWeaponInfo = AircraftAPI.GetChildWithName(hudCanvas, "WeaponInfo", false).GetComponent<HUDWeaponInfo>();
@@ -167,7 +141,7 @@ namespace CustomAircraftTemplate
             VRLever hmcsPowerInteractableVRL = hmcsPowerInteractable.GetComponent<VRLever>();
             hmcsPowerInteractableVRL.OnSetState.AddListener(helmetController.SetPower);
 
-            GameObject visorButtonInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "visorButtonInteractable", false);
+            GameObject visorButtonInteractable = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "visorButtonInteractable", false);
             //Debug.Log("MSSSV 1.2.4.8");
 
             VRInteractable visorButtonInteractableVRI = visorButtonInteractable.GetComponent<VRInteractable>();
@@ -177,24 +151,24 @@ namespace CustomAircraftTemplate
 
 
             //Debug.Log("MSSSV 1.2.5");
-            WeaponManager wm = Main.aircraftCustom.GetComponent<WeaponManager>();
+            WeaponManager wm = aircraftMod.aircraftCustom.GetComponent<WeaponManager>();
             //wm.SetOpticalTargeter(Main.aircraftCustom.GetComponentInChildren<OpticalTargeter>(true));
             //Debug.Log("MSSSV 1.2.6");
-            Main.aircraftCustom.SetActive(true);
+            aircraftMod.aircraftCustom.SetActive(true);
             //componentInChildren8.SetOpticalTargeter();
-            GameObject blackOutParent = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutParent", true);
+            GameObject blackOutParent = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutParent", true);
             blackOutParent.SetActive(false);
-            GameObject blackOutEffect = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffect", true);
+            GameObject blackOutEffect = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutEffect", true);
             blackOutParent.SetActive(false);
             blackOutEffect.SetActive(false);
-            GameObject blackOutEffectNew = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffectNewParent", true);
+            GameObject blackOutEffectNew = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutEffectNewParent", true);
             blackOutEffectNew.transform.SetParent(cameraEye.transform);
 
 
 
             //Debug.Log("MSSSV 1.3");
 
-            GameObject screenFader = AircraftAPI.GetChildWithName(Main.aircraftCustom, "ScreenFader", false);
+            GameObject screenFader = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "ScreenFader", false);
             screenFader.SetActive(false);
 
             Rigidbody ejectionSeatRB = gameObject2.GetComponent<Rigidbody>();
@@ -205,7 +179,7 @@ namespace CustomAircraftTemplate
             flybyCameraMFDPage.seatRb = ejectionSeatRB;
             //Debug.Log("MSSSV 1.5");
 
-            ShipController CustomAircraftSC = Main.aircraftCustom.GetComponent<ShipController>();
+            ShipController CustomAircraftSC = aircraftMod.aircraftCustom.GetComponent<ShipController>();
             CustomAircraftSC.ejectionSeat = ejectionSeatES;
             //Debug.Log("MSSSV 1.6");
 
@@ -225,20 +199,23 @@ namespace CustomAircraftTemplate
             //Debug.Log("MSSSV 1.9");
 
             GameObject riggedSuit2 = AircraftAPI.GetChildWithName(gameObject2, "RiggedSuit (2)", false);
-            TempPilotDetacher tempPilotDetacherComp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "TempPilotDetacher", false).GetComponent<TempPilotDetacher>();
+            TempPilotDetacher tempPilotDetacherComp = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom,
+                "TempPilotDetacher", false).GetComponent<TempPilotDetacher>();
             tempPilotDetacherComp.pilotModel = riggedSuit2;
             //Debug.Log("MSSSV 1.10");
 
-            PlayerVehicleSetup customPlayerVS = Main.aircraftCustom.GetComponent<PlayerVehicleSetup>();
+            PlayerVehicleSetup customPlayerVS = aircraftMod.aircraftCustom.GetComponent<PlayerVehicleSetup>();
             customPlayerVS.hideObjectsOnConfig[2] = riggedSuit2;
             //Debug.Log("MSSSV 1.11");
 
-            VehicleInputManager customPlayerVI = Main.aircraftCustom.GetComponent<VehicleInputManager>();
+            VehicleInputManager customPlayerVI = aircraftMod.aircraftCustom.GetComponent<VehicleInputManager>();
             customPlayerVI.pyrOutputs[1] = riggedSuit2.GetComponent<RudderFootAnimator>();
             //Debug.Log("MSSSV 1.12");
 
-            PilotColorSetup pilotColorSetupComp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "PilotColorApplier", false).GetComponent<PilotColorSetup>();
-            SkinnedMeshRenderer riggedSuit001SMComp = AircraftAPI.GetChildWithName(gameObject2, "RiggedSuit.001", false).GetComponent<SkinnedMeshRenderer>();
+            PilotColorSetup pilotColorSetupComp = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom,
+                "PilotColorApplier", false).GetComponent<PilotColorSetup>();
+            SkinnedMeshRenderer riggedSuit001SMComp = AircraftAPI.GetChildWithName(gameObject2, "RiggedSuit.001", false)
+                .GetComponent<SkinnedMeshRenderer>();
             pilotColorSetupComp.pilotRenderers[3] = riggedSuit001SMComp;
             //Debug.Log("MSSSV 1.13");
 
@@ -256,7 +233,7 @@ namespace CustomAircraftTemplate
             GameObject playerGTrans = AircraftAPI.GetChildWithName(cameraRigGO, "PlayerGTransform", false);
             //Debug.Log("MSSSV 1.16.1");
 
-            FlightInfo customFlightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
+            FlightInfo customFlightInfo = aircraftMod.aircraftCustom.GetComponent<FlightInfo>();
             //Debug.Log("MSSSV 1.16.2");
 
             //customFlightInfo.playerGTransform = playerGTrans.transform;
@@ -265,7 +242,8 @@ namespace CustomAircraftTemplate
             GameObject controllerLeft = AircraftAPI.GetChildWithName(cameraRigParent, "Controller (left)", false);
             GameObject swatglowerLeft = AircraftAPI.GetChildWithName(controllerLeft, "SWAT_glower_pivot.002", false);
             GameObject postDeathLookTgt = AircraftAPI.GetChildWithName(controllerLeft, "postDeathLookTgt", false);
-            LookRotationReference leftForearmLRTf = AircraftAPI.GetChildWithName(controllerLeft, "forearmLook", false).GetComponent<LookRotationReference>();
+            LookRotationReference leftForearmLRTf = AircraftAPI.GetChildWithName(controllerLeft, "forearmLook", false)
+                .GetComponent<LookRotationReference>();
 
 
             pilotColorSetupComp.pilotRenderers[1] = swatglowerLeft.GetComponent<SkinnedMeshRenderer>();
@@ -281,9 +259,6 @@ namespace CustomAircraftTemplate
             tempPilotDetacherComp.OnDetachPilot.AddListener(matSwitchLeft.SwitchToB);
             MaterialSwitcher matSwitchRight = swatglowerRight.GetComponent<MaterialSwitcher>();
             tempPilotDetacherComp.OnDetachPilot.AddListener(matSwitchRight.SwitchToB);
-
-
-
 
             //Debug.Log("MSSSV 1.20");
 
@@ -311,12 +286,12 @@ namespace CustomAircraftTemplate
             componentInChildren8.helmet = hqhHCComp;
             //Debug.Log("MSSSV 1.24");
 
-            GameObject nvgBIVL = AircraftAPI.GetChildWithName(Main.aircraftCustom, "nvgButtonInteractable", false);
+            GameObject nvgBIVL = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "nvgButtonInteractable", false);
             VRInteractable nvgBIVLVRL = nvgBIVL.GetComponent<VRInteractable>();
             nvgBIVLVRL.OnInteract.AddListener(hqhHCComp.ToggleNVG);
             //Debug.Log("MSSSV 1.25");
 
-            GameObject visorBIVL = AircraftAPI.GetChildWithName(Main.aircraftCustom, "visorButtonInteractable", false);
+            GameObject visorBIVL = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "visorButtonInteractable", false);
             VRInteractable visorBIVLVRL = visorBIVL.GetComponent<VRInteractable>();
             visorBIVLVRL.OnInteract.AddListener(hqhHCComp.ToggleVisor);
             //Debug.Log("MSSSV 1.26");
@@ -327,12 +302,11 @@ namespace CustomAircraftTemplate
 
             GameObject HMCSDisplays = AircraftAPI.GetChildWithName(cameraEye, "HMCSDisplays", true);
 
-            WeaponManager wem = Main.aircraftCustom.GetComponent<WeaponManager>();
+            WeaponManager wem = aircraftMod.aircraftCustom.GetComponent<WeaponManager>();
             //Debug.Log("MSSSV 1.26.1 = " + wem.name);
 
             GameObject WeaponInfo = AircraftAPI.GetChildWithName(HMCSDisplays, "WeaponInfo", true);
-            Main.HMCSAltText = AircraftAPI.GetChildWithName(HMCSDisplays, "Alt", true);
-
+            aircraftMod.HMCSAltText = AircraftAPI.GetChildWithName(HMCSDisplays, "Alt", true);
 
             WeaponInfo.GetComponent<HMDWeaponInfo>().wm = wem;
 
@@ -341,7 +315,7 @@ namespace CustomAircraftTemplate
             //  MirageElements.IdentifiedRadarTargetsSetup();
             prefabES = aircraftSeat.GetComponent<EjectionSeat>();
             UnityEngine.Component.Destroy(prefabES);
-             GameObject MPSyncs = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MPSyncs", false);
+            GameObject MPSyncs = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "MPSyncs", false);
             Debug.Log("MSSSV 1.28");
             EjectSync ejectSyncs = MPSyncs.GetComponent<EjectSync>();
             Debug.Log("MSSSV 1.29");
@@ -350,10 +324,7 @@ namespace CustomAircraftTemplate
             ejectSyncs.localEjector = ejectionSeat;
             return;
         }
-
     }
-
-  
 
     [HarmonyPatch(typeof(WeaponManager), "ReattachWeapons")]
     public class SU35_ReattachWeapons_post
@@ -361,30 +332,31 @@ namespace CustomAircraftTemplate
         public static void Postfix(WeaponManager __instance)
         {
             //Debug.Log("MSSSV 1.27");
-           // MirageElements.SetUpGauges();
+            // MirageElements.SetUpGauges();
             //Debug.Log("MSSSV 1.28");
-          //  MirageElements.SetupArmingText();
+            //  MirageElements.SetupArmingText();
             //Debug.Log("MSSSV 1.29");
-        AircraftSetup.SetUpEOTS();
+            AircraftSetup.SetUpEOTS();
         }
     }
-   
 
 
-        [HarmonyPatch(typeof(MFDRadarUI), "Awake")]
+
+    [HarmonyPatch(typeof(MFDRadarUI), "Awake")]
     public class SU35_MFDUIAwakePatch
     {
         public static bool Prefix(MFDRadarUI __instance)
         {
-          
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            Main aircraftMod = Main.Instance;
+
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return true;
             //Debug.Log("Starting MDUIAwake 0.0");
             //Debug.unityLogger.logEnabled = Main.logging;
             //Debug.Log("Starting MDUIAwake 1.0");
             Traverse traversemui = Traverse.Create(__instance);
             traversemui.Field("isMultiCrew").SetValue(false);
-            
+
             __instance.SetupPools();
             __instance.SetupDisplay();
             __instance.softLocks = new MFDRadarUI.UIRadarContact[__instance.softLockCount];
@@ -404,8 +376,9 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(MFDRadarUI __instance)
         {
-            
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            Main aircraftMod = Main.Instance;
+
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return true;
             //Debug.unityLogger.logEnabled = Main.logging;
             //Debug.Log("Starting MDUISP 1.0");
@@ -419,8 +392,9 @@ namespace CustomAircraftTemplate
     {
         public static void Postfix(BlackoutEffect __instance)
         {
-           
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            Main aircraftMod = Main.Instance;
+
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return;
             //Debug.unityLogger.logEnabled = Main.logging;
             Debug.Log("Starting BOFPatch 1.0");
@@ -429,7 +403,7 @@ namespace CustomAircraftTemplate
             float num = Mathf.Abs(newgAccum) * __instance.aFactor;
             Debug.Log("Starting BOFPatch 1.0.1");
 
-            Single newAlpha = Main.currentGAlpha;
+            Single newAlpha = aircraftMod.currentGAlpha;
             Debug.Log("Starting BOFPatch 1.0.2");
 
             NightVisionGoggles newNVG = (NightVisionGoggles)traverse1.Field("nvg").GetValue();
@@ -437,7 +411,7 @@ namespace CustomAircraftTemplate
 
             newAlpha = Mathf.Lerp(newAlpha, num, 20f * Time.deltaTime);
             Debug.Log("Starting BOFPatch 1.0.4");
-            Main.currentGAlpha = newAlpha;
+            aircraftMod.currentGAlpha = newAlpha;
 
             Color color = (newNVG && newNVG.IsNVGVisible()) ? __instance.nvgRedoutColor : __instance.redoutColor;
             Debug.Log("Starting BOFPatch 1.0.5");
@@ -449,20 +423,20 @@ namespace CustomAircraftTemplate
             Debug.Log("Starting BOFPatch 1.0.7");
 
             color2.a = newAlpha * newAlpha;
-            GameObject BONew = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffectNew", false);
+            GameObject BONew = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutEffectNew", false);
             Debug.Log("Starting BOFPatch 1.0.7.1");
-            Main.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
+            aircraftMod.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
 
             Debug.Log("Starting BOFPatch 1.0.8");
-            MeshRenderer BOMesh = Main.BOQuad.GetComponent<MeshRenderer>();
+            MeshRenderer BOMesh = aircraftMod.BOQuad.GetComponent<MeshRenderer>();
             Debug.Log("Starting BOFPatch 1.0.8.1");
             Material BOMat = BOMesh.material;
             Debug.Log("Starting BOFPatch 1.0.9");
             Color BOMatColor = BOMat.color;
-            Debug.Log("Starting BOFPatch 1.0.0: Alpha = " + Main.currentGAlpha + "GAccum: " + newgAccum);
+            Debug.Log("Starting BOFPatch 1.0.0: Alpha = " + aircraftMod.currentGAlpha + "GAccum: " + newgAccum);
 
             BOMatColor.a = newAlpha;
-            BOMat.color = new Color(0,0,0,newAlpha);
+            BOMat.color = new Color(0, 0, 0, newAlpha);
         }
 
     }
@@ -472,9 +446,11 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(BlackoutEffect __instance)
         {
-            if (!Main.aircraftLoaded)
+            Main aircraftMod = Main.Instance;
+
+            if (!aircraftMod.aircraftLoaded)
             { return true; }
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return true;
             if (!__instance.audioMixer) { return false; }
 
@@ -498,9 +474,11 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(BlackoutEffect __instance)
         {
-            if (!Main.aircraftLoaded)
+            Main aircraftMod = Main.Instance;
+
+            if (!aircraftMod.aircraftLoaded)
             { return true; }
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return true;
             if (!__instance.audioMixer) { return false; }
             //Debug.Log("BOFDisable 1.0");
@@ -520,9 +498,11 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(MFDRadarUI __instance)
         {
-            if (!Main.aircraftLoaded)
+            Main aircraftMod = Main.Instance;
+
+            if (!aircraftMod.aircraftLoaded)
             { return true; }
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return true;
             //Debug.unityLogger.logEnabled = Main.logging;
             //Debug.Log("Starting ClrSftLk 1.0");
@@ -552,7 +532,7 @@ namespace CustomAircraftTemplate
             __instance.UpdateLocks();
             return false;
         }
-        
+
     }
 
 
@@ -561,50 +541,48 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(PlayerSpawn __instance)
         {
-           
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+
+            if (PilotSaveManager.currentVehicle.vehicleName != Main.Instance.customAircraftPV.vehicleName)
                 return true;
             Debug.Log("Starting OPS 1");
-            Debug.unityLogger.logEnabled = Main.logging;
+            Debug.unityLogger.logEnabled = Main.Instance.logging;
             // __instance.OnPreSpawnUnit();
-           
+
             Debug.Log("Starting OPS");
 
+            Main aircraftMod = Main.Instance;
 
-            GameObject vehiclePrefab = Main.aircraftPrefab;
+            GameObject vehiclePrefab = Main.Instance.aircraftPrefab;
             if (vehiclePrefab)
             {
                 Debug.Log("Starting OPS Inst");
 
-                Debug.Log("AircraftSelected = " + AircraftInfo.AircraftSelected);
-
-
                 Debug.Log("OPS 0.00.0.1");
-                Main.i = 0;
+                aircraftMod.hasInitEots = false;
 
                 Vector3 position = new Vector3(0, 1.1f, 0);
                 Quaternion rotation = new Quaternion(0, 0, 0, 0);
 
                 Debug.Log("OPS 0.00.0.2");
-                Main.aircraftCustom = UnityEngine.Object.Instantiate<GameObject>(vehiclePrefab, position, rotation);
-                Main.aircraftLoaded = true;
-                
+                aircraftMod.aircraftCustom = UnityEngine.Object.Instantiate(vehiclePrefab, position, rotation);
+                aircraftMod.aircraftLoaded = true;
+
                 Debug.Log("OPS 0.00.0.3");
 
-                GameObject BONew = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffectNew", false);
+                GameObject BONew = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutEffectNew", false);
                 Debug.Log("OPS 0.00.0.4");
 
-                Main.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
+                aircraftMod.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
                 Debug.Log("OPS 0.00.0.5");
 
-                Rigidbody component = Main.aircraftCustom.GetComponent<Rigidbody>();
+                Rigidbody component = aircraftMod.aircraftCustom.GetComponent<Rigidbody>();
                 Debug.Log("OPS 0.00.0.6");
 
                 Traverse traverse = Traverse.Create(__instance);
-                traverse.Field("vehicleRb").SetValue(Main.aircraftCustom.GetComponent<Rigidbody>());
+                traverse.Field("vehicleRb").SetValue(aircraftMod.aircraftCustom.GetComponent<Rigidbody>());
                 Debug.Log("OPS 0.00.0.7");
 
-                traverse.Field("playerVm").SetValue(Main.aircraftCustom.GetComponent<VehicleMaster>());
+                traverse.Field("playerVm").SetValue(aircraftMod.aircraftCustom.GetComponent<VehicleMaster>());
                 traverse.Field("vehicleRb").Field("interpolation").SetValue(RigidbodyInterpolation.None);
 
 
@@ -614,11 +592,13 @@ namespace CustomAircraftTemplate
                 GameObject f26seatholder = AircraftAPI.GetChildWithName(vehiclePrefab2, "EjectorSeat", false);
                 Debug.Log("OPS 0.00.0.8");
 
-                GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(f26seatholder, position2, Main.aircraftCustom.transform.rotation);
+                GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(f26seatholder, position2,
+                    aircraftMod.aircraftCustom.transform.rotation);
                 Debug.Log("OPS 0.00.0.9");
 
-                
-                Actor actor = __instance.actor = (FlightSceneManager.instance.playerActor = Main.aircraftCustom.GetComponent<Actor>());
+
+                Actor actor = __instance.actor = FlightSceneManager.instance.playerActor =
+                    aircraftMod.aircraftCustom.GetComponent<Actor>();
 
                 Debug.Log("OPS 0.00.0.10");
 
@@ -628,19 +608,19 @@ namespace CustomAircraftTemplate
                 actor.unitSpawn = __instance;
                 Debug.Log("OPS 0.00.0.12");
 
-                
+
 
                 Debug.Log("OPSStartPatch 00");
                 GameObject f26EjectorSeat = AircraftAPI.GetChildWithName(gameObject2, "EjectorSeat", false);
                 f26EjectorSeat.transform.localScale = new Vector3(0.92f, 0.92f, 0.92f);
-                f26EjectorSeat.transform.SetParent(Main.aircraftCustom.transform);
+                f26EjectorSeat.transform.SetParent(aircraftMod.aircraftCustom.transform);
                 Debug.Log("OPSStartPatch 00.1");
 
                 Vector3 PlaneLocation = gameObject2.transform.position;
                 Quaternion PlaneRotation = gameObject2.transform.rotation;
                 Debug.Log("OPSStartPatch 00.2");
                 Debug.Log("PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
-               
+
                 Debug.Log("OPSStartPatch 00.7");
                 //GameObject f26Heartbeat2 = AircraftAPI.GetChildWithName(gameObject2, "HeartbeatAudio", true);
                 f26EjectorSeat.SetActive(true);
@@ -650,37 +630,35 @@ namespace CustomAircraftTemplate
 
                 Debug.Log("OPSStartPatch 0");
 
-                Main.aircraftCustom.transform.position = PlaneLocation;
-                Main.aircraftCustom.transform.rotation = PlaneRotation;
+                aircraftMod.aircraftCustom.transform.position = PlaneLocation;
+                aircraftMod.aircraftCustom.transform.rotation = PlaneRotation;
                 Debug.Log("OPSStartPatch 01");
 
                 Debug.Log("OPSStartPatch 1");
-                GameObject aircraftSeat = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EjectorSeatLocation", false);
+                GameObject aircraftSeat = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "EjectorSeatLocation", false);
                 f26EjectorSeat.transform.SetParent(aircraftSeat.transform);
                 Debug.Log("OPSStartPatch 1.1");
 
                 f26EjectorSeat.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
                 f26EjectorSeat.transform.localPosition = new Vector3(0f, 0f, 0f);
                 Debug.Log("OPSStartPatch 1.2");
-                Debug.Log("FOS threshold: " + Main.aircraftCustom.GetComponent<FloatingOriginShifter>().threshold);
+                Debug.Log("FOS threshold: " + aircraftMod.aircraftCustom.GetComponent<FloatingOriginShifter>().threshold);
 
-
-
-                Main.aircraftCustom.SetActive(false);
+                aircraftMod.aircraftCustom.SetActive(false);
 
                 //FloatingOriginShifter floatingOriginShifter = Main.aircraftCustom.AddComponent<FloatingOriginShifter>();
                 //floatingOriginShifter.rb = component;
                 //floatingOriginShifter.threshold = 600f;
-               // FloatingOriginShifter floatingOriginShifter = Main.aircraftCustom.GetComponent<FloatingOriginShifter>();
-               // floatingOriginShifter.enabled = false;
-             //   floatingOriginShifter.enabled = true;
+                // FloatingOriginShifter floatingOriginShifter = Main.aircraftCustom.GetComponent<FloatingOriginShifter>();
+                // floatingOriginShifter.enabled = false;
+                //   floatingOriginShifter.enabled = true;
                 Debug.Log("OPSStartPatch 1.2.1");
 
 
-                GameObject cameraEye = AircraftAPI.GetChildWithName(Main.aircraftCustom, "Camera (eye)", false);
+                GameObject cameraEye = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "Camera (eye)", false);
                 Debug.Log("OPSStartPatch 1.2.2");
                 Camera cameraEyeCamera = cameraEye.GetComponent<Camera>();
-                GameObject hudCanvas = AircraftAPI.GetChildWithName(Main.aircraftCustom, "HUDCanvas", false);
+                GameObject hudCanvas = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "HUDCanvas", false);
                 Debug.Log("OPSStartPatch 1.2.3");
                 Canvas hudCanvasCanvasComp = hudCanvas.GetComponent<Canvas>();
                 hudCanvasCanvasComp.worldCamera = cameraEyeCamera;
@@ -691,7 +669,7 @@ namespace CustomAircraftTemplate
                 HUDElevationLadder elevationLadderComp = elevationLadder.GetComponent<HUDElevationLadder>();
                 elevationLadderComp.headTransform = cameraEyeTf;
                 Debug.Log("OPSStartPatch 1.2.4.2");
-                GameObject sideStickObject = AircraftAPI.GetChildWithName(Main.aircraftCustom, "SideStickObjects", false);
+                GameObject sideStickObject = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "SideStickObjects", false);
                 GameObject autoAdjust = AircraftAPI.GetChildWithName(sideStickObject, "AutoAdjust", false);
                 GameObject autoAdjustCanvas = AircraftAPI.GetChildWithName(autoAdjust, "Canvas", false);
                 Debug.Log("OPSStartPatch 1.2.4.3");
@@ -700,12 +678,12 @@ namespace CustomAircraftTemplate
                 autoAdjustCanvasCompCanvas.worldCamera = cameraEyeCamera;
                 Debug.Log("OPSStartPatch 1.2.4.4");
 
-                GameObject dashCanvas = AircraftAPI.GetChildWithName(Main.aircraftCustom, "DashCanvas", false);
+                GameObject dashCanvas = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "DashCanvas", false);
                 Canvas dashCanvasCompCanvas = dashCanvas.GetComponent<Canvas>();
                 Debug.Log("OPSStartPatch 1.2.4.5");
 
                 dashCanvasCompCanvas.worldCamera = cameraEyeCamera;
-                GameObject spectatorCam = AircraftAPI.GetChildWithName(Main.aircraftCustom, "SpectatorCam", false);
+                GameObject spectatorCam = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "SpectatorCam", false);
                 Debug.Log("OPSStartPatch 1.2.4.5");
 
                 FlybyCameraMFDPage flybyCameraMFDPage = spectatorCam.GetComponent<FlybyCameraMFDPage>();
@@ -714,18 +692,15 @@ namespace CustomAircraftTemplate
                 Debug.Log("OPSStartPatch 1.2.4.5.1");
 
                 AudioListenerPosition cameraEyeALP = cameraEye.GetComponent<AudioListenerPosition>();
-                
-                cameraEyeALP.SetParentRigidbody(Main.aircraftCustom.GetComponent<Rigidbody>());
-                cameraEyeALP.rb = Main.aircraftCustom.GetComponent<Rigidbody>();
 
+                cameraEyeALP.SetParentRigidbody(aircraftMod.aircraftCustom.GetComponent<Rigidbody>());
+                cameraEyeALP.rb = aircraftMod.aircraftCustom.GetComponent<Rigidbody>();
 
                 Debug.Log("OPSStartPatch 1.2.4.6");
-
 
                 //cameraEye.GetComponent<AudioListenerPosition>().rb = Main.aircraftCustom.GetComponent<Rigidbody>();
-                TargetingMFDPage componentInChildren8 = Main.aircraftCustom.GetComponentInChildren<TargetingMFDPage>(true);
+                TargetingMFDPage componentInChildren8 = aircraftMod.aircraftCustom.GetComponentInChildren<TargetingMFDPage>(true);
                 Debug.Log("OPSStartPatch 1.2.4.6");
-
 
                 GameObject hqhGO = AircraftAPI.GetChildWithName(cameraEye, "hqh", false);
                 HelmetController helmetController = hqhGO.GetComponent<HelmetController>();
@@ -739,44 +714,40 @@ namespace CustomAircraftTemplate
                 helmetController.hudMaskToggler = hudCanvas.GetComponent<HUDMaskToggler>();
                 Debug.Log("OPSStartPatch 1.2.4.6.2");
 
-                helmetController.battery = AircraftAPI.GetChildWithName(Main.aircraftCustom, "battery", false).GetComponent<Battery>();
-                GameObject hmcsPowerInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "hmcsPowerInteractable", false);
+                helmetController.battery = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "battery", false)
+                    .GetComponent<Battery>();
+                GameObject hmcsPowerInteractable = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom,
+                    "hmcsPowerInteractable", false);
                 Debug.Log("OPSStartPatch 1.2.4.7");
-
-                
-
 
                 Debug.Log("OPSStartPatch 1.2.4.7.1");
 
                 VRLever hmcsPowerInteractableVRL = hmcsPowerInteractable.GetComponent<VRLever>();
                 hmcsPowerInteractableVRL.OnSetState.AddListener(helmetController.SetPower);
 
-                GameObject visorButtonInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "visorButtonInteractable", false);
+                GameObject visorButtonInteractable = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom,
+                    "visorButtonInteractable", false);
                 Debug.Log("OPSStartPatch 1.2.4.8");
 
                 VRInteractable visorButtonInteractableVRI = visorButtonInteractable.GetComponent<VRInteractable>();
                 visorButtonInteractableVRI.OnInteract.AddListener(helmetController.ToggleVisor);
                 Debug.Log("OPSStartPatch 1.2.4.9");
 
-
-
                 Debug.Log("OPSStartPatch 1.2.5");
                 Debug.Log("OPSStartPatch 1.2.6");
-                Main.aircraftCustom.SetActive(true);
+                aircraftMod.aircraftCustom.SetActive(true);
                 //componentInChildren8.SetOpticalTargeter();
-                GameObject blackOutParent = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutParent", true);
+                GameObject blackOutParent = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutParent", true);
                 blackOutParent.SetActive(false);
-                GameObject blackOutEffect = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffect", true);
-               
-                blackOutEffect.SetActive(false);
-                GameObject blackOutEffectNew = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffectNewParent", true);
-                blackOutEffectNew.transform.SetParent(cameraEye.transform);
-                
+                GameObject blackOutEffect = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutEffect", true);
 
+                blackOutEffect.SetActive(false);
+                GameObject blackOutEffectNew = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "blackoutEffectNewParent", true);
+                blackOutEffectNew.transform.SetParent(cameraEye.transform);
 
                 Debug.Log("OPSStartPatch 1.3");
 
-                GameObject screenFader = AircraftAPI.GetChildWithName(Main.aircraftCustom, "ScreenFader", false);
+                GameObject screenFader = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "ScreenFader", false);
                 screenFader.SetActive(false);
 
                 Rigidbody ejectionSeatRB = f26EjectorSeat.GetComponent<Rigidbody>();
@@ -787,7 +758,7 @@ namespace CustomAircraftTemplate
                 flybyCameraMFDPage.seatRb = ejectionSeatRB;
                 Debug.Log("OPSStartPatch 1.5");
 
-                ShipController CustomAircraftSC = Main.aircraftCustom.GetComponent<ShipController>();
+                ShipController CustomAircraftSC = aircraftMod.aircraftCustom.GetComponent<ShipController>();
                 CustomAircraftSC.ejectionSeat = ejectionSeatES;
                 Debug.Log("OPSStartPatch 1.6");
 
@@ -797,19 +768,19 @@ namespace CustomAircraftTemplate
                 Debug.Log("OPSStartPatch 1.9");
 
                 GameObject riggedSuit2 = AircraftAPI.GetChildWithName(f26EjectorSeat, "RiggedSuit (2)", false);
-                TempPilotDetacher tempPilotDetacherComp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "TempPilotDetacher", false).GetComponent<TempPilotDetacher>();
+                TempPilotDetacher tempPilotDetacherComp = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "TempPilotDetacher", false).GetComponent<TempPilotDetacher>();
                 tempPilotDetacherComp.pilotModel = riggedSuit2;
                 Debug.Log("OPSStartPatch 1.10");
 
-                PlayerVehicleSetup customPlayerVS = Main.aircraftCustom.GetComponent<PlayerVehicleSetup>();
+                PlayerVehicleSetup customPlayerVS = aircraftMod.aircraftCustom.GetComponent<PlayerVehicleSetup>();
                 customPlayerVS.hideObjectsOnConfig[2] = riggedSuit2;
                 Debug.Log("OPSStartPatch 1.11");
 
-                VehicleInputManager customPlayerVI = Main.aircraftCustom.GetComponent<VehicleInputManager>();
+                VehicleInputManager customPlayerVI = aircraftMod.aircraftCustom.GetComponent<VehicleInputManager>();
                 customPlayerVI.pyrOutputs[1] = riggedSuit2.GetComponent<RudderFootAnimator>();
                 Debug.Log("OPSStartPatch 1.12");
 
-                PilotColorSetup pilotColorSetupComp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "PilotColorApplier", false).GetComponent<PilotColorSetup>();
+                PilotColorSetup pilotColorSetupComp = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "PilotColorApplier", false).GetComponent<PilotColorSetup>();
                 SkinnedMeshRenderer riggedSuit001SMComp = AircraftAPI.GetChildWithName(f26EjectorSeat, "RiggedSuit.001", false).GetComponent<SkinnedMeshRenderer>();
                 pilotColorSetupComp.pilotRenderers[3] = riggedSuit001SMComp;
                 Debug.Log("OPSStartPatch 1.13");
@@ -828,7 +799,7 @@ namespace CustomAircraftTemplate
                 GameObject playerGTrans = AircraftAPI.GetChildWithName(cameraRigGO, "PlayerGTransform", false);
                 Debug.Log("OPSStartPatch 1.16.1");
 
-                FlightInfo customFlightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
+                FlightInfo customFlightInfo = aircraftMod.aircraftCustom.GetComponent<FlightInfo>();
                 Debug.Log("OPSStartPatch 1.16.2");
 
                 //customFlightInfo.playerGTransform = playerGTrans.transform;
@@ -853,9 +824,6 @@ namespace CustomAircraftTemplate
                 tempPilotDetacherComp.OnDetachPilot.AddListener(matSwitchLeft.SwitchToB);
                 MaterialSwitcher matSwitchRight = swatglowerRight.GetComponent<MaterialSwitcher>();
                 tempPilotDetacherComp.OnDetachPilot.AddListener(matSwitchRight.SwitchToB);
-
-
-
 
                 Debug.Log("OPSStartPatch 1.20");
 
@@ -883,12 +851,12 @@ namespace CustomAircraftTemplate
                 componentInChildren8.helmet = hqhHCComp;
                 Debug.Log("OPSStartPatch 1.24");
 
-                GameObject nvgBIVL = AircraftAPI.GetChildWithName(Main.aircraftCustom, "nvgButtonInteractable", false);
+                GameObject nvgBIVL = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "nvgButtonInteractable", false);
                 VRInteractable nvgBIVLVRL = nvgBIVL.GetComponent<VRInteractable>();
                 nvgBIVLVRL.OnInteract.AddListener(hqhHCComp.ToggleNVG);
                 Debug.Log("OPSStartPatch 1.25");
 
-                GameObject visorBIVL = AircraftAPI.GetChildWithName(Main.aircraftCustom, "visorButtonInteractable", false);
+                GameObject visorBIVL = AircraftAPI.GetChildWithName(aircraftMod.aircraftCustom, "visorButtonInteractable", false);
                 VRInteractable visorBIVLVRL = visorBIVL.GetComponent<VRInteractable>();
                 visorBIVLVRL.OnInteract.AddListener(hqhHCComp.ToggleVisor);
                 Debug.Log("OPSStartPatch 1.26");
@@ -898,14 +866,14 @@ namespace CustomAircraftTemplate
                 cockpitWindNoiseAC.flightInfo = customFlightInfo;
 
                 GameObject HMCSDisplays = AircraftAPI.GetChildWithName(cameraEye, "HMCSDisplays", true);
-                
-                WeaponManager wem = Main.aircraftCustom.GetComponent<WeaponManager>();
+
+                WeaponManager wem = aircraftMod.aircraftCustom.GetComponent<WeaponManager>();
                 Debug.Log("OPSStartPatch 1.26.1 = " + wem.name);
 
                 GameObject WeaponInfo = AircraftAPI.GetChildWithName(HMCSDisplays, "WeaponInfo", true);
-                Main.HMCSAltText = AircraftAPI.GetChildWithName(HMCSDisplays, "Alt", true);
+                aircraftMod.HMCSAltText = AircraftAPI.GetChildWithName(HMCSDisplays, "Alt", true);
 
-                PlayerVehicleNetSync componentNetSync = Main.aircraftCustom.GetComponent<PlayerVehicleNetSync>();
+                PlayerVehicleNetSync componentNetSync = aircraftMod.aircraftCustom.GetComponent<PlayerVehicleNetSync>();
                 if (componentNetSync)
                 {
                     componentNetSync.Initialize();
@@ -914,14 +882,14 @@ namespace CustomAircraftTemplate
                 WeaponInfo.GetComponent<HMDWeaponInfo>().wm = wem;
 
                 Debug.Log("OPSStartPatch 1.27");
-               // MirageElements.SetUpGauges();
-             // MirageElements.IdentifiedRadarTargetsSetup();
+                // MirageElements.SetUpGauges();
+                // MirageElements.IdentifiedRadarTargetsSetup();
             }
             return false;
         }
     }
-    
-    
+
+
     [HarmonyPatch(typeof(PlayerSpawn), "OnSpawnUnit")]
     public class SU35_OSStartPatch
     {
@@ -930,12 +898,13 @@ namespace CustomAircraftTemplate
             //Debug.Log("Starting OSU 0.0");
             return true;
         }
-            public static void Postfix(PlayerSpawn __instance)
+        public static void Postfix(PlayerSpawn __instance)
         {
+            Main aircraftMod = Main.Instance;
             //Debug.Log("Starting OSU 1.0");
-            if (!Main.aircraftLoaded)
-            { return ; }
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            if (!aircraftMod.aircraftLoaded)
+            { return; }
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return;
             //MirageElements.SetupArmingText();
             AircraftSetup.SetUpEOTS();
@@ -948,12 +917,14 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(TargetingMFDPage __instance)
         {
-            if (!Main.aircraftLoaded)
+            Main aircraftMod = Main.Instance;
+
+            if (!aircraftMod.aircraftLoaded)
             { return true; }
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return true;
             //Debug.unityLogger.logEnabled = Main.logging;
-            HelmetController helmet = Main.aircraftCustom.GetComponentInChildren<HelmetController>(true);
+            HelmetController helmet = aircraftMod.aircraftCustom.GetComponentInChildren<HelmetController>(true);
             __instance.helmet = helmet;
             if (__instance.targetingCamera)
             {
@@ -980,7 +951,7 @@ namespace CustomAircraftTemplate
         }
     }
 
-    
+
     [HarmonyPatch(typeof(WeaponManager), nameof(WeaponManager.Awake))]
     public class SU35_PlayerSpawnAwakePatch
     {
@@ -994,147 +965,97 @@ namespace CustomAircraftTemplate
 
         public static void Prefix(WeaponManager __instance)
         {
-            
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            Main aircraftMod = Main.Instance;
+
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return;
-            //Debug.unityLogger.logEnabled = Main.logging;
-            //Debug.Log("Awake prefix ran in wm!");
-            
-
-            //Debug.Log("Weapon Manager for : " + __instance.vm);
-
-
-           
 
             if (__instance.gameObject.GetComponentInChildren<PlayerFlightLogger>())
             {
 
-                Main.playerGameObject = __instance.gameObject;
-                FA26Aircraft = AircraftAPI.GetChildWithName(Main.playerGameObject, "FA-26B", false);
+                aircraftMod.playerGameObject = __instance.gameObject;
+                FA26Aircraft = AircraftAPI.GetChildWithName(aircraftMod.playerGameObject, "FA-26B", false);
 
-                //Debug.Log("0");
                 if (!FA26Aircraft) { return; }
-                
-                //Debug.Log("001");
-              
-                //Debug.Log("PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
-
                 UnityEngine.Object.Destroy(FA26Aircraft);
-
-                
-                
-
             }
         }
 
         public static void Postfix(WeaponManager __instance)
         {
-            
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            Main aircraftMod = Main.Instance;
+
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return;
-            //Debug.unityLogger.logEnabled = Main.logging;
-            //Debug.Log("pf1");
+
             Traverse traverse = Traverse.Create(__instance);
-            //Debug.Log("pf1.1");
             HPEquippable[] hpEquippables = (HPEquippable[])traverse.Field("equips").GetValue();
-            //Debug.Log("pf1.2");
-
-
         }
     }
 
-    
+
 
     [HarmonyPatch(typeof(TargetingMFDPage), "Setup")]
     public class SU35_TMFDStartPatch
     {
         public static bool Prefix(TargetingMFDPage __instance)
         {
-            
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            Main aircraftMod = Main.Instance;
+
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return true;
-            //Debug.unityLogger.logEnabled = Main.logging;
-            //Debug.Log("TargetingMFDPage Setup 1.0 : " + __instance.gameObject.transform.parent.transform.parent.transform.parent);
 
             Traverse traverseT1 = Traverse.Create(__instance);
             bool startedTMFD = (bool)traverseT1.Field("started").GetValue();
 
-            //Debug.Log("TargetingMFDPage Setup 1.1");
-
             if (startedTMFD)
             {
-                //Debug.Log("TargetingMFDPage Setup 1.2");
-
                 return false;
             }
-            //Debug.Log("TargetingMFDPage Setup 1.3");
 
             startedTMFD = true;
             traverseT1.Field("started").SetValue(true);
 
-
             WeaponManager TMFDwm = (WeaponManager)traverseT1.Field("wm").GetValue();
-
-
-            //Debug.Log("TargetingMFDPage Setup 1.4 +" + TMFDwm);
 
             if (!TMFDwm) { return false; }
 
             if (TMFDwm.opticalTargeter)
             {
-                //Debug.Log("TargetingMFDPage Setup 1.5");
-
                 if (!__instance.targetingCamera)
                 {
-                    //Debug.Log("TargetingMFDPage Setup 1.6");
-
                     __instance.targetingCamera = TMFDwm.opticalTargeter.cameraTransform.GetComponent<Camera>();
                 }
                 if (!__instance.opticalTargeter)
                 {
-                    //Debug.Log("TargetingMFDPage Setup 1.7");
-
                     __instance.opticalTargeter = TMFDwm.opticalTargeter;
                 }
                 if (__instance.targetingCamera)
                 {
-                    //Debug.Log("TargetingMFDPage Setup 1.8");
-
                     LODManager.instance.tcam = __instance.targetingCamera;
                 }
-                
             }
             else
             {
                 return false;
             }
             string[] tgpModeLabelsT1 = (string[])traverseT1.Field("tgpModeLabels").GetValue();
-            //Debug.Log("TargetingMFDPage Setup 1.9");
 
             if (__instance.mfdPage)
             {
-                //Debug.Log("TargetingMFDPage Setup 1.10");
-
-
                 __instance.mfdPage.SetText("tgpMode", tgpModeLabelsT1[(int)__instance.tgpMode]);
             }
             else if (__instance.portalPage)
             {
-                //Debug.Log("TargetingMFDPage Setup 1.11");
-
                 __instance.portalPage.SetText("tgpMode", tgpModeLabelsT1[(int)__instance.tgpMode]);
             }
             traverseT1.Field("gpsSystem").SetValue(TMFDwm.gpsSystem);
             if (__instance.limitLineRenderer)
             {
-                //Debug.Log("TargetingMFDPage Setup 1.12");
-
                 __instance.SetupLimitLine();
             }
-            //Debug.Log("TargetingMFDPage Setup 1.13");
-
             __instance.UpdateLimLineVisibility();
-            //Debug.Log("TargetingMFDPage Setup");
+
             return false;
         }
     }
@@ -1145,33 +1066,30 @@ namespace CustomAircraftTemplate
     {
         public static void Prefix(FlybyCameraMFDPage __instance)
         {
-            
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            Main aircraftMod = Main.Instance;
+
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return;
-            //Debug.unityLogger.logEnabled = Main.logging;
+
             Traverse traverseF1 = Traverse.Create(__instance);
-            //Debug.Log("Scamepatch 1.0");
+
             bool flyCamEnabledFBCMFD = (bool)traverseF1.Field("flyCamEnabled").GetValue();
             bool previewEnabledFBCMFD = (bool)traverseF1.Field("previewEnabled").GetValue();
-            //Debug.Log("Scamepatch 1.1");
+
 
             if (flyCamEnabledFBCMFD)
             {
-                //Debug.Log("Scamepatch 1.2");
                 __instance.SetupFlybyPosition((FlybyCameraMFDPage.SpectatorBehaviors)(-1));
                 return;
             }
-            //Debug.Log("Scamepatch 1.3");
             if (previewEnabledFBCMFD)
             {
-                //Debug.Log("Scamepatch 1.3.1");
                 __instance.previewObject.SetActive(true);
             }
-            //Debug.Log("Scamepatch 1.4");
             traverseF1.Field("flyCamEnabled").SetValue(true);
 
             flyCamEnabledFBCMFD = true;
-            //Debug.Log("Scamepatch 1.5");
+
             traverseF1.Field("cameraStartTime").SetValue(Time.time);
             __instance.flybyCam.gameObject.SetActive(true);
             __instance.flybyCam.transform.parent = null;
@@ -1188,26 +1106,23 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(FlybyCameraMFDPage.SCamNVGController __instance)
         {
-           
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            Main aircraftMod = Main.Instance;
+
+            if (PilotSaveManager.currentVehicle.vehicleName != aircraftMod.customAircraftPV.vehicleName)
                 return true;
-            //Debug.unityLogger.logEnabled = Main.logging;
+
             Traverse traverse1 = Traverse.Create(__instance);
-            //Debug.Log("PatchNVGPreCull 1.0");
 
             if (!__instance.specCamNVG) { return false; }
-            //Debug.Log("PatchNVGPreCull 1.0.1");
+
             if (__instance.specCamNVG.enabled)
             {
-                //Debug.Log("PatchNVGPreCull 1.1");
                 if (__instance.doIllum)
                 {
-                    //Debug.Log("PatchNVGPreCull 1.2");
                     traverse1.Field("illumEnabled").SetValue(true);
                     //__instance.illumEnabled = true;
-                    //Debug.Log("PatchNVGPreCull 1.3");
+
                     __instance.nvg.EnableIlluminator();
-                    //Debug.Log("PatchNVGPreCull 1.4");
 
                     return false;
                 }
@@ -1215,15 +1130,12 @@ namespace CustomAircraftTemplate
             }
             else
             {
-                //Debug.Log("PatchNVGPreCull 1.5");
-
                 traverse1.Field("hidNvg").SetValue(true);
                 //__instance.hidNvg = true;
-                //Debug.Log("PatchNVGPreCull 1.6");
 
                 object nvgScaleIDPull = traverse1.Field("nvgScaleID").GetValue();
                 Shader.SetGlobalFloat(nvgScaleIDPull.ToString(), 0f);
-                //Debug.Log("PatchNVGPreCull 1.7");
+
                 return false;
             }
         }
@@ -1238,92 +1150,88 @@ namespace CustomAircraftTemplate
             //__instance.shaker.Shake(UnityEngine.Random.onUnitSphere * __instance.shakeMagnitude);
             //FlybyCameraMFDPage.ShakeSpectatorCamera(30f * __instance.shakeMagnitude / (FlybyCameraMFDPage.instance.flybyCam.transform.position - __instance.GetFireTransform().position).sqrMagnitude);
             return false;
-
         }
     }
-    
-  /* 
-    [HarmonyPatch(typeof(HUDMaskToggler), "SetMask")]
-    public static class SU35_HUDMaskTogglePatch
-    {
 
-        public static bool Prefix(bool maskEnabled, HUDMaskToggler __instance)
-        {
-            
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
-                return true;
-            //Debug.unityLogger.logEnabled = Main.logging;
-            //Debug.Log("SetMask 1.0");
-            if (__instance.alwaysFPVOnly && maskEnabled)
-            {
-                //Debug.Log("SetMask 1.1");
-                return false;
-            }
-            //Debug.Log("SetMask 1.2");
-            Traverse traverse = Traverse.Create(__instance);
-            Transform[] displayObjectsP = (Transform[])traverse.Field("displayObjects").GetValue();
-            GameObject hudCanvas = CustomAircraftTemplate.AircraftAPI.GetChildWithName(Main.aircraftCustom, "HUDCanvas", true);
-            Transform[] displayObjectsHUD = hudCanvas.GetComponentsInChildren<Transform>(true);
+    /* 
+      [HarmonyPatch(typeof(HUDMaskToggler), "SetMask")]
+      public static class SU35_HUDMaskTogglePatch
+      {
 
+          public static bool Prefix(bool maskEnabled, HUDMaskToggler __instance)
+          {
 
-            //Debug.Log("SetMask 1.3");
-
-            for (int i = 0; i < displayObjectsHUD.Length; i++)
-            {
-                //Debug.Log("SetMask 1.4");
-                if (displayObjectsHUD[i])
-                {
-                    //Debug.Log("SetMask 1.5");
-                    if (__instance.alwaysFPVOnly)
-                    {
-                        //Debug.Log("SetMask 1.6");
-                        displayObjectsHUD[i].gameObject.layer = 28;
-                    }
-                    else
-                    {
-                        //Debug.Log("SetMask 1.7");
-                        displayObjectsHUD[i].gameObject.layer = (maskEnabled ? 5 : 28);
-                    }
-                }
-            }
-            traverse.Field("displayObjects").SetValue(displayObjectsP);
-            //Debug.Log("SetMask 1.8");
-            for (int j = 0; j < __instance.masks.Length; j++)
-            {
-                //Debug.Log("SetMask 1.9");
-                if (__instance.masks[j])
-                {
-                    //Debug.Log("SetMask 1.10");
-                    __instance.masks[j].enabled = maskEnabled;
-                }
-            }
-            for (int k = 0; k < __instance.images.Length; k++)
-            {
-                //Debug.Log("SetMask 1.11");
-                if (__instance.images[k])
-                {
-                    //Debug.Log("SetMask 1.12");
-                    __instance.images[k].enabled = maskEnabled;
-                }
-            }
-            if (__instance.alwaysFPVOnly)
-            {
-                //Debug.Log("SetMask 1.13");
-                __instance.canvasObject.layer = 28;
-            }
-            else
-            {
-                //Debug.Log("SetMask 1.14");
-               hudCanvas.layer = (maskEnabled ? 5 : 28);
-            }
-            //__instance.isMasked = maskEnabled;
-            traverse.Field("isMasked").SetValue("maskEnabled");
-            //Debug.Log("SetMask 1.15");
-            return false;
-        }
-    }
-    */
-   
+              if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                  return true;
+              //Debug.unityLogger.logEnabled = Main.logging;
+              //Debug.Log("SetMask 1.0");
+              if (__instance.alwaysFPVOnly && maskEnabled)
+              {
+                  //Debug.Log("SetMask 1.1");
+                  return false;
+              }
+              //Debug.Log("SetMask 1.2");
+              Traverse traverse = Traverse.Create(__instance);
+              Transform[] displayObjectsP = (Transform[])traverse.Field("displayObjects").GetValue();
+              GameObject hudCanvas = CustomAircraftTemplate.AircraftAPI.GetChildWithName(Main.aircraftCustom, "HUDCanvas", true);
+              Transform[] displayObjectsHUD = hudCanvas.GetComponentsInChildren<Transform>(true);
 
 
-        }
+              //Debug.Log("SetMask 1.3");
+
+              for (int i = 0; i < displayObjectsHUD.Length; i++)
+              {
+                  //Debug.Log("SetMask 1.4");
+                  if (displayObjectsHUD[i])
+                  {
+                      //Debug.Log("SetMask 1.5");
+                      if (__instance.alwaysFPVOnly)
+                      {
+                          //Debug.Log("SetMask 1.6");
+                          displayObjectsHUD[i].gameObject.layer = 28;
+                      }
+                      else
+                      {
+                          //Debug.Log("SetMask 1.7");
+                          displayObjectsHUD[i].gameObject.layer = (maskEnabled ? 5 : 28);
+                      }
+                  }
+              }
+              traverse.Field("displayObjects").SetValue(displayObjectsP);
+              //Debug.Log("SetMask 1.8");
+              for (int j = 0; j < __instance.masks.Length; j++)
+              {
+                  //Debug.Log("SetMask 1.9");
+                  if (__instance.masks[j])
+                  {
+                      //Debug.Log("SetMask 1.10");
+                      __instance.masks[j].enabled = maskEnabled;
+                  }
+              }
+              for (int k = 0; k < __instance.images.Length; k++)
+              {
+                  //Debug.Log("SetMask 1.11");
+                  if (__instance.images[k])
+                  {
+                      //Debug.Log("SetMask 1.12");
+                      __instance.images[k].enabled = maskEnabled;
+                  }
+              }
+              if (__instance.alwaysFPVOnly)
+              {
+                  //Debug.Log("SetMask 1.13");
+                  __instance.canvasObject.layer = 28;
+              }
+              else
+              {
+                  //Debug.Log("SetMask 1.14");
+                 hudCanvas.layer = (maskEnabled ? 5 : 28);
+              }
+              //__instance.isMasked = maskEnabled;
+              traverse.Field("isMasked").SetValue("maskEnabled");
+              //Debug.Log("SetMask 1.15");
+              return false;
+          }
+      }
+      */
+}

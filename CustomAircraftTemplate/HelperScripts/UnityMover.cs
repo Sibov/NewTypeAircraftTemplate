@@ -39,7 +39,7 @@ namespace CustomAircraftTemplate
             if (gs == null)
                 return;
             List<customTransform> listCustomTraans = new List<customTransform>();
-            string fileLocation = Path.Combine(Main.instance.ModFolder, this.FileName);
+            string fileLocation = Path.Combine(IAircraftMod.Instance.ModFolder, this.FileName);
             using (BinaryReader reader = new BinaryReader(File.Open(fileLocation, FileMode.Open)))
             {
 
@@ -86,10 +86,10 @@ namespace CustomAircraftTemplate
                                 // ts.gameObject.GetComponent<MeshRenderer>().enabled = true;
 
                                 if (render == "dontrender")
-                                   
-                                //ts.gameObject.GetComponent<MeshRenderer>().enabled = false;
 
-                                ts.localPosition = trans.positions;
+                                    //ts.gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+                                    ts.localPosition = trans.positions;
                                 ts.localEulerAngles = trans.rotations;
                                 ts.localScale = trans.scales;
                                 if (doCockpit)
@@ -114,8 +114,8 @@ namespace CustomAircraftTemplate
                                                     newBounds.transform.eulerAngles = intact.transform.parent.transform.eulerAngles;
                                                     intact.poseBounds = newBounds.GetComponent<PoseBounds>(); //Assigns bounds for switch
                                                     if (resize) intact.poseBounds.size = posesize;
-                                                    
-                                       
+
+
 
                                                 }
 
@@ -138,7 +138,7 @@ namespace CustomAircraftTemplate
         // Update is called once per frame
         void Update()
         {
-            
+
         }
     }
 }

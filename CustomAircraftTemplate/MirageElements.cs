@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Harmony;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
-using Harmony;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 
 
@@ -33,63 +33,63 @@ namespace CustomAircraftTemplate
         private static string text;
 
         public static void SetupArmingText()
-              {
+        {
             //if (!AircraftInfo.AircraftSelected) { return; }
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            if (PilotSaveManager.currentVehicle.vehicleName != IAircraftMod.customAircraftPV.vehicleName)
                 return;
             //Debug.unityLogger.logEnabled = Main.logging;
-                  //Debug.Log("Setup Arming Text");
+            //Debug.Log("Setup Arming Text");
 
-                  WeaponManager wm = Main.aircraftCustom.GetComponent<WeaponManager>();
-                  int aircraftNodeLength = wm.hardpointTransforms.Length;
-                  //Debug.Log("Setup Arming Text 1.0: Length = " + aircraftNodeLength);
-                  GameObject aircraft = AircraftAPI.GetChildWithName(Main.aircraftCustom, "WeaponArmingButtons", false);
-                  //Debug.Log("Setup Arming Text 1.1");
-                  for (int i = 0; i < aircraftNodeLength; i++)
-                  {
-                      string textArmingItem = "Text" + i;
-                       equippedItem = wm.GetEquip(i);
-                      //Debug.Log("Setup Arming Text 1.1.1");
-
-
-                      GameObject textItem = AircraftAPI.GetChildWithName(aircraft, textArmingItem, false);
-                      //Debug.Log("Setup Arming Text 1.1.2");
-                      if (equippedItem != null && equippedItem.armable)
-                      {
-                          //Debug.Log("Setup Arming Text 1.2: " + i + " , Item: " + equippedItem.shortName);
-                          nameLength = equippedItem.shortName.Length;
-                          shortenedEquipName = equippedItem.shortName.Substring(0, 1) + equippedItem.shortName.Substring(nameLength-2, 2);
-                      }
-                      else
-                      {
-                          //Debug.Log("Setup Arming Text 1.2.2 ");
-                          shortenedEquipName = "NON";
-                      }
-                      //Debug.Log("Setup Arming Text 1.3");
-                      Text textComponentItem = textItem.GetComponent<Text>();
-                      textComponentItem.text = shortenedEquipName;
-
-                  }
-                    GameObject masterArmingSwitchInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MasterArmingSwitchInteractable", false);
-                    masterArmingSwitchInteractableiVRLever = masterArmingSwitchInteractable.GetComponent<VRLever>();
-                    masterArmingSwitchInteractableiVRLever.OnSetState.AddListener(SwitchWeaponTextOn);
+            WeaponManager wm = IAircraftMod.aircraftCustom.GetComponent<WeaponManager>();
+            int aircraftNodeLength = wm.hardpointTransforms.Length;
+            //Debug.Log("Setup Arming Text 1.0: Length = " + aircraftNodeLength);
+            GameObject aircraft = AircraftAPI.GetChildWithName(IAircraftMod.aircraftCustom, "WeaponArmingButtons", false);
+            //Debug.Log("Setup Arming Text 1.1");
+            for (int i = 0; i < aircraftNodeLength; i++)
+            {
+                string textArmingItem = "Text" + i;
+                equippedItem = wm.GetEquip(i);
+                //Debug.Log("Setup Arming Text 1.1.1");
 
 
-                    return ;
-              }
+                GameObject textItem = AircraftAPI.GetChildWithName(aircraft, textArmingItem, false);
+                //Debug.Log("Setup Arming Text 1.1.2");
+                if (equippedItem != null && equippedItem.armable)
+                {
+                    //Debug.Log("Setup Arming Text 1.2: " + i + " , Item: " + equippedItem.shortName);
+                    nameLength = equippedItem.shortName.Length;
+                    shortenedEquipName = equippedItem.shortName.Substring(0, 1) + equippedItem.shortName.Substring(nameLength - 2, 2);
+                }
+                else
+                {
+                    //Debug.Log("Setup Arming Text 1.2.2 ");
+                    shortenedEquipName = "NON";
+                }
+                //Debug.Log("Setup Arming Text 1.3");
+                Text textComponentItem = textItem.GetComponent<Text>();
+                textComponentItem.text = shortenedEquipName;
+
+            }
+            GameObject masterArmingSwitchInteractable = AircraftAPI.GetChildWithName(IAircraftMod.aircraftCustom, "MasterArmingSwitchInteractable", false);
+            masterArmingSwitchInteractableiVRLever = masterArmingSwitchInteractable.GetComponent<VRLever>();
+            masterArmingSwitchInteractableiVRLever.OnSetState.AddListener(SwitchWeaponTextOn);
+
+
+            return;
+        }
 
         public static void SwitchWeaponTextOn(int MasterArmOn)
         {
-           // if (!AircraftInfo.AircraftSelected) { return; }
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            // if (!AircraftInfo.AircraftSelected) { return; }
+            if (PilotSaveManager.currentVehicle.vehicleName != IAircraftMod.customAircraftPV.vehicleName)
                 return;
-            GameObject weaponArmingButtons = AircraftAPI.GetChildWithName(Main.aircraftCustom, "WeaponArmingButtons", false);
-            
-                for (int i = 0; i < 10; i++)
-                {
+            GameObject weaponArmingButtons = AircraftAPI.GetChildWithName(IAircraftMod.aircraftCustom, "WeaponArmingButtons", false);
 
-                    GameObject weaponArmingText = AircraftAPI.GetChildWithName(weaponArmingButtons, "Text"+i, false);
-                    Text textItem = weaponArmingText.GetComponent<Text>();
+            for (int i = 0; i < 10; i++)
+            {
+
+                GameObject weaponArmingText = AircraftAPI.GetChildWithName(weaponArmingButtons, "Text" + i, false);
+                Text textItem = weaponArmingText.GetComponent<Text>();
 
                 if (MasterArmOn == 1)
                 {
@@ -99,15 +99,15 @@ namespace CustomAircraftTemplate
                 {
                     textItem.enabled = false;
                 }
-                }
-
             }
+
+        }
 
         public static void SetUpGauges()
         {
-            Battery componentInChildren = Main.aircraftCustom.GetComponentInChildren<Battery>(true);
-            FlightInfo componentInChildren2 = Main.aircraftCustom.GetComponentInChildren<FlightInfo>(true);
-            GameObject childWithName3 = AircraftAPI.GetChildWithName(Main.aircraftCustom, "ClimbGauge", false);
+            Battery componentInChildren = IAircraftMod.aircraftCustom.GetComponentInChildren<Battery>(true);
+            FlightInfo componentInChildren2 = IAircraftMod.aircraftCustom.GetComponentInChildren<FlightInfo>(true);
+            GameObject childWithName3 = AircraftAPI.GetChildWithName(IAircraftMod.aircraftCustom, "ClimbGauge", false);
             DashVertGauge dashVertGauge = childWithName3.AddComponent<DashVertGauge>();
             dashVertGauge.battery = componentInChildren;
             dashVertGauge.dialHand = AircraftAPI.GetChildWithName(childWithName3, "dialHand", false).transform;
@@ -121,29 +121,29 @@ namespace CustomAircraftTemplate
             dashVertGauge.doCalibration = true;
             dashVertGauge.calibrationSpeed = 1f;
             dashVertGauge.info = componentInChildren2;
-            dashVertGauge.measures = Main.aircraftCustom.GetComponent<MeasurementManager>();
+            dashVertGauge.measures = IAircraftMod.aircraftCustom.GetComponent<MeasurementManager>();
         }
 
         public static void IdentifiedRadarTargetsSetup()
         {
             //Debug.Log("IRTS 1.1");
-            Main.miniicp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MiniMFDICP", false);
+            IAircraftMod.miniIcp = AircraftAPI.GetChildWithName(IAircraftMod.aircraftCustom, "MiniMFDICP", false);
             //Debug.Log("IRTS 1.2");
-            radarcontactlistobj = AircraftAPI.GetChildWithName(Main.miniicp, "RadarContactList", false);
-            Main.radarcontactlist = radarcontactlistobj.GetComponent<TextMeshPro>();
+            radarcontactlistobj = AircraftAPI.GetChildWithName(IAircraftMod.miniIcp, "RadarContactList", false);
+            IAircraftMod.radarContactListText = radarcontactlistobj.GetComponent<TextMeshPro>();
             //Debug.Log("IRTS 1.3");
-            GameObject radarObject = AircraftAPI.GetChildWithName(Main.aircraftCustom, "Radar2", false);
-             Main.radar = radarObject.GetComponentInChildren<Radar>();
+            GameObject radarObject = AircraftAPI.GetChildWithName(IAircraftMod.aircraftCustom, "Radar2", false);
+            IAircraftMod.radar = radarObject.GetComponentInChildren<Radar>();
             //Debug.Log("IRTS 1.4");
-            
+
         }
         public static void IdentifiedRadarTargets()
         {
-            
+
             i = 0;
             oldcumText = "";
             //Debug.Log("IRT 1.1");
-            foreach (Actor unit in Main.radar.detectedUnits)
+            foreach (Actor unit in IAircraftMod.radar.detectedUnits)
             {
                 //Debug.Log("unit: " + unit);
                 text = i + ": " + unit.actorName + " \n";
@@ -152,21 +152,21 @@ namespace CustomAircraftTemplate
                 oldcumText = cumText;
                 i++;
             }
-            Main.radarcontactlist.text = cumText;
+            IAircraftMod.radarContactListText.text = cumText;
 
         }
 
 
-            public static void ClockUpdate()
+        public static void ClockUpdate()
         {
             currentTime = DateTime.Now;
 
             timeNow = currentTime.ToString("HH:mm:ss");
             currentHour = currentTime.Hour;
             currentMinute = currentTime.Minute;
-            GameObject clockItem = AircraftAPI.GetChildWithName(Main.aircraftCustom, "Clock", false);
+            GameObject clockItem = AircraftAPI.GetChildWithName(IAircraftMod.aircraftCustom, "Clock", false);
             GameObject clockDisplayLocal = AircraftAPI.GetChildWithName(clockItem, "testWatchLocal", false);
-            if (!clockDisplayLocal) { Main.aircraftLoaded = false; }
+            if (!clockDisplayLocal) { IAircraftMod.aircraftLoaded = false; }
             GameObject clockDisplayLocalText = AircraftAPI.GetChildWithName(clockDisplayLocal, "Text", false);
             var clockDisplayLocalTextComp = clockDisplayLocalText.GetComponent<Text>();
 
@@ -187,11 +187,11 @@ namespace CustomAircraftTemplate
             public static bool Prefix(Radar __instance, Actor a, float dotThresh, bool hasMapGen)
             {
                 // if (!AircraftInfo.AircraftSelected) { return true; }
-                if (!Main.aircraftLoaded)
+                if (!IAircraftMod.aircraftLoaded)
                 {
                     return true;
                 }
-                if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                if (PilotSaveManager.currentVehicle.vehicleName != IAircraftMod.customAircraftPV.vehicleName)
                     return true;
                 //Debug.unityLogger.logEnabled = Main.logging;
 
@@ -282,7 +282,7 @@ namespace CustomAircraftTemplate
                     Radar.SendRadarDetectEvent(a, __instance.myActor, __instance.radarSymbol, __instance.detectionPersistanceTime, __instance.rotationTransform.position, __instance.transmissionStrength);
                     if (Radar.ADV_RADAR)
                     {
-                        float radarSignalStrength = Radar.GetRadarSignalStrength(__instance.radarTransform.position, a,false);
+                        float radarSignalStrength = Radar.GetRadarSignalStrength(__instance.radarTransform.position, a, false);
                         float num = __instance.transmissionStrength * radarSignalStrength / sqrMagnitude;
                         if (num < 1f / __instance.receiverSensitivity)
                         {
@@ -302,13 +302,13 @@ namespace CustomAircraftTemplate
 
             public static void Postfix()
             {
-                if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                if (PilotSaveManager.currentVehicle.vehicleName != IAircraftMod.customAircraftPV.vehicleName)
                     return;
                 IdentifiedRadarTargets();
             }
         }
 
-       
+
 
 
     }
