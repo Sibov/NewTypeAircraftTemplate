@@ -951,26 +951,7 @@ namespace CustomAircraftTemplateSU35
 
 
 
-    [HarmonyPatch(typeof(UnitSpawnAttribute), "SetupUIOptions")]
-    class SU35_USASUOPatch
-    {
-        public static bool Prefix(UnitSpawnAttribute __instance, params string[] uiOptionsParams)
-        {
-            Debug.Log("SU35 USASUO1.0.0: ");
-            if (uiOptionsParams != null)
-            {
-                Debug.Log("SU35 USASUO1.0: " + __instance.name);
-                __instance.uiOptions = new List<string>();
-                Debug.Log("SU35 USASUO1.1: ");
-                for (int i = 0; i < uiOptionsParams.Length; i++)
-                {
-                    Debug.Log("SU35 USASUO1.0: " + i + ", " + uiOptionsParams[i]);
-                    __instance.uiOptions.Add(uiOptionsParams[i]);
-                }
-            }
-            return false;
-        }
-    }
+   
 
     [HarmonyPatch(typeof(VTEdOptionSelector), "Display", new Type[] {typeof(string), typeof(string[]),typeof(object[]),typeof(int), typeof(VTEdOptionSelector.OptionSelectionObjectDelegate), typeof(VTEdOptionSelector.OptionHoverInfoDelegate) })]
     class SU35_Patch_VTEdOptionSelector_Display

@@ -62,59 +62,66 @@ namespace CustomAircraftTemplateSU35
 
             catch
             {
-                eotstf = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EOTSHolder", true);
-                Debug.Log("SU35 SetEOT3.1.1");
-                GameObject sevtf = VTResources.GetPlayerVehicle("F-45A").vehiclePrefab;
+                try
+                {
+                    eotstf = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EOTSHolder", true);
+                    Debug.Log("SU35 SetEOT3.1.1");
+                    GameObject sevtf = VTResources.GetPlayerVehicle("F-45A").vehiclePrefab;
 
-                GameObject sevtfeots = AircraftAPI.GetChildWithName(sevtf, "EOTS", false);
-                Debug.Log("SU35 SetEOT3.1.2");
+                    GameObject sevtfeots = AircraftAPI.GetChildWithName(sevtf, "EOTS", false);
+                    Debug.Log("SU35 SetEOT3.1.2");
 
-                GameObject EOTSObj = UnityEngine.Object.Instantiate<GameObject>(sevtfeots, eotstf.transform.position, eotstf.transform.rotation);
-                Debug.Log("SU35 SetEOT3.1.3");
-                EOTSObj.transform.SetParent(eotstf.transform);
-                EOTSObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-                EOTSObj.transform.localPosition = new Vector3(0f, 0f, 0f);
+                    GameObject EOTSObj = UnityEngine.Object.Instantiate<GameObject>(sevtfeots, eotstf.transform.position, eotstf.transform.rotation);
+                    Debug.Log("SU35 SetEOT3.1.3");
+                    EOTSObj.transform.SetParent(eotstf.transform);
+                    EOTSObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+                    EOTSObj.transform.localPosition = new Vector3(0f, 0f, 0f);
 
 
-                mpSyncsObj = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MPSyncs", true);
-                Debug.Log("SU35 SetEOT3.1.4");
-                mpSyncsTGPSync = mpSyncsObj.GetComponent<TGPSync>();
-                Debug.Log("SU35 SetEOT3.1.5");
-                mpSyncsTGPSync.targeter = EOTSObj.GetComponent<OpticalTargeter>();
-                Debug.Log("SU35 SetEOT3.1.5.1");
-                EOTSObj.GetComponent<OpticalTargeter>().actor = Main.aircraftCustom.GetComponent<Actor>();
-                EOTSObj.GetComponent<OpticalTargeter>().wm = Main.aircraftCustom.GetComponent<WeaponManager>();
-                Debug.Log("SU35 SetEOT3.1.6");
-                Main.aircraftCustom.GetComponent<WeaponManager>().opticalTargeter = EOTSObj.GetComponent<OpticalTargeter>();
-                Debug.Log("SU35 SetEOT3.1.7");
-                radarUIC = AircraftAPI.GetChildWithName(Main.aircraftCustom, "RadarUIController", true);
+                    mpSyncsObj = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MPSyncs", true);
+                    Debug.Log("SU35 SetEOT3.1.4");
+                    mpSyncsTGPSync = mpSyncsObj.GetComponent<TGPSync>();
+                    Debug.Log("SU35 SetEOT3.1.5");
+                    mpSyncsTGPSync.targeter = EOTSObj.GetComponent<OpticalTargeter>();
+                    Debug.Log("SU35 SetEOT3.1.5.1");
+                    EOTSObj.GetComponent<OpticalTargeter>().actor = Main.aircraftCustom.GetComponent<Actor>();
+                    EOTSObj.GetComponent<OpticalTargeter>().wm = Main.aircraftCustom.GetComponent<WeaponManager>();
+                    Debug.Log("SU35 SetEOT3.1.6");
+                    Main.aircraftCustom.GetComponent<WeaponManager>().opticalTargeter = EOTSObj.GetComponent<OpticalTargeter>();
+                    Debug.Log("SU35 SetEOT3.1.7");
+                    radarUIC = AircraftAPI.GetChildWithName(Main.aircraftCustom, "RadarUIController", true);
 
-                Debug.Log("SU35 SetEOT3.1.8");
-                radarUIC.GetComponent<MFDRadarUI>().tgp = EOTSObj.GetComponent<OpticalTargeter>();
-                Debug.Log("SU35 SetEOT3.1.9");
-                TC = AircraftAPI.GetChildWithName(EOTSObj, "TargetingCam", true);
+                    Debug.Log("SU35 SetEOT3.1.8");
+                    radarUIC.GetComponent<MFDRadarUI>().tgp = EOTSObj.GetComponent<OpticalTargeter>();
+                    Debug.Log("SU35 SetEOT3.1.9");
+                    TC = AircraftAPI.GetChildWithName(EOTSObj, "TargetingCam", true);
 
-                TPC = AircraftAPI.GetChildWithName(Main.aircraftCustom, "TargetingPageController", true);
+                    TPC = AircraftAPI.GetChildWithName(Main.aircraftCustom, "TargetingPageController", true);
 
-                Debug.Log("SU35 SetEOT3.1.10");
-                TPC.GetComponent<TargetingMFDPage>().opticalTargeter = EOTSObj.GetComponent<OpticalTargeter>();
-                TPC.GetComponent<TargetingMFDPage>().targetingCamera = TC.GetComponent<Camera>();
-                TPC.GetComponent<TargetingMFDPage>().cameraFog = TC.GetComponent<CameraFogSettings>();
-                TPC.GetComponent<TargetingMFDPage>().targetIlluminator = TC.GetComponent<IlluminateVesselsOnRender>();
-                Debug.Log("SU35 SetEOT3.1.11");
-                TSC = AircraftAPI.GetChildWithName(Main.aircraftCustom, "TacticalSituationController", true);
+                    Debug.Log("SU35 SetEOT3.1.10");
+                    TPC.GetComponent<TargetingMFDPage>().opticalTargeter = EOTSObj.GetComponent<OpticalTargeter>();
+                    TPC.GetComponent<TargetingMFDPage>().targetingCamera = TC.GetComponent<Camera>();
+                    TPC.GetComponent<TargetingMFDPage>().cameraFog = TC.GetComponent<CameraFogSettings>();
+                    TPC.GetComponent<TargetingMFDPage>().targetIlluminator = TC.GetComponent<IlluminateVesselsOnRender>();
+                    Debug.Log("SU35 SetEOT3.1.11");
+                    TSC = AircraftAPI.GetChildWithName(Main.aircraftCustom, "TacticalSituationController", true);
 
-                Debug.Log("SU35 SetEOT3.1.12");
-                TSC.GetComponent<TacticalSituationController>().opticalTargeter = EOTSObj.GetComponent<OpticalTargeter>();
-                Debug.Log("SU35 SetEOT3.1.13");
-                TSCComp = TSC.GetComponent<TacticalSituationController>();
-                TSCComp.CollectFromTGP();
-                MFDTRT = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MFDTargetingRT", true);
-                
+                    Debug.Log("SU35 SetEOT3.1.12");
+                    TSC.GetComponent<TacticalSituationController>().opticalTargeter = EOTSObj.GetComponent<OpticalTargeter>();
+                    Debug.Log("SU35 SetEOT3.1.13");
+                    TSCComp = TSC.GetComponent<TacticalSituationController>();
+                    TSCComp.CollectFromTGP();
+                    MFDTRT = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MFDTargetingRT", true);
 
-                MFDTRT.GetComponent<RawImage>().texture = TC.GetComponent<Camera>().targetTexture;
 
-                return;
+                    MFDTRT.GetComponent<RawImage>().texture = TC.GetComponent<Camera>().targetTexture;
+
+                    return;
+                }
+                catch
+                {
+                    return;
+                }
             }
 
 

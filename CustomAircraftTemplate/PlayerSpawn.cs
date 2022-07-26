@@ -390,6 +390,8 @@ namespace CustomAircraftTemplateSU35
     
         public static void Prefix(HUDAoAMeter __instance)
         {
+            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                return;
             __instance.flightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
 
         }
@@ -398,9 +400,11 @@ namespace CustomAircraftTemplateSU35
     [HarmonyPatch(typeof(HMDAltitude), "Awake")]
     public class SU35_HMDAlt_Postfix
     {
-
+        
         public static void Postfix(HMDAltitude __instance)
         {
+            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                return;
             Debug.Log("SU35 Starting HMDAltpatch 1.0.1");
             Traverse trav1 = Traverse.Create(__instance);
             Debug.Log("SU35 Starting HMDAltpatch 1.0.2");
@@ -418,6 +422,8 @@ namespace CustomAircraftTemplateSU35
     {
         public static void Postfix(WeaponManager __instance)
         {
+            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                return;
             Debug.Log("SU35 MSSSV 1.27");
            // MirageElements.SetUpGauges();
             Debug.Log("SU35 MSSSV 1.28");
@@ -457,20 +463,7 @@ namespace CustomAircraftTemplateSU35
 
     }
 
-    [HarmonyPatch(typeof(MFDRadarUI), nameof(MFDRadarUI.SetPower))]
-    public class SU35_MFDUISetPowerPatch
-    {
-        public static bool Prefix(MFDRadarUI __instance)
-        {
-            
-            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
-                return true;
-            //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Starting MDUISP 1.0");
-            return true;
-        }
-
-    }
+    
 
     [HarmonyPatch(typeof(BlackoutEffect), nameof(BlackoutEffect.LateUpdate))]
     public class SU35_BlackoutPFPatch
@@ -530,6 +523,8 @@ namespace CustomAircraftTemplateSU35
     {
         public static bool Prefix(BlackoutEffect __instance)
         {
+            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                return true;
             Debug.Log("SU35 BOFDestroy 1.0.0");
             if (!Main.aircraftLoaded)
                 {
@@ -561,6 +556,7 @@ namespace CustomAircraftTemplateSU35
     {
         public static bool Prefix(BlackoutEffect __instance)
         {
+
             Debug.Log("SU35 BOFDisa 1.0.0");
             if (!Main.aircraftLoaded)
             {
@@ -1034,11 +1030,7 @@ namespace CustomAircraftTemplateSU35
     [HarmonyPatch(typeof(PlayerSpawn), "OnSpawnUnit")]
     public class SU35_OSStartPatch
     {
-        public static bool Prefix(PlayerSpawn __instance)
-        {
-            Debug.Log("SU35 Starting OSU 0.0");
-            return true;
-        }
+       
             public static void Postfix(PlayerSpawn __instance)
         {
             Debug.Log("SU35 Starting OSU 1.0");
@@ -1372,7 +1364,7 @@ namespace CustomAircraftTemplateSU35
     [HarmonyPatch(typeof(HUDMaskToggler), "SetMask")]
     public static class SU35_HUDMaskTogglePatch
     {
-
+        
         public static bool Prefix(bool maskEnabled, HUDMaskToggler __instance)
         {
             

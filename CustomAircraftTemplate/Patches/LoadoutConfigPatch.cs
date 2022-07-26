@@ -11,145 +11,24 @@ namespace CustomAircraftTemplateSU35
 {
 
 
-
     [HarmonyPatch(typeof(VehicleConfigSceneSetup), "Start")]
     public class SU35_VehicleConfigStartPatch
     {
-        private static GameObject f26LC;
 
-        public static bool Prefix(VehicleConfigSceneSetup __instance)
+
+        public static void Postfix(VehicleConfigSceneSetup __instance)
         {
-           
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
-                return true;
-            //Debug.unityLogger.logEnabled = Main.logging;
-            Traverse traverse = Traverse.Create(__instance);
-            if (PilotSaveManager.currentVehicle == null)
-            {
-                LoadingSceneController.LoadSceneImmediate("ReadyRoom");
-                return true;
-            }
-            Debug.Log("SU35 VCS1.0");
-            PilotSaveManager.LoadPilotsFromFile();
-            Debug.Log("SU35 VCS1.1");
+            { return; }
             PlayerVehicle currentVehicle = PilotSaveManager.currentVehicle;
-            Debug.Log("SU35 VCS1.1.1: " + Main.aircraftPrefab.name);
-            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftPrefab);
-            Debug.Log("SU35 VCS1.1.1.1: ");
-            Main.aircraftCustom = gameObject;
-            Debug.Log("SU35 VCS1.1.2");
-            gameObject.transform.position = __instance.loadoutSpawnTransform.TransformPoint(currentVehicle.loadoutSpawnOffset);
-            Debug.Log("SU35 VCS1.1.3");
-            gameObject.transform.rotation = __instance.loadoutSpawnTransform.rotation;
-            Debug.Log("SU35 VCS1.2");
-            PlayerVehicleSetup component = gameObject.GetComponent<PlayerVehicleSetup>();
-            component.SetToConfigurationState();
-            WheelsController component2 = gameObject.GetComponent<WheelsController>();
-            Debug.Log("SU35 VCS1.3");
-            if (component2)
-            {
-                component2.SetBrakeLock(1);
-            }
-            Debug.Log("SU35 VCS1.4");
-            gameObject.SetActive(true);
-            GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftLoadoutConfiguratorPrefab);
-
-            gameObject2.transform.position = __instance.loadoutSpawnTransform.position;
-            gameObject2.transform.rotation = __instance.loadoutSpawnTransform.rotation;
-            gameObject2.SetActive(true);
-            Debug.Log("SU35 VCS1.5");
-            traverse.Field("config").SetValue(gameObject2.GetComponent<LoadoutConfigurator>());
-            traverse.Field("config").Field("wm").SetValue(gameObject.GetComponent<WeaponManager>());
-            LoadoutConfigurator LC1 = gameObject2.GetComponent<LoadoutConfigurator>();
-            Debug.Log("SU35 VCS1.6");
-            component.StartUsingConfigurator(LC1);
-            //working version
-            VehicleSave vSave = PilotSaveManager.current.GetVehicleSave(PilotSaveManager.currentVehicle.vehicleName);
-            if (vSave == null)
-            {
-                Debug.Log("SU35 VCS 1.6.0.1");
-            }
-
-            CampaignSave campaignSave = vSave.GetCampaignSave(PilotSaveManager.currentCampaign.campaignID);
-            Debug.Log("SU35 VCS1.6.0.1.1");
-
-
-            Debug.Log("SU35 VCS1.6.1 , vn = " + PilotSaveManager.currentVehicle.vehicleName);
-            Debug.Log("SU35 VCS1.6.2 , cn = " + PilotSaveManager.currentCampaign.campaignID);
-
-            if (campaignSave == null)
-            {
-                Debug.Log("SU35 VCS1.7.1 , " + PilotSaveManager.currentVehicle);
-                CampaignSelectorUI.SetUpCampaignSave(PilotSaveManager.currentCampaign, null, null, null, PilotSaveManager.currentVehicle);
-                campaignSave = PilotSaveManager.current.GetVehicleSave(PilotSaveManager.currentVehicle.vehicleName).GetCampaignSave(PilotSaveManager.currentCampaign.campaignID);
-
-            }
-
-            Debug.Log("SU35 VCS1.7");
-            List<string> allAvailableEquipStrings = new List<string>();
-            if (PilotSaveManager.currentCampaign.isCustomScenarios && PilotSaveManager.currentCampaign.isStandaloneScenarios)
-            {
-                Debug.Log("SU35 VCS1.8");
-                List<string> allowedEquips = VTResources.GetScenario(PilotSaveManager.currentScenario.scenarioID, PilotSaveManager.currentCampaign).allowedEquips;
-                foreach (string item in allowedEquips)
-                {
-                    allAvailableEquipStrings.Add(item);
-                }
-                if (campaignSave.currentWeapons != null)
-                {
-                    for (int i = 0; i < campaignSave.currentWeapons.Length; i++)
-                    {
-                        if (!allowedEquips.Contains(campaignSave.currentWeapons[i]))
-                        {
-                            campaignSave.currentWeapons[i] = string.Empty;
-                        }
-                    }
-                }
-
-            }
-            else
-            {
-                Debug.Log("SU35 VCS1.9");
-                foreach (string item2 in campaignSave.availableWeapons)
-                {
-                    allAvailableEquipStrings.Add(item2);
-                }
-            }
-            Debug.Log("SU35 VCS1.10");
-            traverse.Field("config").Field("availableEquipStrings").SetValue(allAvailableEquipStrings);
-            Debug.Log("SU35 VCS1.10.1");
-            PilotSaveManager.currentScenario.initialSpending = 0f;
-            Debug.Log("SU35 VCS1.10.1" + " : " + LC1.name + ": " + campaignSave.campaignName);
-            LC1.Initialize(campaignSave, false);
-            Debug.Log("SU35 VCS1.11");
-            if (PilotSaveManager.currentScenario.forcedEquips != null)
-            {
-                Debug.Log("SU35 VCS1.12");
-                foreach (CampaignScenario.ForcedEquip forcedEquip in PilotSaveManager.currentScenario.forcedEquips)
-                {
-                    LC1.AttachImmediate(forcedEquip.weaponName, forcedEquip.hardpointIdx);
-                    LC1.lockedHardpoints.Add(forcedEquip.hardpointIdx);
-                }
-            }
-            if (campaignSave.currentWeapons != null)
-            {
-                Debug.Log("SU35 VCS1.11.1");
-                for (int k = 0; k < campaignSave.currentWeapons.Length; k++)
-                {
-                    Debug.Log("SU35 VCS1.11.2");
-                    if (!LC1.lockedHardpoints.Contains(k) && !string.IsNullOrEmpty(campaignSave.currentWeapons[k]))
-                    {
-                        Debug.Log("SU35 VCS1.11.3");
-                        LC1.AttachImmediate(campaignSave.currentWeapons[k], k);
-                    }
-                }
-            }
-            Debug.Log("SU35 VCS1.13");
-            ScreenFader.FadeIn(1f);
-            return false;
+            Debug.Log("SU35 VCS1.0");
+            Main.aircraftCustom = GameObject.Find(currentVehicle.vehicleName+"(Clone)");
+            Debug.Log("SU35 VCS1.1");
         }
-
     }
+
+
+   
 
     [HarmonyPatch(typeof(LoadoutConfigurator), "Initialize")]
     public static class SU35_LCInit
@@ -187,7 +66,7 @@ namespace CustomAircraftTemplateSU35
             
             if (true) // fuck you c ; work on manners you ape
             {
-                Debug.Log("SU35 Section 11");
+                Debug.Log("SU35 Section 11 New");
 
 
                 // this creates a dictionary of all the wepaons and where they can be mounted, just alter the second string per weapon according to the wepaon you want.
@@ -200,7 +79,7 @@ namespace CustomAircraftTemplateSU35
                 //allowedhardpointbyweapon.Add("fa26_agm161", "4,5,9");
                 //allowedhardpointbyweapon.Add("fa26_aim9x2", "");
                 //allowedhardpointbyweapon.Add("fa26_aim9x3", "");
-                //allowedhardpointbyweapon.Add("fa26_cagm-6", "4,5,9");
+                allowedhardpointbyweapon.Add("fa26_cagm-6", "1,2,4,5,7,8,9");
                 //allowedhardpointbyweapon.Add("fa26_cbu97x1", "4,5,9");
                 //allowedhardpointbyweapon.Add("fa26_droptank", "4,5,9");
                 //allowedhardpointbyweapon.Add("fa26_droptankXL", "");
@@ -243,32 +122,7 @@ namespace CustomAircraftTemplateSU35
                 //allowedhardpointbyweapon.Add("h70-x7ld-under", "");
                 //allowedhardpointbyweapon.Add("h70-x14ld-under", "");
                 //allowedhardpointbyweapon.Add("h70-x14ld", "4,5");
-                allowedhardpointbyweapon.Add("f45_aim9x1", "5,6,7,8,9,10");
-                allowedhardpointbyweapon.Add("f45_amraamRail", "5,6,7,8,9,10");
-                allowedhardpointbyweapon.Add("f45_amraamInternal", "2,3");
-
-                allowedhardpointbyweapon.Add("f45_mk82x1", "6,7,8,9");
-                allowedhardpointbyweapon.Add("f45_mk82Internal", "2,3");
-                allowedhardpointbyweapon.Add("f45_mk82x4Internal", "2,3");
-                allowedhardpointbyweapon.Add("f45_gbu12x2Internal", "2,3");
-
-                allowedhardpointbyweapon.Add("f45_gbu12x1", "6,7,8,9");
-                allowedhardpointbyweapon.Add("f45-gbu39", "2,3");
-                allowedhardpointbyweapon.Add("f45_droptank", "7,8");
-                allowedhardpointbyweapon.Add("f45_gbu38x1", "6,7,8,9");
-                allowedhardpointbyweapon.Add("f45_gbu38x2Internal", "2,3");
-                allowedhardpointbyweapon.Add("f45_gbu38x4Internal", "2,3");
-                allowedhardpointbyweapon.Add("f45_sidewinderx2", "1,4");
-                allowedhardpointbyweapon.Add("f45_mk83x1", "6,7,8,9");
-                allowedhardpointbyweapon.Add("f45_mk83x1Internal", "2,3");
-                allowedhardpointbyweapon.Add("f45-agm145I", "2,3");
-                allowedhardpointbyweapon.Add("f45-agm145ISide", "1,4");
-                allowedhardpointbyweapon.Add("f45-agm145x3", "6,7,8,9");
-                allowedhardpointbyweapon.Add("f45-gbu53", "2,3");
-                allowedhardpointbyweapon.Add("f45_agm161", "6,7,8,9");
-                allowedhardpointbyweapon.Add("f45_agm161Internal", "2,3");
-
-                allowedhardpointbyweapon.Add("f45_gun", "0");
+                
 
                 Debug.Log("SU35 Before Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
 
@@ -296,7 +150,7 @@ namespace CustomAircraftTemplateSU35
     }
 
 
-
+    
     [HarmonyPatch(typeof(ReArmingPoint), "FinalBeginReArm")]
     public static class SU35_RAPFBAPatch
     {
@@ -628,8 +482,9 @@ namespace CustomAircraftTemplateSU35
         }
 
     }
+    
 }
-
+    
 
     //
         
