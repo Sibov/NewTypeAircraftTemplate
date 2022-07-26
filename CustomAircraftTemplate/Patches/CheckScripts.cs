@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateF35
 {
     /*
     [HarmonyPatch(typeof(LoadoutConfigurator), "AttachImmediate")]
@@ -15,38 +15,38 @@ namespace CustomAircraftTemplate
     {
         public static bool Prefix(LoadoutConfigurator __instance, string weaponName, int hpIdx)
         {
-            //Debug.Log("Running AttachImmediate");
+            Debug.Log("F35 Running AttachImmediate");
             __instance.DetachImmediate(hpIdx);
             Traverse traverse2 = Traverse.Create(__instance);
 
             
             Dictionary<string, EqInfo> allWeaponPrefabsOutput = new Dictionary<string, EqInfo>();
-            //Debug.Log("AI: 1.0 : " + weaponName + "," + hpIdx);
+            Debug.Log("F35 AI: 1.0 : " + weaponName + "," + hpIdx);
             allWeaponPrefabsOutput = (Dictionary<string, EqInfo>)traverse2.Field("allWeaponPrefabs").GetValue();
-            //Debug.Log("AI: 1.1");
+            Debug.Log("F35 AI: 1.1");
 
             Transform[] hpTransformsList = (Transform[])traverse2.Field("hpTransforms").GetValue();
-            //Debug.Log("AI: 1.2");
+            Debug.Log("F35 AI: 1.2");
 
             if (allWeaponPrefabsOutput.ContainsKey(weaponName))
             {
-                //Debug.Log("AI: 1.3");
+                Debug.Log("F35 AI: 1.3");
 
 
                 GameObject gameObject = (GameObject)UnityEngine.Object.Instantiate(Resources.Load(allWeaponPrefabsOutput[weaponName].prefabPath));
                 gameObject.name = allWeaponPrefabsOutput[weaponName].eqObject.name;
                 gameObject.SetActive(true);
                 Transform transform = gameObject.transform;
-                //Debug.Log("AI: 1.4");
+                Debug.Log("F35 AI: 1.4");
 
                 __instance.equips[hpIdx] = transform.GetComponent<HPEquippable>();
-                //Debug.Log("AI: 1.5");
+                Debug.Log("F35 AI: 1.5");
 
                 transform.parent = hpTransformsList[hpIdx];
-                //Debug.Log("AI: 1.6");
+                Debug.Log("F35 AI: 1.6");
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.identity;
-                //Debug.Log("AI: 1.7");
+                Debug.Log("F35 AI: 1.7");
                 transform.localScale = Vector3.one;
                 __instance.equips[hpIdx].OnConfigAttach(__instance);
                 /*
@@ -69,39 +69,39 @@ namespace CustomAircraftTemplate
         public static bool Prefix(LoadoutConfigurator __instance, int hpIdx)
         {
             //Debug.unityLogger.logEnabled = Main.logging;
-            //Debug.Log("Running DetachImmediate");
+            Debug.Log("F35 Running DetachImmediate");
             return true;
         }
     }
     */
     [HarmonyPatch(typeof(LoadoutConfigurator), "DetachRoutine")]
-    public class SU35_DetachRoutinePatch
+    public class F35_DetachRoutinePatch
     {
         public static bool Prefix(LoadoutConfigurator __instance, int hpIdx)
         {
             //Debug.unityLogger.logEnabled = Main.logging;
-            //Debug.Log("Running DetachRoutine");
+            Debug.Log("F35 Running DetachRoutine");
             return true;
         }
     }
 
     [HarmonyPatch(typeof(LoadoutConfigurator), "AttachRoutine")]
-    public class SU35_AttachRoutinePatch2
+    public class F35_AttachRoutinePatch2
     {
         public static void Prefix(LoadoutConfigurator __instance, int hpIdx)
         {
             //Debug.unityLogger.logEnabled = Main.logging;
-            //Debug.Log("Running AttachRoutine");
+            Debug.Log("F35 Running AttachRoutine");
         }
     }
 
     [HarmonyPatch(typeof(LoadoutConfigurator), "Attach")]
-    public class SU35_AttachPatch
+    public class F35_AttachPatch
     {
         public static bool Prefix(LoadoutConfigurator __instance, string weaponName, int hpIdx)
         {
             //Debug.unityLogger.logEnabled = Main.logging;
-            //Debug.Log("Running AttachRoutine");
+            Debug.Log("F35 Running AttachRoutine");
             return true;
             
         }

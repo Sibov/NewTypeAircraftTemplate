@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateF35
 {
     class AircraftAPI
     {
@@ -26,23 +26,23 @@ namespace CustomAircraftTemplate
             // this all executes after PilotSaveManager loads all the vehicles from base game
 
             // private static field = Traverse babyyyyy
-            //Debug.Log("VLU1.0");
+            Debug.Log("F35 VLU1.0");
             Traverse trav = Traverse.Create<PilotSaveManager>();
             // yoink the existing vars that PilotSaveManager uses
-            //Debug.Log("VLU1.1");
+            Debug.Log("F35 VLU1.1");
             var vehicles = trav.Field("vehicles").GetValue<Dictionary<string, PlayerVehicle>>();
-            //Debug.Log("VLU1.1.1");
+            Debug.Log("F35 VLU1.1.1");
             var vehicleList = trav.Field("vehicleList").GetValue<List<PlayerVehicle>>();
-            //Debug.Log("VLU1.1.2");
+            Debug.Log("F35 VLU1.1.2");
             if (vehicles.ContainsKey(Main.customAircraftPV.vehicleName))
             {
-                //Debug.Log("VLU1.1.3");
+                Debug.Log("F35 VLU1.1.3");
                 return;
             }
             // then add our vehicle to the list
-            //Debug.Log("VLU1.3");
+            Debug.Log("F35 VLU1.3");
 
-            //Debug.Log("VLU2.0");
+            Debug.Log("F35 VLU2.0");
 
 
             
@@ -53,14 +53,14 @@ namespace CustomAircraftTemplate
 
             foreach (PlayerVehicle vehicle in vehicleList)
             {
-                //Debug.Log("VLU2.1 : " + vehicle.vehicleName);
+                Debug.Log("F35 VLU2.1 : " + vehicle.vehicleName);
             }
 
-            //Debug.Log("VLU3.0");
+            Debug.Log("F35 VLU3.0");
             // and set them back with our fancy updated data structures
             trav.Field("vehicles").SetValue(vehicles);
             trav.Field("vehicleList").SetValue(vehicleList);
-            //Debug.Log("VLU3.1");
+            Debug.Log("F35 VLU3.1");
             VTResources.LoadPlayerVehicles();
             PilotSaveManager.LoadPilotsFromFile();
 
@@ -78,7 +78,7 @@ namespace CustomAircraftTemplate
             foreach (Transform child in children)
             {
                 if (check) {
-                    //Debug.Log("Looking for:" + name + ", Found:" + child.name); 
+                    Debug.Log("F35 Looking for:" + name + ", Found:" + child.name); 
                 }
                 if (child.name == name || child.name == (name + "(Clone)"))
                 {

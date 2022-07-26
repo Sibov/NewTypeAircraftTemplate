@@ -7,15 +7,33 @@ using ModLoader;
 using VTOLVR.Multiplayer;
 using System.Reflection;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateF35
 {
 
 
 
     [HarmonyPatch(typeof(VehicleConfigSceneSetup), "Start")]
-    public class SU35_VehicleConfigStartPatch
+    public class F35_VehicleConfigStartPatch
+    {
+
+
+        public static void Postfix(VehicleConfigSceneSetup __instance)
+        {
+            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+            { return; }
+            PlayerVehicle currentVehicle = PilotSaveManager.currentVehicle;
+            Debug.Log("F35 VCS1.0");
+            Main.aircraftCustom = GameObject.Find(currentVehicle.vehicleName + "(Clone)");
+            Debug.Log("F35 VCS1.1");
+        }
+    }
+
+    /*
+    [HarmonyPatch(typeof(VehicleConfigSceneSetup), "Start")]
+    public class F35_VehicleConfigStartPatch
     {
         private static GameObject f26LC;
+        private static GameObject gameObject;
 
         public static bool Prefix(VehicleConfigSceneSetup __instance)
         {
@@ -30,66 +48,68 @@ namespace CustomAircraftTemplate
                 LoadingSceneController.LoadSceneImmediate("ReadyRoom");
                 return true;
             }
-            ////Debug.Log("VCS1.0");
+            Debug.Log("F35 VCS1.0");
             PilotSaveManager.LoadPilotsFromFile();
-            ////Debug.Log("VCS1.1");
+            Debug.Log("F35 VCS1.1");
             PlayerVehicle currentVehicle = PilotSaveManager.currentVehicle;
-            ////Debug.Log("VCS1.1.1");
-            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftPrefab);
+            Debug.Log("F35 VCS1.1.1:" + Main.aircraftPrefab.name);
+            gameObject = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftPrefab);
+            Debug.Log("F35 VCS1.1.1.1");
+
             Main.aircraftCustom = gameObject;
-            ////Debug.Log("VCS1.1.2");
+            Debug.Log("F35 VCS1.1.2");
             gameObject.transform.position = __instance.loadoutSpawnTransform.TransformPoint(currentVehicle.loadoutSpawnOffset);
-            ////Debug.Log("VCS1.1.3");
+            Debug.Log("F35 VCS1.1.3");
             gameObject.transform.rotation = __instance.loadoutSpawnTransform.rotation;
-            ////Debug.Log("VCS1.2");
+            Debug.Log("F35 VCS1.2");
             PlayerVehicleSetup component = gameObject.GetComponent<PlayerVehicleSetup>();
             component.SetToConfigurationState();
             WheelsController component2 = gameObject.GetComponent<WheelsController>();
-            ////Debug.Log("VCS1.3");
+            Debug.Log("F35 VCS1.3");
             if (component2)
             {
                 component2.SetBrakeLock(1);
             }
-            ////Debug.Log("VCS1.4");
+            Debug.Log("F35 VCS1.4");
             gameObject.SetActive(true);
             GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(Main.aircraftLoadoutConfiguratorPrefab);
 
             gameObject2.transform.position = __instance.loadoutSpawnTransform.position;
             gameObject2.transform.rotation = __instance.loadoutSpawnTransform.rotation;
             gameObject2.SetActive(true);
-            ////Debug.Log("VCS1.5");
+            Debug.Log("F35 VCS1.5");
             traverse.Field("config").SetValue(gameObject2.GetComponent<LoadoutConfigurator>());
             traverse.Field("config").Field("wm").SetValue(gameObject.GetComponent<WeaponManager>());
             LoadoutConfigurator LC1 = gameObject2.GetComponent<LoadoutConfigurator>();
-            ////Debug.Log("VCS1.6");
+            Debug.Log("F35 VCS1.6");
             component.StartUsingConfigurator(LC1);
             //working version
             VehicleSave vSave = PilotSaveManager.current.GetVehicleSave(PilotSaveManager.currentVehicle.vehicleName);
             if (vSave == null)
             {
-                ////Debug.Log("VCS 1.6.0.1");
+                Debug.Log("F35 VCS 1.6.0.1");
             }
 
             CampaignSave campaignSave = vSave.GetCampaignSave(PilotSaveManager.currentCampaign.campaignID);
-            ////Debug.Log("VCS1.6.0.1.1");
+            Debug.Log("F35 VCS1.6.0.1.1");
 
 
-            ////Debug.Log("VCS1.6.1 , vn = " + PilotSaveManager.currentVehicle.vehicleName);
-            ////Debug.Log("VCS1.6.2 , cn = " + PilotSaveManager.currentCampaign.campaignID);
+            Debug.Log("F35 VCS1.6.1 , vn = " + PilotSaveManager.currentVehicle.vehicleName);
+            Debug.Log("F35 VCS1.6.2 , cn = " + PilotSaveManager.currentCampaign.campaignID);
 
             if (campaignSave == null)
             {
-                ////Debug.Log("VCS1.7.1 , " + PilotSaveManager.currentVehicle);
+                Debug.Log("F35 VCS1.7.1 , " + PilotSaveManager.currentVehicle);
                 CampaignSelectorUI.SetUpCampaignSave(PilotSaveManager.currentCampaign, null, null, null, PilotSaveManager.currentVehicle);
                 campaignSave = PilotSaveManager.current.GetVehicleSave(PilotSaveManager.currentVehicle.vehicleName).GetCampaignSave(PilotSaveManager.currentCampaign.campaignID);
 
             }
 
-            ////Debug.Log("VCS1.7");
+            Debug.Log("F35 VCS1.7");
             List<string> allAvailableEquipStrings = new List<string>();
             if (PilotSaveManager.currentCampaign.isCustomScenarios && PilotSaveManager.currentCampaign.isStandaloneScenarios)
             {
-                ////Debug.Log("VCS1.8");
+                Debug.Log("F35 VCS1.8");
                 List<string> allowedEquips = VTResources.GetScenario(PilotSaveManager.currentScenario.scenarioID, PilotSaveManager.currentCampaign).allowedEquips;
                 foreach (string item in allowedEquips)
                 {
@@ -109,22 +129,22 @@ namespace CustomAircraftTemplate
             }
             else
             {
-                ////Debug.Log("VCS1.9");
+                Debug.Log("F35 VCS1.9");
                 foreach (string item2 in campaignSave.availableWeapons)
                 {
                     allAvailableEquipStrings.Add(item2);
                 }
             }
-            ////Debug.Log("VCS1.10");
+            Debug.Log("F35 VCS1.10");
             traverse.Field("config").Field("availableEquipStrings").SetValue(allAvailableEquipStrings);
-            ////Debug.Log("VCS1.10.1");
+            Debug.Log("F35 VCS1.10.1");
             PilotSaveManager.currentScenario.initialSpending = 0f;
-            ////Debug.Log("VCS1.10.1" + " : " + LC1.name + ": " + campaignSave.campaignName);
+            Debug.Log("F35 VCS1.10.1" + " : " + LC1.name + ": " + campaignSave.campaignName);
             LC1.Initialize(campaignSave, false);
-            ////Debug.Log("VCS1.11");
+            Debug.Log("F35 VCS1.11");
             if (PilotSaveManager.currentScenario.forcedEquips != null)
             {
-                ////Debug.Log("VCS1.12");
+                Debug.Log("F35 VCS1.12");
                 foreach (CampaignScenario.ForcedEquip forcedEquip in PilotSaveManager.currentScenario.forcedEquips)
                 {
                     LC1.AttachImmediate(forcedEquip.weaponName, forcedEquip.hardpointIdx);
@@ -133,29 +153,48 @@ namespace CustomAircraftTemplate
             }
             if (campaignSave.currentWeapons != null)
             {
-                ////Debug.Log("VCS1.11.1");
+                Debug.Log("F35 VCS1.11.1");
                 for (int k = 0; k < campaignSave.currentWeapons.Length; k++)
                 {
-                    ////Debug.Log("VCS1.11.2");
+                    Debug.Log("F35 VCS1.11.2");
                     if (!LC1.lockedHardpoints.Contains(k) && !string.IsNullOrEmpty(campaignSave.currentWeapons[k]))
                     {
-                        ////Debug.Log("VCS1.11.3");
+                        Debug.Log("F35 VCS1.11.3");
                         LC1.AttachImmediate(campaignSave.currentWeapons[k], k);
                     }
                 }
             }
-            ////Debug.Log("VCS1.13");
+            Debug.Log("F35 VCS1.13");
             ScreenFader.FadeIn(1f);
             return false;
         }
 
     }
+    */
 
 
+    [HarmonyPatch(typeof(LoadoutConfigurator), "Initialize")]
+    public static class F35_LCInit
+    {
+        public static void Postfix(LoadoutConfigurator __instance)
+        {
+            Traverse traverse2 = Traverse.Create(__instance);
 
 
+            Dictionary<string, EqInfo> allWeaponPrefabsOutput = new Dictionary<string, EqInfo>();
+            Debug.Log("F35 LCI: 1.0 : ");
+            allWeaponPrefabsOutput = (Dictionary<string, EqInfo>)traverse2.Field("allWeaponPrefabs").GetValue();
+            Debug.Log("F35 LCI: 1.1");
+            traverse2.Field("unlockedWeaponPrefabs").SetValue(allWeaponPrefabsOutput);
+
+        }
+
+    }
+
+
+            
     [HarmonyPatch(typeof(LoadoutConfigurator), "EquipCompatibilityMask")]
-    public static class SU35_EquipCompatibilityPatch
+    public static class F35_EquipCompatibilityPatch
     {
         public static bool Prefix(LoadoutConfigurator __instance, HPEquippable equip)
         {
@@ -165,17 +204,16 @@ namespace CustomAircraftTemplate
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
 
-            Debug.Log("Name:" + AircraftInfo.AircraftName);
+            Debug.Log("F35 Name:" + Main.customAircraftPV.vehicleName);
 
             
             if (true) // fuck you c ; work on manners you ape
             {
-                Debug.Log("Section 11");
+                Debug.Log("F35 Section 11");
 
 
                 // this creates a dictionary of all the wepaons and where they can be mounted, just alter the second string per weapon according to the wepaon you want.
                 Dictionary<string, string> allowedhardpointbyweapon = new Dictionary<string, string>();
-                allowedhardpointbyweapon.Add("asf-srmx1", "9,10");
                 //allowedhardpointbyweapon.Add("fa26_gun", "0");
                 //allowedhardpointbyweapon.Add("GIAT30Gun", "0");
                 //allowedhardpointbyweapon.Add("asf30_gun", "0");
@@ -227,34 +265,47 @@ namespace CustomAircraftTemplate
                 //allowedhardpointbyweapon.Add("h70-x7ld-under", "");
                 //allowedhardpointbyweapon.Add("h70-x14ld-under", "");
                 //allowedhardpointbyweapon.Add("h70-x14ld", "4,5");
-                //allowedhardpointbyweapon.Add("f45_aim9x1", "2,3");
-                //allowedhardpointbyweapon.Add("f45_amraamRail", "2,3,1,4,5,6,7,8,9");
-                //allowedhardpointbyweapon.Add("f45_mk82x1", "1,4,5,6,7,8,9");
-                //allowedhardpointbyweapon.Add("f45_gbu12x1", "1,4,5,6,7,8,9");
-                //allowedhardpointbyweapon.Add("f45-gbu39", "1,4,5,6,7,8,9");
-                //allowedhardpointbyweapon.Add("f45_droptank", "1,4,5,6,7,8,9");
-                //allowedhardpointbyweapon.Add("f45_gbu38x1", "1,4,5,6,7,8,9");
-                //allowedhardpointbyweapon.Add("f45_sidewinderx2", "2,3,4,5");
-                //allowedhardpointbyweapon.Add("f45_mk83x1", "1,4,5,6,7,8,9");
-                //allowedhardpointbyweapon.Add("f45-agm145I", "1, 4, 5, 6, 7, 8, 9");
-                //allowedhardpointbyweapon.Add("f45-gbu53", "1, 4, 5, 6, 7, 8, 9");
-                //allowedhardpointbyweapon.Add("f45_agm161", "1, 4, 5, 6, 7, 8, 9");
-                //allowedhardpointbyweapon.Add("f45_gun", "0");
+                allowedhardpointbyweapon.Add("f45_aim9x1", "5,6,7,8,9,10");
+                allowedhardpointbyweapon.Add("f45_amraamRail", "5,6,7,8,9,10");
+                allowedhardpointbyweapon.Add("f45_amraamInternal", "2,3");
 
-                ////Debug.Log("Before Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
+                allowedhardpointbyweapon.Add("f45_mk82x1", "6,7,8,9");
+                allowedhardpointbyweapon.Add("f45_mk82Internal", "2,3");
+                allowedhardpointbyweapon.Add("f45_mk82x4Internal", "2,3");
+                allowedhardpointbyweapon.Add("f45_gbu12x2Internal", "2,3");
 
+                allowedhardpointbyweapon.Add("f45_gbu12x1", "6,7,8,9");
+                allowedhardpointbyweapon.Add("f45-gbu39", "2,3");
+                allowedhardpointbyweapon.Add("f45_droptank", "7,8");
+                allowedhardpointbyweapon.Add("f45_gbu38x1", "6,7,8,9");
+                allowedhardpointbyweapon.Add("f45_gbu38x2Internal", "2,3");
+                allowedhardpointbyweapon.Add("f45_gbu38x4Internal", "2,3");
+                allowedhardpointbyweapon.Add("f45_sidewinderx2", "1,4");
+                allowedhardpointbyweapon.Add("f45_mk83x1", "6,7,8,9");
+                allowedhardpointbyweapon.Add("f45_mk83x1Internal", "2,3");
+                allowedhardpointbyweapon.Add("f45-agm145I", "2,3");
+                allowedhardpointbyweapon.Add("f45-agm145ISide", "1,4");
+                allowedhardpointbyweapon.Add("f45-agm145x3", "6,7,8,9");
+                allowedhardpointbyweapon.Add("f45-gbu53", "2,3");
+                allowedhardpointbyweapon.Add("f45_agm161", "6,7,8,9");
+                allowedhardpointbyweapon.Add("f45_agm161Internal", "2,3");
 
+                allowedhardpointbyweapon.Add("f45_gun", "0");
+
+                Debug.Log("F35 Before Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
+
+                
 
                 if (allowedhardpointbyweapon.ContainsKey(equip.name))
                 {
                     equip.allowedHardpoints = (string)allowedhardpointbyweapon[equip.name];
-                    ////Debug.Log("Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
+                    Debug.Log("F35 Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
                 }
                 else
                 {
-                    ////Debug.Log("Equipment: " + equip.name + ", not in dictionary");
+                    Debug.Log("F35 Equipment: " + equip.name + ", not in dictionary");
                 }
-
+               
 
 
             }
@@ -269,170 +320,176 @@ namespace CustomAircraftTemplate
 
 
     [HarmonyPatch(typeof(ReArmingPoint), "FinalBeginReArm")]
-    public static class SU35_RAPFBAPatch
+    public static class F35_RAPFBAPatch
     {
         public static bool Prefix(ReArmingPoint __instance)
         {
-            ////Debug.Log("RAPFBAP 1.0");
+            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                return true;
+
+            Debug.Log("F35 RAPFBAP 1.0");
             AudioController.instance.SetExteriorOpening("rearming", 1f);
             PlayerVehicle currentVehicle = PilotSaveManager.currentVehicle;
-            ////Debug.Log("RAPFBAP 1.1");
+            Debug.Log("F35 RAPFBAP 1.1");
             Transform transform = __instance.transform;
             GameObject gameObject = Main.aircraftCustom;
             Vector3 b = Vector3.zero;
-            ////Debug.Log("RAPFBAP 1.2");
+            Debug.Log("F35 RAPFBAP 1.2");
             RaycastHit raycastHit;
-            ////Debug.Log("RAPFBAP 1.3");
+            Debug.Log("F35 RAPFBAP 1.3");
             if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out raycastHit, 100f, 1))
             {
-                ////Debug.Log("RAPFBAP 1.4");
+                Debug.Log("F35 RAPFBAP 1.4");
                 b = transform.InverseTransformPoint(raycastHit.point);
             }
-            ////Debug.Log("RAPFBAP 1.5");
+            Debug.Log("F35 RAPFBAP 1.5");
             FlightSceneManager.instance.playerActor.flightInfo.PauseGCalculations();
             gameObject.transform.position = transform.TransformPoint(currentVehicle.playerSpawnOffset + b);
             gameObject.transform.rotation = Quaternion.AngleAxis(currentVehicle.spawnPitch, transform.right) * transform.rotation;
-            ////Debug.Log("RAPFBAP 1.6");
+            Debug.Log("F35 RAPFBAP 1.6");
             gameObject.GetComponent<PlayerVehicleSetup>().LandVehicle(transform);
             WeaponManager component = gameObject.GetComponent<WeaponManager>();
-            ////Debug.Log("RAPFBAP 1.7");
+            Debug.Log("F35 RAPFBAP 1.7");
             Traverse trav2 = Traverse.Create(__instance);
             HPEquippable[] mpOriginEquips = (HPEquippable[])trav2.Field("mp_OrigEquips").GetValue();
-            ////Debug.Log("RAPFBAP 1.8");
+            Debug.Log("F35 RAPFBAP 1.8");
             if (VTOLMPUtils.IsMultiplayer())
             {
-                ////Debug.Log("RAPFBAP 1.9");
+                Debug.Log("F35 RAPFBAP 1.9");
                 if (mpOriginEquips == null || mpOriginEquips.Length != component.equipCount)
                 {
-                    ////Debug.Log("RAPFBAP 1.10");
+                    Debug.Log("F35 RAPFBAP 1.10");
                     mpOriginEquips = new HPEquippable[component.equipCount];
                 }
                 for (int i = 0; i < component.equipCount; i++)
                 {
-                    ////Debug.Log("RAPFBAP 1.11");
+                    Debug.Log("F35 RAPFBAP 1.11");
                     mpOriginEquips[i] = component.GetEquip(i);
                 }
-                ////Debug.Log("RAPFBAP 1.12");
+                Debug.Log("F35 RAPFBAP 1.12");
                 trav2.Field("mp_OrigEquips").SetValue(mpOriginEquips);
 
             }
-            ////Debug.Log("RAPFBAP 1.13");
+            Debug.Log("F35 RAPFBAP 1.13");
             //Transform TcamRigParent = (Transform)trav2.Field("camRigParent").GetValue();
 
-            ////Debug.Log("RAPFBAP 1.14" );
+            Debug.Log("F35 RAPFBAP 1.14" );
             Transform TcamRigParent = VRHead.instance.transform.parent.parent;
             trav2.Field("camRigParent").SetValue(TcamRigParent);
-            ////Debug.Log("RAPFBAP 1.15: x=" + TcamRigParent.position.x + ", y=" + TcamRigParent.position.y + ", z = " + TcamRigParent.position.z);
+            Debug.Log("F35 RAPFBAP 1.15: x=" + TcamRigParent.position.x + ", y=" + TcamRigParent.position.y + ", z = " + TcamRigParent.position.z);
             gameObject.SetActive(true);
-            EjectionSeat componentInChildren = gameObject.GetComponentInChildren<EjectionSeat>();
-            ////Debug.Log("RAPFBAP 1.16");
+            EjectionSeat componentInChildren = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EjectorSeat", false).GetComponent<EjectionSeat>();
+            Debug.Log("F35 RAPFBAP 1.16");
             if (componentInChildren)
             {
-                ////Debug.Log("RAPFBAP 1.17");
-                componentInChildren.pilotModel.SetActive(false);
-            }
-            ////Debug.Log("RAPFBAP 1.18");
+                Debug.Log("F35 RAPFBAP 1.17");
+                if (componentInChildren.pilotModel)
+                {
+                    componentInChildren.pilotModel.SetActive(false);
+                }
+                }
+            Debug.Log("F35 RAPFBAP 1.18");
             VTOLQuickStart componentInChildren2 = gameObject.GetComponentInChildren<VTOLQuickStart>();
-            ////Debug.Log("RAPFBAP 1.18.1");
+            Debug.Log("F35 RAPFBAP 1.18.1");
             if (componentInChildren2.throttle)
             {
-                ////Debug.Log("RAPFBAP 1.19");
+                Debug.Log("F35 RAPFBAP 1.19");
                 componentInChildren2.throttle.RemoteSetThrottle(0f);
             }
-            ////Debug.Log("RAPFBAP 1.20");
+            Debug.Log("F35 RAPFBAP 1.20");
             componentInChildren2.quickStopComponents.ApplySettings();
-            ////Debug.Log("RAPFBAP 1.21");
+            Debug.Log("F35 RAPFBAP 1.21");
             PlayerVehicleSetup TvehicleSetup = (PlayerVehicleSetup)trav2.Field("vehicleSetup").GetValue();
-            ////Debug.Log("RAPFBAP 1.22");
+            Debug.Log("F35 RAPFBAP 1.22");
             TvehicleSetup = gameObject.GetComponentInChildren<PlayerVehicleSetup>();
             if (TvehicleSetup && TvehicleSetup.OnBeginRearming != null)
             {
-                ////Debug.Log("RAPFBAP 1.23");
+                Debug.Log("F35 RAPFBAP 1.23");
                 TvehicleSetup.OnBeginRearming.Invoke();
             }
-            ////Debug.Log("RAPFBAP 1.24");
+            Debug.Log("F35 RAPFBAP 1.24");
             GameObject TconfigObject = (GameObject)trav2.Field("configObject").GetValue();
 
-            ////Debug.Log("RAPFBAP 1.25");
+            Debug.Log("F35 RAPFBAP 1.25");
             TconfigObject = UnityEngine.Object.Instantiate<GameObject>(currentVehicle.loadoutConfiguratorPrefab);
             TconfigObject.transform.parent = transform;
-            ////Debug.Log("RAPFBAP 1.26");
+            Debug.Log("F35 RAPFBAP 1.26");
             TconfigObject.transform.position = transform.position;
             TconfigObject.transform.rotation = transform.rotation;
-            ////Debug.Log("RAPFBAP 1.27");
+            Debug.Log("F35 RAPFBAP 1.27");
             TconfigObject.SetActive(true);
             trav2.Field("configObject").SetValue(TconfigObject);
-            ////Debug.Log("RAPFBAP 1.28");
+            Debug.Log("F35 RAPFBAP 1.28");
             LoadoutConfigurator Tconfig = (LoadoutConfigurator)trav2.Field("config").GetValue();
 
             Tconfig = TconfigObject.GetComponent<LoadoutConfigurator>();
-            ////Debug.Log("RAPFBAP 1.29");
+            Debug.Log("F35 RAPFBAP 1.29");
             Tconfig.wm = component;
             Tconfig.canRefuel = __instance.canRefuel;
-            ////Debug.Log("RAPFBAP 1.30");
+            Debug.Log("F35 RAPFBAP 1.30");
             Tconfig.canArm = __instance.canArm;
             trav2.Field("config").SetValue(Tconfig);
-            ////Debug.Log("RAPFBAP 1.31");
+            Debug.Log("F35 RAPFBAP 1.31");
             if (Tconfig.equipRigTf)
             {
-                ////Debug.Log("RAPFBAP 1.32");
+                Debug.Log("F35 RAPFBAP 1.32");
                 float z = currentVehicle.playerSpawnOffset.z - currentVehicle.loadoutSpawnOffset.z;
-                ////Debug.Log("RAPFBAP 1.33");
+                Debug.Log("F35 RAPFBAP 1.33");
                 Vector3 vector = Tconfig.equipRigTf.localPosition;
-                ////Debug.Log("RAPFBAP 1.34");
+                Debug.Log("F35 RAPFBAP 1.34");
                 vector += new Vector3(0f, 0f, z);
                 vector.y = 0f;
-                ////Debug.Log("RAPFBAP 1.35");
+                Debug.Log("F35 RAPFBAP 1.35");
                 Tconfig.equipRigTf.localPosition = vector;
             }
             trav2.Field("config").SetValue(Tconfig);
 
             if (TvehicleSetup)
             {
-                ////Debug.Log("RAPFBAP 1.36");
+                Debug.Log("F35 RAPFBAP 1.36");
                 TvehicleSetup.StartUsingConfigurator(Tconfig);
             }
             trav2.Field("vehicleSetup").SetValue(TvehicleSetup);
 
             foreach (VRHandController vrhandController in VRHandController.controllers)
             {
-                ////Debug.Log("RAPFBAP 1.37");
+                Debug.Log("F35 RAPFBAP 1.37");
                 if (vrhandController.activeInteractable)
                 {
-                    ////Debug.Log("RAPFBAP 1.38");
+                    Debug.Log("F35 RAPFBAP 1.38");
                     vrhandController.ReleaseFromInteractable();
                 }
             }
-            ////Debug.Log("RAPFBAP 1.39");
+            Debug.Log("F35 RAPFBAP 1.39");
             VRHead.instance.transform.parent.parent = Tconfig.seatTransform;
-            ////Debug.Log("RAPFBAP 1.40");
+            Debug.Log("F35 RAPFBAP 1.40");
             VRHead.instance.transform.parent.localPosition = VRHead.playAreaPosition;
-            ////Debug.Log("RAPFBAP 1.41");
+            Debug.Log("F35 RAPFBAP 1.41");
             VRHead.instance.transform.parent.localRotation = VRHead.playAreaRotation;
-            ////Debug.Log("RAPFBAP 1.42");
+            Debug.Log("F35 RAPFBAP 1.42");
             CampaignSave campaignSave = PilotSaveManager.current.GetVehicleSave(PilotSaveManager.currentVehicle.vehicleName).GetCampaignSave(PilotSaveManager.currentCampaign.campaignID);
 
-            ////Debug.Log("RAPFBAP 1.43");
+            Debug.Log("F35 RAPFBAP 1.43");
             Tconfig.availableEquipStrings = new List<string>();
             List<string> availableWeapons = campaignSave.availableWeapons;
-            ////Debug.Log("RAPFBAP 1.44");
+            Debug.Log("F35 RAPFBAP 1.44");
             if (VTOLMPUtils.IsMultiplayer())
             {
-                ////Debug.Log("RAPFBAP 1.45");
+                Debug.Log("F35 RAPFBAP 1.45");
                 PlayerInfo localPlayer = VTOLMPSceneManager.instance.localPlayer;
                 List<string> equipment = VTOLMPSceneManager.instance.GetMPSpawn(localPlayer.team, localPlayer.selectedSlot).equipment.equipment;
-                ////Debug.Log("RAPFBAP 1.46");
+                Debug.Log("F35 RAPFBAP 1.46");
                 using (List<GameObject>.Enumerator enumerator2 = PilotSaveManager.currentVehicle.allEquipPrefabs.GetEnumerator())
                 {
-                    ////Debug.Log("RAPFBAP 1.47");
+                    Debug.Log("F35 RAPFBAP 1.47");
 
                     while (enumerator2.MoveNext())
                     {
-                        ////Debug.Log("RAPFBAP 1.48");
+                        Debug.Log("F35 RAPFBAP 1.48");
                         GameObject gameObject2 = enumerator2.Current;
                         if (!equipment.Contains(gameObject2.gameObject.name))
                         {
-                            ////Debug.Log("RAPFBAP 1.49");
+                            Debug.Log("F35 RAPFBAP 1.49");
                             Tconfig.availableEquipStrings.Add(gameObject2.gameObject.name);
                         }
                     }
@@ -440,12 +497,12 @@ namespace CustomAircraftTemplate
                 }
             }
             trav2.Field("config").SetValue(Tconfig);
-            ////Debug.Log("RAPFBAP 1.50");
+            Debug.Log("F35 RAPFBAP 1.50");
             foreach (string item in campaignSave.availableWeapons)
             {
                 if (!(VTScenario.current.gameVersion > new GameVersion(1, 3, 0, 30, GameVersion.ReleaseTypes.Testing)) || VTScenario.current.allowedEquips.Contains(item))
                 {
-                    ////Debug.Log("RAPFBAP 1.51");
+                    Debug.Log("F35 RAPFBAP 1.51");
                     Tconfig.availableEquipStrings.Add(item);
                 }
             }
@@ -454,18 +511,18 @@ namespace CustomAircraftTemplate
             Tconfig.Initialize(campaignSave, true);
             if (PilotSaveManager.currentScenario.forcedEquips != null)
             {
-                ////Debug.Log("RAPFBAP 1.52");
+                Debug.Log("F35 RAPFBAP 1.52");
                 foreach (CampaignScenario.ForcedEquip forcedEquip in PilotSaveManager.currentScenario.forcedEquips)
                 {
-                    ////Debug.Log("RAPFBAP 1.53");
+                    Debug.Log("F35 RAPFBAP 1.53");
                     Tconfig.Attach(forcedEquip.weaponName, forcedEquip.hardpointIdx);
                     Tconfig.lockedHardpoints.Add(forcedEquip.hardpointIdx);
                 }
             }
-            ////Debug.Log("RAPFBAP 1.54");
+            Debug.Log("F35 RAPFBAP 1.54");
             trav2.Field("config").SetValue(Tconfig);
             Tconfig.UpdateNodes();
-            ////Debug.Log("RAPFBAP 1.5");
+            Debug.Log("F35 RAPFBAP 1.5");
             trav2.Field("config").SetValue(Tconfig);
             __instance.StartCoroutine(__instance.SetRearmAnchorDelayed());
             return false;
@@ -473,11 +530,13 @@ namespace CustomAircraftTemplate
     }
 
     [HarmonyPatch(typeof(ReArmingPoint), "FinalEndReArm")]
-    public static class SU35_RAPFERPatch
+    public static class F35_RAPFERPatch
     {
         public static bool Prefix(ReArmingPoint __instance)
         {
-            ////Debug.Log("RAPFFER 1.0");
+            Debug.Log("F35 RAPFFER 1.0");
+            if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
+                return true;
             Traverse trav3 = Traverse.Create(__instance);
             Traverse trav4 = Traverse.Create(typeof(ReArmingPoint));
 
@@ -489,49 +548,49 @@ namespace CustomAircraftTemplate
             UnityEngine.Object trav3active = (UnityEngine.Object)trav3.Field("active").GetValue();
             PlayerVehicleSetup trav3pvSetup = (PlayerVehicleSetup)trav3.Field("vehicleSetup").GetValue();
             HPEquippable[] trav3mp_OrigEquips = (HPEquippable[])trav3.Field("mp_OrigEquips").GetValue();
-            ////Debug.Log("RAPFFER 1.1");
+            Debug.Log("F35 RAPFFER 1.1");
             float totalFlightCost = trav3config.GetTotalFlightCost();
             AudioController.instance.SetExteriorOpening("rearming", 0f);
-            ////Debug.Log("RAPFFER 1.2");
+            Debug.Log("F35 RAPFFER 1.2");
             PilotSaveManager.currentScenario.inFlightSpending += totalFlightCost;
-            ////Debug.Log("RAPFFER 1.2.1:");
-            ////Debug.Log("x =" + trav3camrigParent.position.x + ", y=" + trav3camrigParent.position.y + ", z = " + trav3camrigParent.position.z);
+            Debug.Log("F35 RAPFFER 1.2.1:");
+            Debug.Log("F35 x =" + trav3camrigParent.position.x + ", y=" + trav3camrigParent.position.y + ", z = " + trav3camrigParent.position.z);
             VRHead.instance.transform.parent.parent = trav3camrigParent;
             VRHead.instance.transform.parent.localPosition = VRHead.playAreaPosition;
             VRHead.instance.transform.parent.localRotation = VRHead.playAreaRotation;
-            ////Debug.Log("RAPFFER 1.3");
+            Debug.Log("F35 RAPFFER 1.3");
             GameObject gameObject = FlightSceneManager.instance.playerActor.gameObject;
             //GameObject gameObject = Main.aircraftCustom;
-            ////Debug.Log("RAPFFER 1.3.1 : " + gameObject.name);
+            Debug.Log("F35 RAPFFER 1.3.1 : " + gameObject.name);
 
 
-            EjectionSeat componentInChildren = gameObject.GetComponentInChildren<EjectionSeat>();
+            EjectionSeat componentInChildren = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EjectorSeat", false).GetComponent<EjectionSeat>();
             if (componentInChildren)
             {
-                ////Debug.Log("RAPFFER 1.3.2 ");
+                Debug.Log("F35 RAPFFER 1.3.2 ");
                 componentInChildren.pilotModel.SetActive(true);
             }
-            ////Debug.Log("RAPFFER 1.4");
+            Debug.Log("F35 RAPFFER 1.4");
             CommRadioSource componentInChildren2 = gameObject.GetComponentInChildren<CommRadioSource>();
             if (componentInChildren2)
             {
-                ////Debug.Log("RAPFFER 1.4.1 : ");
+                Debug.Log("F35 RAPFFER 1.4.1 : ");
                 componentInChildren2.SetAsRadioSource();
             }
-            ////Debug.Log("RAPFFER 1.5");
+            Debug.Log("F35 RAPFFER 1.5");
             foreach (VRHandController vrhandController in VRHandController.controllers)
             {
-                ////Debug.Log("RAPFFER 1.5.1");
+                Debug.Log("F35 RAPFFER 1.5.1");
                 if (vrhandController.activeInteractable)
                 {
-                    ////Debug.Log("RAPFFER 1.5.2");
+                    Debug.Log("F35 RAPFFER 1.5.2");
                     vrhandController.ReleaseFromInteractable();
                 }
             }
-            ////Debug.Log("RAPFFER 1.6");
+            Debug.Log("F35 RAPFFER 1.6");
             UnityEngine.Object.Destroy(trav3configObject);
             trav4.Field("active").SetValue(null);
-            ////Debug.Log("RAPFFER 1.7");
+            Debug.Log("F35 RAPFFER 1.7");
             if (FlightSceneManager.instance)
             {
                 FlightSceneManager.instance.OnExitScene -= __instance.Instance_OnExitScene;
@@ -544,7 +603,7 @@ namespace CustomAircraftTemplate
                 }
                 trav3pvSetup.EndUsingConfigurator(trav3config);
             }
-            ////Debug.Log("RAPFFER 1.8");
+            Debug.Log("F35 RAPFFER 1.8");
             //if (__instance.OnEndRearm != null)
             //{
             //    __instance.OnEndRearm();
@@ -561,12 +620,12 @@ namespace CustomAircraftTemplate
 
                 if (FlightSceneManager.instance.playerActor)
             {
-                ////Debug.Log("RAPFFER 1.8.1");
+                Debug.Log("F35 RAPFFER 1.8.1");
                 __instance.voiceProfile.PlayMessage(GroundCrewVoiceProfile.GroundCrewMessages.ReturnedToVehicle);
-                ////Debug.Log("RAPFFER 1.8.1");
+                Debug.Log("F35 RAPFFER 1.8.1");
                 FlightSceneManager.instance.playerActor.flightInfo.UnpauseGCalculations();
             }
-            ////Debug.Log("RAPFFER 1.9");
+            Debug.Log("F35 RAPFFER 1.9");
             if (VTOLMPUtils.IsMultiplayer() && gameObject)
             {
                 WeaponManagerSync componentInChildren3 = gameObject.GetComponentInChildren<WeaponManagerSync>();

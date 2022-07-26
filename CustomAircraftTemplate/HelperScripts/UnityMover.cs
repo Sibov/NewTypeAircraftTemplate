@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateF35
 {
 
     public class customTransform
@@ -35,7 +35,7 @@ namespace CustomAircraftTemplate
         public void load(bool doCockpit = true)
         {
 
-            ////Debug.Log("load1");
+            Debug.Log("F35 load1");
             if (gs == null)
                 return;
             List<customTransform> listCustomTraans = new List<customTransform>();
@@ -129,7 +129,7 @@ namespace CustomAircraftTemplate
                     }
                 }
             }
-            ////Debug.Log("load2");
+            Debug.Log("F35 load2");
         }
 
 

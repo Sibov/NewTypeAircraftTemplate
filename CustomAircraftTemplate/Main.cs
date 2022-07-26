@@ -12,7 +12,7 @@ using Unity;
 using TMPro;
 using UnityEngine.UI;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateF35
 {
     public class Main : VTOLMOD
     {
@@ -59,7 +59,7 @@ namespace CustomAircraftTemplate
             //Debug.unityLogger.logEnabled = Main.logging;
             instance = this;
 
-            //Debug.Log("ML3");
+            Debug.Log("F35 ML3");
 
             pathToBundle = Path.Combine(instance.ModFolder, AircraftInfo.AircraftAssetbundleName);
             AssetBundle bundleLoad = FileLoader.GetAssetBundleAsGameObject(pathToBundle, AircraftInfo.AircraftAssetbundleName);
@@ -69,14 +69,16 @@ namespace CustomAircraftTemplate
             aircraftLoadoutConfiguratorPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftLoadoutConfigurator);
             customAircraftPV = FileLoader.GetPrefabAsPlayerVehicle(bundleLoad, AircraftInfo.customAircraftPV);
             customBICampaigns = FileLoader.GetPrefabAsBICampaigns(bundleLoad, "Campaigns.asset");
-            //Debug.Log("ML3.1");
+            Debug.Log("F35 ML3.1");
             int count = Enum.GetValues(typeof(MultiplayerSpawn.Vehicles)).Length;
-            //Debug.Log("ML3.2 : " + count);
+            Debug.Log("F35 ML3.2 : " + count);
             aircraftMSVId = (MultiplayerSpawn.Vehicles)AircraftInfo.AircraftMPIdentifier;
-            VTNetworking.VTNetworkManager.RegisterOverrideResource(customAircraftPV.resourcePath, aircraftPrefab);
+            Debug.Log("F35 ML3.3");
+
+           VTNetworking.VTNetworkManager.RegisterOverrideResource(customAircraftPV.resourcePath, aircraftPrefab);
           
 
-            //Debug.Log("ML1");
+            Debug.Log("F35 ML1");
 
 
 
@@ -85,17 +87,17 @@ namespace CustomAircraftTemplate
             harmonyInstance.PatchAll();
            
 
-            //Debug.Log("ML2");
+            Debug.Log("F35 ML2");
             
 
-            //Debug.Log("ML4");
+            Debug.Log("F35 ML4");
             //Debug.Log(pathToBundle);
             
            
            
-            //Debug.Log("ML5");
+            Debug.Log("F35 ML5");
 
-            //Debug.Log("Got " + aircraftPrefab.name);
+            Debug.Log("F35 Got " + aircraftPrefab.name);
 
            
 
@@ -124,8 +126,8 @@ namespace CustomAircraftTemplate
         {
             if (aircraftLoaded)
             {
-               //MirageElements.ClockUpdate();
-                Main.HMCSAltText.GetComponent<Text>().text = Main.aircraftCustom.GetComponent<FlightInfo>().radarAltitude.ToString();
+               
+                //Main.HMCSAltText.GetComponent<Text>().text = Main.aircraftCustom.GetComponent<FlightInfo>().radarAltitude.ToString();
             } 
         }
 
@@ -139,13 +141,13 @@ namespace CustomAircraftTemplate
             {
                 
                 case VTOLScenes.VehicleConfiguration:
-                    //Debug.Log("Reload the configurator");
+                    Debug.Log("F35 Reload the configurator");
                     StartCoroutine(InitWaiter());
                     
 
                     break;
                 default:
-                    //Debug.Log("In scene: " + scene);
+                    Debug.Log("F35 In scene: " + scene);
 
                     break;
 
@@ -157,7 +159,7 @@ namespace CustomAircraftTemplate
         private IEnumerator InitWaiter()
         {
         //Debug.unityLogger.logEnabled = Main.logging;
-        //Debug.Log("InitWaiter Started");
+        Debug.Log("F35 InitWaiter Started");
             yield return new WaitForSeconds(3f);
           
             yield break;

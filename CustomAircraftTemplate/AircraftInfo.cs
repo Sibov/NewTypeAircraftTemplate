@@ -4,35 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomAircraftTemplate
+namespace CustomAircraftTemplateF35
 {
     public class AircraftInfo
     {
 
         //READ ME, IMPORTANT!!!!!!!!
         //You must change HarmonyId in order for your custom aircraft mod to be compatable with other aircraft mods
-        public const string HarmonyId = "Bovine.GAV25";
+        public const string HarmonyId = "Bovine.F35";
 
         //Stores if your custom aircraft is selected.
         //This is what prevents your aircraft from constantly replacing the FA-26
         public static bool AircraftSelected = false;
 
         //Info about your aircraft
-        public const float maxInternalFuel = 5000;
-        public const Int32 AircraftMPIdentifier = 7;
-        public const string customAircraftPV = "GAV-25.asset";
-        public const string AircraftName = "GAV-25 Bullshark";
-        public const string AircraftNickName = "Bullshark";
-        public const string AircraftDescription = "GAV-25 Bullshark";
+        public const float maxInternalFuel = 7600;
+        //You need a number for this below to identify your aircraft, see modding community to discuss next number
+        public const Int32 AircraftMPIdentifier = 9;
+        public const string customAircraftPV = "F-35.asset";
+        public const string pilottype = "F-45A";
+
+
+
 
         //Names of the various files you need to put in your builds folder
-        public const string PreviewPngFileName = "Mirage2000preview.png";
-        public const string AircraftAssetbundleName = "gav25";
+
+        public const string AircraftAssetbundleName = "f35";
         
 
         //Name of the prefab of your aircraft from the assetbundle
-        public const string AircraftPrefabName = "GAV-25B.prefab";
-        public const string AircraftLoadoutConfigurator = "GAV25-LoadoutConfigurator.prefab";
+        public const string AircraftPrefabName = "F35.prefab";
+        public const string AircraftLoadoutConfigurator = "F35-LoadoutConfigurator.prefab";
 
 
 
