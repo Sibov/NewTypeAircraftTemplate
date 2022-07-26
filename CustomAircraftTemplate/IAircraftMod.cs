@@ -3,17 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
-using Unity;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace CustomAircraftTemplate
 {
+    /// <summary>
+    /// The core abstract base of an aircraft mod. Expects a derived class as the template parameter.
+    /// </summary>
+    /// <typeparam name="T">A derived aircraft mod core runner class type.</typeparam>
     public abstract class IAircraftMod<T> : VTOLMOD where T : IAircraftMod<T>, new()
     {
         /// <summary> The single instance of this aircraft mod. </summary>
@@ -51,7 +50,7 @@ namespace CustomAircraftTemplate
         internal    Radar radar;
         internal    GameObject HMCSAltText;
 
-        public void AircraftModLoaded(T instance, IAircraftInfo aircraftInfo)
+        protected virtual void AircraftModLoaded(T instance, IAircraftInfo aircraftInfo)
         {
             Instance = instance;
 
@@ -81,17 +80,19 @@ namespace CustomAircraftTemplate
             AircraftAPI.VehicleListUpdate();
         }
         
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if (!aircraftLoaded)
                 return;
 
-            //MirageElements.ClockUpdate();
             HMCSAltText.GetComponent<Text>().text = aircraftCustom.GetComponent<FlightInfo>().radarAltitude.ToString();
         }
 
-        // This function is called every time a scene is loaded. This behaviour executes in the Awake() stage.
-        private void SceneLoaded(VTOLScenes scene)
+        /// <summary>
+        /// This function is called every time a scene is loaded. This behaviour executes in the Awake() stage.
+        /// </summary>
+        /// <param name="scene">The scene being passed to the event handler.</param>
+        protected virtual void SceneLoaded(VTOLScenes scene)
         {
             switch (scene)
             {
@@ -108,7 +109,6 @@ namespace CustomAircraftTemplate
         private IEnumerator InitWaiter()
         {
             yield return new WaitForSeconds(3f);
-
             yield break;
         }
     }
