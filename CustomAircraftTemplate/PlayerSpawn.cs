@@ -30,19 +30,19 @@ using VTNetworking;
 using Steamworks;
 using UnityStandardAssets.ImageEffects;
 
-namespace CustomAircraftTemplateSU35
+namespace CustomAircraftTemplateGAV25B
 {
 
 
     [HarmonyPatch(typeof(MultiplayerSpawn), "SetupSpawnedVehicle")]
-    public class SU35_MS_SetupSpawnedVehicle_Prefix
+    public class GAV25B_MS_SetupSpawnedVehicle_Prefix
     {
         private static EjectionSeat prefabES;
 
         public static void Prefix(MultiplayerSpawn __instance, GameObject vehicleObj)
         {
             Main.i = 0;
-            Debug.Log("SU35 MSSSV 1.0");
+            Debug.Log("GAV25B MSSSV 1.0");
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
             {
                 return;
@@ -50,82 +50,82 @@ namespace CustomAircraftTemplateSU35
 
             Main.aircraftLoaded = true;
             Main.aircraftCustom = vehicleObj;
-            Debug.Log("SU35 MSSSV 1.1");
+            Debug.Log("GAV25B MSSSV 1.1");
 
             GameObject BONew = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffectNew", false);
-            Debug.Log("SU35 MSSSV 1.2");
+            Debug.Log("GAV25B MSSSV 1.2");
 
             Main.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
-            Debug.Log("SU35 MSSSV 1.3");
+            Debug.Log("GAV25B MSSSV 1.3");
 
             Rigidbody componentRB = Main.aircraftCustom.GetComponent<Rigidbody>();
-            Debug.Log("SU35 MSSSV 1.4");
+            Debug.Log("GAV25B MSSSV 1.4");
             Vector3 position2 = new Vector3(200, 200.66f, 200);
             GameObject vehiclePrefab2 = VTResources.GetPlayerVehicle(AircraftInfo.pilottype).vehiclePrefab;
 
             GameObject f26seatholder = AircraftAPI.GetChildWithName(vehiclePrefab2, "EjectorSeat", false);
-            Debug.Log("SU35 MSSSV 1.5");
+            Debug.Log("GAV25B MSSSV 1.5");
 
             GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(f26seatholder, position2, Main.aircraftCustom.transform.rotation);
-            Debug.Log("SU35 MSSSV 1.6");
+            Debug.Log("GAV25B MSSSV 1.6");
 
             gameObject2.transform.localScale = new Vector3(0.92f, 0.92f, 0.92f);
             gameObject2.transform.SetParent(Main.aircraftCustom.transform);
-            Debug.Log("SU35 MSSSV 1.6");
+            Debug.Log("GAV25B MSSSV 1.6");
             gameObject2.SetActive(true);
-            Debug.Log("SU35 MSSSV 1.7");
+            Debug.Log("GAV25B MSSSV 1.7");
             GameObject aircraftSeat = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EjectorSeatLocation", false);
             gameObject2.transform.SetParent(aircraftSeat.transform);
             gameObject2.transform.SetParent(aircraftSeat.transform);
-            Debug.Log("SU35 MSSSV 1.8");
+            Debug.Log("GAV25B MSSSV 1.8");
 
             gameObject2.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
             gameObject2.transform.localPosition = new Vector3(0f, 0f, 0f);
-            Debug.Log("SU35 MSSSV 1.9");
+            Debug.Log("GAV25B MSSSV 1.9");
             Main.aircraftCustom.SetActive(false);
 
 
             //FloatingOriginShifter floatingOriginShifter = Main.aircraftCustom.GetComponent<FloatingOriginShifter>();
 
-            Debug.Log("SU35 MSSSV 1.10");
+            Debug.Log("GAV25B MSSSV 1.10");
             //floatingOriginShifter.enabled = false;
             //floatingOriginShifter.enabled = true;
 
             GameObject cameraEye = AircraftAPI.GetChildWithName(Main.aircraftCustom, "Camera (eye)", false);
-            Debug.Log("SU35 MSSSV 1.2.2");
+            Debug.Log("GAV25B MSSSV 1.2.2");
             Camera cameraEyeCamera = cameraEye.GetComponent<Camera>();
             GameObject hudCanvas = AircraftAPI.GetChildWithName(Main.aircraftCustom, "HUDCanvas", false);
-            Debug.Log("SU35 MSSSV 1.2.3");
+            Debug.Log("GAV25B MSSSV 1.2.3");
             Canvas hudCanvasCanvasComp = hudCanvas.GetComponent<Canvas>();
             hudCanvasCanvasComp.worldCamera = cameraEyeCamera;
-            Debug.Log("SU35 MSSSV 1.2.4");
+            Debug.Log("GAV25B MSSSV 1.2.4");
             Transform cameraEyeTf = cameraEye.GetComponent<Transform>();
             GameObject elevationLadder = AircraftAPI.GetChildWithName(hudCanvas, "ElevationLadder", false);
-            Debug.Log("SU35 MSSSV 1.2.4.1");
+            Debug.Log("GAV25B MSSSV 1.2.4.1");
             HUDElevationLadder elevationLadderComp = elevationLadder.GetComponent<HUDElevationLadder>();
             elevationLadderComp.headTransform = cameraEyeTf;
-            Debug.Log("SU35 MSSSV 1.2.4.2");
+            Debug.Log("GAV25B MSSSV 1.2.4.2");
             GameObject sideStickObject = AircraftAPI.GetChildWithName(Main.aircraftCustom, "SideStickObjects", false);
             GameObject autoAdjust = AircraftAPI.GetChildWithName(sideStickObject, "AutoAdjust", false);
             GameObject autoAdjustCanvas = AircraftAPI.GetChildWithName(autoAdjust, "Canvas", false);
-            Debug.Log("SU35 MSSSV 1.2.4.3");
+            Debug.Log("GAV25B MSSSV 1.2.4.3");
 
             Canvas autoAdjustCanvasCompCanvas = autoAdjustCanvas.GetComponent<Canvas>();
             autoAdjustCanvasCompCanvas.worldCamera = cameraEyeCamera;
-            Debug.Log("SU35 MSSSV 1.2.4.4");
+            Debug.Log("GAV25B MSSSV 1.2.4.4");
 
             GameObject dashCanvas = AircraftAPI.GetChildWithName(Main.aircraftCustom, "DashCanvas", false);
             Canvas dashCanvasCompCanvas = dashCanvas.GetComponent<Canvas>();
-            Debug.Log("SU35 MSSSV 1.2.4.5");
+            Debug.Log("GAV25B MSSSV 1.2.4.5");
 
             dashCanvasCompCanvas.worldCamera = cameraEyeCamera;
             GameObject spectatorCam = AircraftAPI.GetChildWithName(Main.aircraftCustom, "SpectatorCam", false);
-            Debug.Log("SU35 MSSSV 1.2.4.5");
+            Debug.Log("GAV25B MSSSV 1.2.4.5");
 
             FlybyCameraMFDPage flybyCameraMFDPage = spectatorCam.GetComponent<FlybyCameraMFDPage>();
             AudioListener cameraEyeAL = cameraEye.GetComponent<AudioListener>();
             flybyCameraMFDPage.playerAudioListener = cameraEyeAL;
-            Debug.Log("SU35 MSSSV 1.2.4.5.1");
+            Debug.Log("GAV25B MSSSV 1.2.4.5.1");
 
             AudioListenerPosition cameraEyeALP = cameraEye.GetComponent<AudioListenerPosition>();
 
@@ -133,25 +133,25 @@ namespace CustomAircraftTemplateSU35
             cameraEyeALP.rb = Main.aircraftCustom.GetComponent<Rigidbody>();
 
 
-            Debug.Log("SU35 MSSSV 1.2.4.6");
+            Debug.Log("GAV25B MSSSV 1.2.4.6");
 
 
             //cameraEye.GetComponent<AudioListenerPosition>().rb = Main.aircraftCustom.GetComponent<Rigidbody>();
             TargetingMFDPage componentInChildren8 = Main.aircraftCustom.GetComponentInChildren<TargetingMFDPage>(true);
-            Debug.Log("SU35 MSSSV 1.2.4.6");
+            Debug.Log("GAV25B MSSSV 1.2.4.6");
 
 
             GameObject hqhGO = AircraftAPI.GetChildWithName(cameraEye, "hqh", false);
             HelmetController helmetController = hqhGO.GetComponent<HelmetController>();
 
-            Debug.Log("SU35 MSSSV 1.2.4.6");
+            Debug.Log("GAV25B MSSSV 1.2.4.6");
             componentInChildren8.helmet = helmetController;
             GameObject glassMask = AircraftAPI.GetChildWithName(hudCanvas, "GlassMask", false);
-            Debug.Log("SU35 MSSSV 1.2.4.6.1");
+            Debug.Log("GAV25B MSSSV 1.2.4.6.1");
 
             helmetController.hudPowerObject = glassMask;
             helmetController.hudMaskToggler = hudCanvas.GetComponent<HUDMaskToggler>();
-            Debug.Log("SU35 MSSSV 1.2.4.6.2");
+            Debug.Log("GAV25B MSSSV 1.2.4.6.2");
 
             helmetController.battery = AircraftAPI.GetChildWithName(Main.aircraftCustom, "battery", false).GetComponent<Battery>();
             GameObject hmcsPowerInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "hmcsPowerInteractable", false);
@@ -166,7 +166,7 @@ namespace CustomAircraftTemplateSU35
                 VRLever hmcsPowerInteractableVRL = hmcsPowerInteractable.GetComponent<VRLever>();
                 hmcsPowerInteractableVRL.OnSetState.AddListener(helmetController.SetPower);
             }
-            Debug.Log("SU35 MSSSV 1.2.4.7");
+            Debug.Log("GAV25B MSSSV 1.2.4.7");
 
             HUDWeaponInfo hudWeaponInfo = AircraftAPI.GetChildWithName(hudCanvas, "WeaponInfo", false).GetComponent<HUDWeaponInfo>();
             HMDWeaponInfo hmdWeaponInfo = AircraftAPI.GetChildWithName(cameraEye, "WeaponInfo", false).GetComponent<HMDWeaponInfo>();
@@ -174,24 +174,24 @@ namespace CustomAircraftTemplateSU35
             hmdWeaponInfo.weaponCountText = hudWeaponInfo.ammoCountText;
 
 
-            Debug.Log("SU35 MSSSV 1.2.4.7.1");
+            Debug.Log("GAV25B MSSSV 1.2.4.7.1");
 
             
             
 
             GameObject visorButtonInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "visorButtonInteractable", false);
-            Debug.Log("SU35 MSSSV 1.2.4.8");
+            Debug.Log("GAV25B MSSSV 1.2.4.8");
 
             VRInteractable visorButtonInteractableVRI = visorButtonInteractable.GetComponent<VRInteractable>();
             visorButtonInteractableVRI.OnInteract.AddListener(helmetController.ToggleVisor);
-            Debug.Log("SU35 MSSSV 1.2.4.9");
+            Debug.Log("GAV25B MSSSV 1.2.4.9");
 
 
 
-            Debug.Log("SU35 MSSSV 1.2.5");
+            Debug.Log("GAV25B MSSSV 1.2.5");
             WeaponManager wm = Main.aircraftCustom.GetComponent<WeaponManager>();
             //wm.SetOpticalTargeter(Main.aircraftCustom.GetComponentInChildren<OpticalTargeter>(true));
-            Debug.Log("SU35 MSSSV 1.2.6");
+            Debug.Log("GAV25B MSSSV 1.2.6");
             Main.aircraftCustom.SetActive(true);
             //componentInChildren8.SetOpticalTargeter();
             GameObject blackOutParent = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutParent", true);
@@ -204,7 +204,7 @@ namespace CustomAircraftTemplateSU35
 
 
 
-            Debug.Log("SU35 MSSSV 1.3");
+            Debug.Log("GAV25B MSSSV 1.3");
 
             GameObject screenFader = AircraftAPI.GetChildWithName(Main.aircraftCustom, "ScreenFader", false);
             screenFader.SetActive(false);
@@ -212,71 +212,71 @@ namespace CustomAircraftTemplateSU35
             Rigidbody ejectionSeatRB = gameObject2.GetComponent<Rigidbody>();
             EjectionSeat ejectionSeatES = gameObject2.GetComponent<EjectionSeat>();
             SeatAdjuster ejectionSeatSA = gameObject2.GetComponent<SeatAdjuster>();
-            Debug.Log("SU35 MSSSV 1.4");
+            Debug.Log("GAV25B MSSSV 1.4");
 
             flybyCameraMFDPage.seatRb = ejectionSeatRB;
-            Debug.Log("SU35 MSSSV 1.5");
+            Debug.Log("GAV25B MSSSV 1.5");
 
             ShipController CustomAircraftSC = Main.aircraftCustom.GetComponent<ShipController>();
             CustomAircraftSC.ejectionSeat = ejectionSeatES;
-            Debug.Log("SU35 MSSSV 1.6");
+            Debug.Log("GAV25B MSSSV 1.6");
 
             //VRInteractable customLowerSeatInter = AircraftAPI.GetChildWithName(dashCanvas, "lowerSeatInter", false).GetComponent<VRInteractable>();
             //customLowerSeatInter.OnInteract.AddListener(ejectionSeatSA.StartLowerSeat);
             //customLowerSeatInter.OnStopInteract.AddListener(ejectionSeatSA.Stop);
 
-            Debug.Log("SU35 MSSSV 1.7");
+            Debug.Log("GAV25B MSSSV 1.7");
 
             //VRInteractable customRaiseSeatInter = AircraftAPI.GetChildWithName(dashCanvas, "raiseSeatInter", false).GetComponent<VRInteractable>();
             //customRaiseSeatInter.OnInteract.AddListener(ejectionSeatSA.StartRaiseSeat);
             //customRaiseSeatInter.OnStopInteract.AddListener(ejectionSeatSA.Stop);
-            Debug.Log("SU35 MSSSV 1.8");
+            Debug.Log("GAV25B MSSSV 1.8");
 
             GameObject intFixedCamSeat = AircraftAPI.GetChildWithName(gameObject2, "int_fixedCam_Cockpit3", false);
                 if(intFixedCamSeat)
                 { flybyCameraMFDPage.fixedTransforms[5] = intFixedCamSeat.transform; }
                 
-                Debug.Log("SU35 OPSStartPatch 1.9");
+                Debug.Log("GAV25B OPSStartPatch 1.9");
 
                 GameObject riggedSuit2 = AircraftAPI.GetChildWithName(gameObject2, "RiggedSuit (2)", false);
                 if (!riggedSuit2)
                 { riggedSuit2 = AircraftAPI.GetChildWithName(gameObject2, "RiggedSuit (1)", false); }
             TempPilotDetacher tempPilotDetacherComp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "TempPilotDetacher", false).GetComponent<TempPilotDetacher>();
             tempPilotDetacherComp.pilotModel = riggedSuit2;
-            Debug.Log("SU35 MSSSV 1.10");
+            Debug.Log("GAV25B MSSSV 1.10");
 
             PlayerVehicleSetup customPlayerVS = Main.aircraftCustom.GetComponent<PlayerVehicleSetup>();
             customPlayerVS.hideObjectsOnConfig[2] = riggedSuit2;
-            Debug.Log("SU35 MSSSV 1.11");
+            Debug.Log("GAV25B MSSSV 1.11");
 
             VehicleInputManager customPlayerVI = Main.aircraftCustom.GetComponent<VehicleInputManager>();
             customPlayerVI.pyrOutputs[1] = riggedSuit2.GetComponent<RudderFootAnimator>();
-            Debug.Log("SU35 MSSSV 1.12");
+            Debug.Log("GAV25B MSSSV 1.12");
 
             PilotColorSetup pilotColorSetupComp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "PilotColorApplier", false).GetComponent<PilotColorSetup>();
             SkinnedMeshRenderer riggedSuit001SMComp = AircraftAPI.GetChildWithName(gameObject2, "RiggedSuit.001", false).GetComponent<SkinnedMeshRenderer>();
             pilotColorSetupComp.pilotRenderers[3] = riggedSuit001SMComp;
-            Debug.Log("SU35 MSSSV 1.13");
+            Debug.Log("GAV25B MSSSV 1.13");
 
             GameObject cameraRigParent = AircraftAPI.GetChildWithName(gameObject2, "CameraRigParent", false);
             customPlayerVS.hideObjectsOnConfig[0] = cameraRigParent;
-            Debug.Log("SU35 MSSSV 1.14");
+            Debug.Log("GAV25B MSSSV 1.14");
 
             GameObject cameraRigGO = AircraftAPI.GetChildWithName(gameObject2, "[CameraRig]", false);
             tempPilotDetacherComp.cameraRig = cameraRigGO;
-            Debug.Log("SU35 MSSSV 1.15");
+            Debug.Log("GAV25B MSSSV 1.15");
 
             CustomAircraftSC.cameraRig = cameraRigGO;
-            Debug.Log("SU35 MSSSV 1.16");
+            Debug.Log("GAV25B MSSSV 1.16");
 
             GameObject playerGTrans = AircraftAPI.GetChildWithName(cameraRigGO, "PlayerGTransform", false);
-            Debug.Log("SU35 MSSSV 1.16.1");
+            Debug.Log("GAV25B MSSSV 1.16.1");
 
             FlightInfo customFlightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
-            Debug.Log("SU35 MSSSV 1.16.2");
+            Debug.Log("GAV25B MSSSV 1.16.2");
 
             //customFlightInfo.playerGTransform = playerGTrans.transform;
-            Debug.Log("SU35 MSSSV 1.17");
+            Debug.Log("GAV25B MSSSV 1.17");
 
             GameObject controllerLeft = AircraftAPI.GetChildWithName(cameraRigParent, "Controller (left)", false);
             GameObject swatglowerLeft = AircraftAPI.GetChildWithName(controllerLeft, "SWAT_glower_pivot.002", false);
@@ -285,13 +285,13 @@ namespace CustomAircraftTemplateSU35
 
 
             pilotColorSetupComp.pilotRenderers[1] = swatglowerLeft.GetComponent<SkinnedMeshRenderer>();
-            Debug.Log("SU35 MSSSV 1.18");
+            Debug.Log("GAV25B MSSSV 1.18");
 
             GameObject controllerRight = AircraftAPI.GetChildWithName(cameraRigParent, "Controller (right)", false);
             GameObject swatglowerRight = AircraftAPI.GetChildWithName(controllerRight, "SWAT_glower_pivot.002", false);
 
             pilotColorSetupComp.pilotRenderers[2] = swatglowerRight.GetComponent<SkinnedMeshRenderer>();
-            Debug.Log("SU35 MSSSV 1.19");
+            Debug.Log("GAV25B MSSSV 1.19");
 
             MaterialSwitcher matSwitchLeft = swatglowerLeft.GetComponent<MaterialSwitcher>();
             tempPilotDetacherComp.OnDetachPilot.AddListener(matSwitchLeft.SwitchToB);
@@ -301,43 +301,43 @@ namespace CustomAircraftTemplateSU35
 
 
 
-            Debug.Log("SU35 MSSSV 1.20");
+            Debug.Log("GAV25B MSSSV 1.20");
 
             customPlayerVS.OnBeginRearming.AddListener(matSwitchLeft.SwitchToB);
             customPlayerVS.OnBeginRearming.AddListener(matSwitchRight.SwitchToB);
             customPlayerVS.OnEndRearming.AddListener(matSwitchLeft.SwitchToB);
             customPlayerVS.OnEndRearming.AddListener(matSwitchRight.SwitchToB);
-            Debug.Log("SU35 MSSSV 1.21");
+            Debug.Log("GAV25B MSSSV 1.21");
 
             GameObject cameraEyeHelmet = AircraftAPI.GetChildWithName(cameraRigParent, "Camera (eye) Helmet", false);
-            Debug.Log("SU35 MSSSV 1.21.1");
+            Debug.Log("GAV25B MSSSV 1.21.1");
 
             ScreenMaskedColorRamp screenMaskedClrRamp = cameraEyeHelmet.GetComponent<ScreenMaskedColorRamp>();
-            Debug.Log("SU35 MSSSV 1.21.2");
+            Debug.Log("GAV25B MSSSV 1.21.2");
 
             flybyCameraMFDPage.playerNVG = screenMaskedClrRamp;
-            Debug.Log("SU35 MSSSV 1.22");
+            Debug.Log("GAV25B MSSSV 1.22");
 
             GameObject headSphere = AircraftAPI.GetChildWithName(cameraRigParent, "headSphere", false);
             pilotColorSetupComp.pilotRenderers[0] = headSphere.GetComponent<MeshRenderer>();
-            Debug.Log("SU35 MSSSV 1.23");
+            Debug.Log("GAV25B MSSSV 1.23");
 
             GameObject hqh = AircraftAPI.GetChildWithName(cameraRigParent, "hqh", false);
             HelmetController hqhHCComp = hqh.GetComponent<HelmetController>();
             componentInChildren8.helmet = hqhHCComp;
-            Debug.Log("SU35 MSSSV 1.24");
+            Debug.Log("GAV25B MSSSV 1.24");
             
 
 
             GameObject nvgBIVL = AircraftAPI.GetChildWithName(Main.aircraftCustom, "nvgButtonInteractable", false);
             VRInteractable nvgBIVLVRL = nvgBIVL.GetComponent<VRInteractable>();
             nvgBIVLVRL.OnInteract.AddListener(hqhHCComp.ToggleNVG);
-            Debug.Log("SU35 MSSSV 1.25");
+            Debug.Log("GAV25B MSSSV 1.25");
 
             GameObject visorBIVL = AircraftAPI.GetChildWithName(Main.aircraftCustom, "visorButtonInteractable", false);
             VRInteractable visorBIVLVRL = visorBIVL.GetComponent<VRInteractable>();
             visorBIVLVRL.OnInteract.AddListener(hqhHCComp.ToggleVisor);
-            Debug.Log("SU35 MSSSV 1.26");
+            Debug.Log("GAV25B MSSSV 1.26");
 
             GameObject cockpitWindNoise = AircraftAPI.GetChildWithName(gameObject2, "cockpitWindNoise", false);
             CockpitWindAudioController cockpitWindNoiseAC = cockpitWindNoise.GetComponent<CockpitWindAudioController>();
@@ -346,7 +346,7 @@ namespace CustomAircraftTemplateSU35
             GameObject HMCSDisplays = AircraftAPI.GetChildWithName(cameraEye, "HMCSDisplays", true);
 
             WeaponManager wem = Main.aircraftCustom.GetComponent<WeaponManager>();
-            Debug.Log("SU35 MSSSV 1.26.1 = " + wem.name);
+            Debug.Log("GAV25B MSSSV 1.26.1 = " + wem.name);
 
             GameObject WeaponInfo = AircraftAPI.GetChildWithName(HMCSDisplays, "WeaponInfo", true);
             WeaponInfo.GetComponent<HMDWeaponInfo>().wm = wem;
@@ -356,9 +356,9 @@ namespace CustomAircraftTemplateSU35
             HMCSAOA.flightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
 
             GameObject GMHMCSInfo = AircraftAPI.GetChildWithName(HMCSDisplays, "Gtext", true);
-            Debug.Log("SU35 OPSStartPatch 1.27.2");
+            Debug.Log("GAV25B OPSStartPatch 1.27.2");
             HUDGMeter HMCSGM = GMHMCSInfo.GetComponent<HUDGMeter>();
-            Debug.Log("SU35 OPSStartPatch 1.27.3");
+            Debug.Log("GAV25B OPSStartPatch 1.27.3");
             HMCSGM.flightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
 
             GameObject MMHMCSInfo = AircraftAPI.GetChildWithName(HMCSDisplays, "MText", true);
@@ -367,17 +367,17 @@ namespace CustomAircraftTemplateSU35
 
             
 
-            Debug.Log("SU35 MSSSV 1.27");
+            Debug.Log("GAV25B MSSSV 1.27");
             // MirageElements.SetUpGauges();
             //  MirageElements.IdentifiedRadarTargetsSetup();
             prefabES = aircraftSeat.GetComponent<EjectionSeat>();
             UnityEngine.Component.Destroy(prefabES);
              GameObject MPSyncs = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MPSyncs", false);
-            Debug.Log("SU35 MSSSV 1.28");
+            Debug.Log("GAV25B MSSSV 1.28");
             EjectSync ejectSyncs = MPSyncs.GetComponent<EjectSync>();
-            Debug.Log("SU35 MSSSV 1.29");
+            Debug.Log("GAV25B MSSSV 1.29");
             EjectionSeat ejectionSeat = f26seatholder.GetComponent<EjectionSeat>();
-            Debug.Log("SU35 MSSSV 1.30");
+            Debug.Log("GAV25B MSSSV 1.30");
             ejectSyncs.localEjector = ejectionSeat;
             return;
         }
@@ -385,7 +385,7 @@ namespace CustomAircraftTemplateSU35
     }
 
     [HarmonyPatch(typeof(HUDAoAMeter), "OnEnable")]
-    public class SU35_HUDAOA_Postfix
+    public class GAV25B_HUDAOA_Postfix
     {
     
         public static void Prefix(HUDAoAMeter __instance)
@@ -398,16 +398,16 @@ namespace CustomAircraftTemplateSU35
     }
 
     [HarmonyPatch(typeof(HMDAltitude), "Awake")]
-    public class SU35_HMDAlt_Postfix
+    public class GAV25B_HMDAlt_Postfix
     {
         
         public static void Postfix(HMDAltitude __instance)
         {
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return;
-            Debug.Log("SU35 Starting HMDAltpatch 1.0.1");
+            Debug.Log("GAV25B Starting HMDAltpatch 1.0.1");
             Traverse trav1 = Traverse.Create(__instance);
-            Debug.Log("SU35 Starting HMDAltpatch 1.0.2");
+            Debug.Log("GAV25B Starting HMDAltpatch 1.0.2");
             trav1.Field("flightInfo").SetValue(Main.aircraftCustom.GetComponent<FlightInfo>());
             trav1.Field("vm").SetValue(Main.aircraftCustom.GetComponent<VehicleMaster>());
             trav1.Field("measurements").SetValue(Main.aircraftCustom.GetComponent<MeasurementManager>());
@@ -418,17 +418,17 @@ namespace CustomAircraftTemplateSU35
 
 
     [HarmonyPatch(typeof(WeaponManager), "ReattachWeapons")]
-    public class SU35_ReattachWeapons_post
+    public class GAV25B_ReattachWeapons_post
     {
         public static void Postfix(WeaponManager __instance)
         {
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return;
-            Debug.Log("SU35 MSSSV 1.27");
+            Debug.Log("GAV25B MSSSV 1.27");
            // MirageElements.SetUpGauges();
-            Debug.Log("SU35 MSSSV 1.28");
+            Debug.Log("GAV25B MSSSV 1.28");
           //  MirageElements.SetupArmingText();
-            Debug.Log("SU35 rw 1.29");
+            Debug.Log("GAV25B rw 1.29");
         AircraftSetup.SetUpEOTS();
         }
     }
@@ -436,16 +436,16 @@ namespace CustomAircraftTemplateSU35
 
 
         [HarmonyPatch(typeof(MFDRadarUI), "Awake")]
-    public class SU35_MFDUIAwakePatch
+    public class GAV25B_MFDUIAwakePatch
     {
         public static bool Prefix(MFDRadarUI __instance)
         {
           
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
-            Debug.Log("SU35 Starting MDUIAwake 0.0");
+            Debug.Log("GAV25B Starting MDUIAwake 0.0");
             //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Starting MDUIAwake 1.0");
+            Debug.Log("GAV25B Starting MDUIAwake 1.0");
             Traverse traversemui = Traverse.Create(__instance);
             traversemui.Field("isMultiCrew").SetValue(false);
             
@@ -466,7 +466,7 @@ namespace CustomAircraftTemplateSU35
     
 
     [HarmonyPatch(typeof(BlackoutEffect), nameof(BlackoutEffect.LateUpdate))]
-    public class SU35_BlackoutPFPatch
+    public class GAV25B_BlackoutPFPatch
     {
         public static void Postfix(BlackoutEffect __instance)
         {
@@ -474,43 +474,43 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return;
             //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Starting BOFPatch 1.0");
+            Debug.Log("GAV25B Starting BOFPatch 1.0");
             Traverse traverse1 = Traverse.Create(__instance);
             Single newgAccum = (Single)traverse1.Field("gAccum").GetValue();
             float num = Mathf.Abs(newgAccum) * __instance.aFactor;
-            Debug.Log("SU35 Starting BOFPatch 1.0.1");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.1");
 
             Single newAlpha = Main.currentGAlpha;
-            Debug.Log("SU35 Starting BOFPatch 1.0.2");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.2");
 
             NightVisionGoggles newNVG = (NightVisionGoggles)traverse1.Field("nvg").GetValue();
-            Debug.Log("SU35 Starting BOFPatch 1.0.3");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.3");
 
             newAlpha = Mathf.Lerp(newAlpha, num, 20f * Time.deltaTime);
-            Debug.Log("SU35 Starting BOFPatch 1.0.4");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.4");
             Main.currentGAlpha = newAlpha;
 
             Color color = (newNVG && newNVG.IsNVGVisible()) ? __instance.nvgRedoutColor : __instance.redoutColor;
-            Debug.Log("SU35 Starting BOFPatch 1.0.5");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.5");
 
             color *= RenderSettings.ambientIntensity;
-            Debug.Log("SU35 Starting BOFPatch 1.0.6");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.6");
 
             Color color2 = (newgAccum >= 0f) ? Color.black : color;
-            Debug.Log("SU35 Starting BOFPatch 1.0.7");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.7");
 
             color2.a = newAlpha * newAlpha;
             GameObject BONew = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffectNew", false);
-            Debug.Log("SU35 Starting BOFPatch 1.0.7.1");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.7.1");
             Main.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
 
-            Debug.Log("SU35 Starting BOFPatch 1.0.8");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.8");
             MeshRenderer BOMesh = Main.BOQuad.GetComponent<MeshRenderer>();
-            Debug.Log("SU35 Starting BOFPatch 1.0.8.1");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.8.1");
             Material BOMat = BOMesh.material;
-            Debug.Log("SU35 Starting BOFPatch 1.0.9");
+            Debug.Log("GAV25B Starting BOFPatch 1.0.9");
             Color BOMatColor = BOMat.color;
-            Debug.Log("SU35 Starting BOFPatch 1.0.0: Alpha = " + Main.currentGAlpha + "GAccum: " + newgAccum);
+            Debug.Log("GAV25B Starting BOFPatch 1.0.0: Alpha = " + Main.currentGAlpha + "GAccum: " + newgAccum);
 
             BOMatColor.a = newAlpha;
             BOMat.color = new Color(0,0,0,newAlpha);
@@ -519,30 +519,30 @@ namespace CustomAircraftTemplateSU35
     }
 
     [HarmonyPatch(typeof(BlackoutEffect), "OnDestroy")]
-    class SU35_BOFCheck
+    class GAV25B_BOFCheck
     {
         public static bool Prefix(BlackoutEffect __instance)
         {
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
-            Debug.Log("SU35 BOFDestroy 1.0.0");
+            Debug.Log("GAV25B BOFDestroy 1.0.0");
             if (!Main.aircraftLoaded)
                 {
-                Debug.Log("SU35 BOFDestroy 1.0.1");
+                Debug.Log("GAV25B BOFDestroy 1.0.1");
 
                 return true; }
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
-            Debug.Log("SU35 BOFDestroy 1.0.3");
+            Debug.Log("GAV25B BOFDestroy 1.0.3");
             if (!__instance.audioMixer) { return false; }
 
-            Debug.Log("SU35 BOFDestroy 1.0");
+            Debug.Log("GAV25B BOFDestroy 1.0");
             __instance.audioMixer.SetFloat("ConsciousVolume", 0f);
 
-            Debug.Log("SU35 BOFDestroy 1.1");
+            Debug.Log("GAV25B BOFDestroy 1.1");
 
             __instance.audioMixer.SetFloat("BlackoutVolume", -80f);
-           Debug.Log("SU35 BOFDestroy 1.2");
+           Debug.Log("GAV25B BOFDestroy 1.2");
 
             Traverse trav = Traverse.Create(__instance);
             trav.Field("destroyed").SetValue(true);
@@ -552,35 +552,35 @@ namespace CustomAircraftTemplateSU35
     }
 
     [HarmonyPatch(typeof(BlackoutEffect), "OnDisable")]
-    class SU35_BOFDisCheck
+    class GAV25B_BOFDisCheck
     {
         public static bool Prefix(BlackoutEffect __instance)
         {
 
-            Debug.Log("SU35 BOFDisa 1.0.0");
+            Debug.Log("GAV25B BOFDisa 1.0.0");
             if (!Main.aircraftLoaded)
             {
-                Debug.Log("SU35 BOFDestroy 1.0.1");
+                Debug.Log("GAV25B BOFDestroy 1.0.1");
                 return true; }
 
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
-            Debug.Log("SU35 BOFDestroy 1.0.3");
+            Debug.Log("GAV25B BOFDestroy 1.0.3");
             if (!__instance.audioMixer) { return false; }
-            Debug.Log("SU35 BOFDisable 1.0");
+            Debug.Log("GAV25B BOFDisable 1.0");
             __instance.audioMixer.SetFloat("ConsciousVolume", 0f);
 
-            Debug.Log("SU35 BOFDisable 1.1");
+            Debug.Log("GAV25B BOFDisable 1.1");
 
             __instance.audioMixer.SetFloat("BlackoutVolume", -80f);
-           Debug.Log("SU35 BOFDisable 1.2");
+           Debug.Log("GAV25B BOFDisable 1.2");
             return false;
         }
     }
 
 
     [HarmonyPatch(typeof(MFDRadarUI), nameof(MFDRadarUI.ClearSoftLocks))]
-    public class SU35_ClearSoftLocksPatch
+    public class GAV25B_ClearSoftLocksPatch
     {
         public static bool Prefix(MFDRadarUI __instance)
         {
@@ -589,30 +589,30 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
             //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Starting ClrSftLk 1.0");
+            Debug.Log("GAV25B Starting ClrSftLk 1.0");
 
             for (int i = 0; i < __instance.softLockCount; i++)
             {
-                Debug.Log("SU35 Starting ClrSftLk 1.1: i=" + i );
+                Debug.Log("GAV25B Starting ClrSftLk 1.1: i=" + i );
                 if (__instance.softLocks[i] != null)
                 {
-                    Debug.Log("SU35 Starting ClrSftLk 1.2: i=" + i);
+                    Debug.Log("GAV25B Starting ClrSftLk 1.2: i=" + i);
                     if (__instance.softLocks[i].actor && __instance.lockingRadar)
                     {
-                        Debug.Log("SU35 Starting ClrSftLk 1.3: i=" + i);
+                        Debug.Log("GAV25B Starting ClrSftLk 1.3: i=" + i);
                         __instance.lockingRadar.RemoveTWSLock(__instance.softLocks[i].actor);
                     }
                     Traverse traversescl = Traverse.Create(__instance);
                     MFDRadarUI.UIRadarContact hardlockcheck = (MFDRadarUI.UIRadarContact)traversescl.Field("hardLock").GetValue();
-                    Debug.Log("SU35 Starting ClrSftLk 1.4: i=" + i);
+                    Debug.Log("GAV25B Starting ClrSftLk 1.4: i=" + i);
                     if (hardlockcheck == null || __instance.softLocks[i].actorID != hardlockcheck.actorID)
                     {
-                        Debug.Log("SU35 Starting ClrSftLk 1.5: i=" + i);
+                        Debug.Log("GAV25B Starting ClrSftLk 1.5: i=" + i);
                         __instance.softLocks[i] = null;
                     }
                 }
             }
-            Debug.Log("SU35 Starting ClrSftLk 1.6: i=");
+            Debug.Log("GAV25B Starting ClrSftLk 1.6: i=");
             __instance.UpdateLocks();
             return false;
         }
@@ -621,7 +621,7 @@ namespace CustomAircraftTemplateSU35
 
 
     [HarmonyPatch(typeof(PlayerSpawn), "OnPreSpawnUnit")]
-    public class SU35_OPSStartPatch
+    public class GAV25B_OPSStartPatch
     {
         private static GameObject hmcsPowerInteractable;
         private static VRLever hmcsPowerInteractableVRL;
@@ -632,45 +632,45 @@ namespace CustomAircraftTemplateSU35
            
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
-            Debug.Log("SU35 Starting OPS 1");
+            Debug.Log("GAV25B Starting OPS 1");
             Debug.unityLogger.logEnabled = Main.logging;
             // __instance.OnPreSpawnUnit();
            
-            Debug.Log("SU35 Starting OPS");
+            Debug.Log("GAV25B Starting OPS");
 
 
             GameObject vehiclePrefab = Main.aircraftPrefab;
             if (vehiclePrefab)
             {
-                Debug.Log("SU35 Starting OPS Inst");
+                Debug.Log("GAV25B Starting OPS Inst");
 
-                Debug.Log("SU35 AircraftSelected = " + AircraftInfo.AircraftSelected);
+                Debug.Log("GAV25B AircraftSelected = " + AircraftInfo.AircraftSelected);
 
 
-                Debug.Log("SU35 OPS 0.00.0.1");
+                Debug.Log("GAV25B OPS 0.00.0.1");
                 Main.i = 0;
 
                 Vector3 position = new Vector3(0, 1.1f, 0);
                 Quaternion rotation = new Quaternion(0, 0, 0, 0);
 
-                Debug.Log("SU35 OPS 0.00.0.2");
+                Debug.Log("GAV25B OPS 0.00.0.2");
                 Main.aircraftCustom = UnityEngine.Object.Instantiate<GameObject>(vehiclePrefab, position, rotation);
                 Main.aircraftLoaded = true;
                 
-                Debug.Log("SU35 OPS 0.00.0.3");
+                Debug.Log("GAV25B OPS 0.00.0.3");
 
                 GameObject BONew = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutEffectNew", false);
-                Debug.Log("SU35 OPS 0.00.0.4");
+                Debug.Log("GAV25B OPS 0.00.0.4");
 
                 Main.BOQuad = AircraftAPI.GetChildWithName(BONew, "Quad", false);
-                Debug.Log("SU35 OPS 0.00.0.5");
+                Debug.Log("GAV25B OPS 0.00.0.5");
 
                 Rigidbody component = Main.aircraftCustom.GetComponent<Rigidbody>();
-                Debug.Log("SU35 OPS 0.00.0.6");
+                Debug.Log("GAV25B OPS 0.00.0.6");
 
                 Traverse traverse = Traverse.Create(__instance);
                 traverse.Field("vehicleRb").SetValue(Main.aircraftCustom.GetComponent<Rigidbody>());
-                Debug.Log("SU35 OPS 0.00.0.7");
+                Debug.Log("GAV25B OPS 0.00.0.7");
 
                 traverse.Field("playerVm").SetValue(Main.aircraftCustom.GetComponent<VehicleMaster>());
                 traverse.Field("vehicleRb").Field("interpolation").SetValue(RigidbodyInterpolation.None);
@@ -680,57 +680,57 @@ namespace CustomAircraftTemplateSU35
                 GameObject vehiclePrefab2 = VTResources.GetPlayerVehicle(AircraftInfo.pilottype).vehiclePrefab;
 
                 GameObject f26seatholder = AircraftAPI.GetChildWithName(vehiclePrefab2, "EjectorSeat", false);
-                Debug.Log("SU35 OPS 0.00.0.8");
+                Debug.Log("GAV25B OPS 0.00.0.8");
 
                 GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(f26seatholder, position2, Main.aircraftCustom.transform.rotation);
-                Debug.Log("SU35 OPS 0.00.0.9");
+                Debug.Log("GAV25B OPS 0.00.0.9");
 
                 
                 Actor actor = __instance.actor = (FlightSceneManager.instance.playerActor = Main.aircraftCustom.GetComponent<Actor>());
 
-                Debug.Log("SU35 OPS 0.00.0.10");
+                Debug.Log("GAV25B OPS 0.00.0.10");
 
                 actor.actorName = PilotSaveManager.current.pilotName;
-                Debug.Log("SU35 OPS 0.00.0.11");
+                Debug.Log("GAV25B OPS 0.00.0.11");
 
                 actor.unitSpawn = __instance;
-                Debug.Log("SU35 OPS 0.00.0.12");
+                Debug.Log("GAV25B OPS 0.00.0.12");
 
                 
 
-                Debug.Log("SU35 OPSStartPatch 00");
+                Debug.Log("GAV25B OPSStartPatch 00");
                 GameObject f26EjectorSeat = AircraftAPI.GetChildWithName(gameObject2, "EjectorSeat", false);
                 f26EjectorSeat.transform.localScale = new Vector3(0.92f, 0.92f, 0.92f);
                 f26EjectorSeat.transform.SetParent(Main.aircraftCustom.transform);
-                Debug.Log("SU35 OPSStartPatch 00.1");
+                Debug.Log("GAV25B OPSStartPatch 00.1");
 
                 Vector3 PlaneLocation = gameObject2.transform.position;
                 Quaternion PlaneRotation = gameObject2.transform.rotation;
-                Debug.Log("SU35 OPSStartPatch 00.2");
-                Debug.Log("SU35 PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
+                Debug.Log("GAV25B OPSStartPatch 00.2");
+                Debug.Log("GAV25B PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
                
-                Debug.Log("SU35 OPSStartPatch 00.7");
+                Debug.Log("GAV25B OPSStartPatch 00.7");
                 //GameObject f26Heartbeat2 = AircraftAPI.GetChildWithName(gameObject2, "HeartbeatAudio", true);
                 f26EjectorSeat.SetActive(true);
 
 
-                Debug.Log("SU35 PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
+                Debug.Log("GAV25B PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
 
-                Debug.Log("SU35 OPSStartPatch 0");
+                Debug.Log("GAV25B OPSStartPatch 0");
 
                 Main.aircraftCustom.transform.position = PlaneLocation;
                 Main.aircraftCustom.transform.rotation = PlaneRotation;
-                Debug.Log("SU35 OPSStartPatch 01");
+                Debug.Log("GAV25B OPSStartPatch 01");
 
-                Debug.Log("SU35 OPSStartPatch 1");
+                Debug.Log("GAV25B OPSStartPatch 1");
                 GameObject aircraftSeat = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EjectorSeatLocation", false);
                 f26EjectorSeat.transform.SetParent(aircraftSeat.transform);
-                Debug.Log("SU35 OPSStartPatch 1.1");
+                Debug.Log("GAV25B OPSStartPatch 1.1");
 
                 f26EjectorSeat.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
                 f26EjectorSeat.transform.localPosition = new Vector3(0f, 0f, 0f);
-                Debug.Log("SU35 OPSStartPatch 1.2");
-                Debug.Log("SU35 FOS threshold: " + Main.aircraftCustom.GetComponent<FloatingOriginShifter>().threshold);
+                Debug.Log("GAV25B OPSStartPatch 1.2");
+                Debug.Log("GAV25B FOS threshold: " + Main.aircraftCustom.GetComponent<FloatingOriginShifter>().threshold);
 
 
 
@@ -742,44 +742,44 @@ namespace CustomAircraftTemplateSU35
                // FloatingOriginShifter floatingOriginShifter = Main.aircraftCustom.GetComponent<FloatingOriginShifter>();
                // floatingOriginShifter.enabled = false;
              //   floatingOriginShifter.enabled = true;
-                Debug.Log("SU35 OPSStartPatch 1.2.1");
+                Debug.Log("GAV25B OPSStartPatch 1.2.1");
 
 
                 GameObject cameraEye = AircraftAPI.GetChildWithName(Main.aircraftCustom, "Camera (eye)", false);
-                Debug.Log("SU35 OPSStartPatch 1.2.2");
+                Debug.Log("GAV25B OPSStartPatch 1.2.2");
                 Camera cameraEyeCamera = cameraEye.GetComponent<Camera>();
                 GameObject hudCanvas = AircraftAPI.GetChildWithName(Main.aircraftCustom, "HUDCanvas", false);
-                Debug.Log("SU35 OPSStartPatch 1.2.3");
+                Debug.Log("GAV25B OPSStartPatch 1.2.3");
                 Canvas hudCanvasCanvasComp = hudCanvas.GetComponent<Canvas>();
                 hudCanvasCanvasComp.worldCamera = cameraEyeCamera;
-                Debug.Log("SU35 OPSStartPatch 1.2.4");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4");
                 Transform cameraEyeTf = cameraEye.GetComponent<Transform>();
                 GameObject elevationLadder = AircraftAPI.GetChildWithName(hudCanvas, "ElevationLadder", false);
-                Debug.Log("SU35 OPSStartPatch 1.2.4.1");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.1");
                 HUDElevationLadder elevationLadderComp = elevationLadder.GetComponent<HUDElevationLadder>();
                 elevationLadderComp.headTransform = cameraEyeTf;
-                Debug.Log("SU35 OPSStartPatch 1.2.4.2");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.2");
                 GameObject sideStickObject = AircraftAPI.GetChildWithName(Main.aircraftCustom, "SideStickObjects", false);
                 GameObject autoAdjust = AircraftAPI.GetChildWithName(sideStickObject, "AutoAdjust", false);
                 GameObject autoAdjustCanvas = AircraftAPI.GetChildWithName(autoAdjust, "Canvas", false);
-                Debug.Log("SU35 OPSStartPatch 1.2.4.3");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.3");
 
                 Canvas autoAdjustCanvasCompCanvas = autoAdjustCanvas.GetComponent<Canvas>();
                 autoAdjustCanvasCompCanvas.worldCamera = cameraEyeCamera;
-                Debug.Log("SU35 OPSStartPatch 1.2.4.4");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.4");
 
                 GameObject dashCanvas = AircraftAPI.GetChildWithName(Main.aircraftCustom, "DashCanvas", false);
                 Canvas dashCanvasCompCanvas = dashCanvas.GetComponent<Canvas>();
-                Debug.Log("SU35 OPSStartPatch 1.2.4.5");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.5");
 
                 dashCanvasCompCanvas.worldCamera = cameraEyeCamera;
                 GameObject spectatorCam = AircraftAPI.GetChildWithName(Main.aircraftCustom, "SpectatorCam", false);
-                Debug.Log("SU35 OPSStartPatch 1.2.4.5");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.5");
 
                 FlybyCameraMFDPage flybyCameraMFDPage = spectatorCam.GetComponent<FlybyCameraMFDPage>();
                 AudioListener cameraEyeAL = cameraEye.GetComponent<AudioListener>();
                 flybyCameraMFDPage.playerAudioListener = cameraEyeAL;
-                Debug.Log("SU35 OPSStartPatch 1.2.4.5.1");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.5.1");
 
                 AudioListenerPosition cameraEyeALP = cameraEye.GetComponent<AudioListenerPosition>();
                 
@@ -787,25 +787,25 @@ namespace CustomAircraftTemplateSU35
                 cameraEyeALP.rb = Main.aircraftCustom.GetComponent<Rigidbody>();
 
 
-                Debug.Log("SU35 OPSStartPatch 1.2.4.6");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.6");
 
 
                 //cameraEye.GetComponent<AudioListenerPosition>().rb = Main.aircraftCustom.GetComponent<Rigidbody>();
                 TargetingMFDPage componentInChildren8 = Main.aircraftCustom.GetComponentInChildren<TargetingMFDPage>(true);
-                Debug.Log("SU35 OPSStartPatch 1.2.4.6");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.6");
 
 
                 GameObject hqhGO = AircraftAPI.GetChildWithName(cameraEye, "hqh", false);
                 HelmetController helmetController = hqhGO.GetComponent<HelmetController>();
 
-                Debug.Log("SU35 OPSStartPatch 1.2.4.6");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.6");
                 componentInChildren8.helmet = helmetController;
                 GameObject glassMask = AircraftAPI.GetChildWithName(hudCanvas, "GlassMask", false);
-                Debug.Log("SU35 OPSStartPatch 1.2.4.6.1");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.6.1");
 
                 //helmetController.hudPowerObject = glassMask;
                 helmetController.hudMaskToggler = hudCanvas.GetComponent<HUDMaskToggler>();
-                Debug.Log("SU35 OPSStartPatch 1.2.4.6.2");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.6.2");
 
                 helmetController.battery = AircraftAPI.GetChildWithName(Main.aircraftCustom, "battery", false).GetComponent<Battery>();
                 hmcsPowerInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "hmcsPowerInteractable", true);
@@ -813,12 +813,12 @@ namespace CustomAircraftTemplateSU35
                 {
                     hmcsPowerInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "HMCSPowerInteractable", true);
                 }
-                Debug.Log("SU35 OPSStartPatch 1.2.4.7");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.7");
 
                 
 
 
-                Debug.Log("SU35 OPSStartPatch 1.2.4.7.1");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.7.1");
 
                 hmcsPowerInteractableVRL = hmcsPowerInteractable.GetComponent<VRLever>();
                 if (!hmcsPowerInteractableVRL)
@@ -826,7 +826,7 @@ namespace CustomAircraftTemplateSU35
                     hmcsPowerInteractableVRT = hmcsPowerInteractable.GetComponent<VRTwistKnobInt>();
                 }
 
-                    Debug.Log("SU35 OPSStartPatch 1.2.4.7.2");
+                    Debug.Log("GAV25B OPSStartPatch 1.2.4.7.2");
                 if (!hmcsPowerInteractableVRL)
                 {
                     hmcsPowerInteractableVRT.OnSetState.AddListener(helmetController.SetPower);
@@ -835,18 +835,18 @@ namespace CustomAircraftTemplateSU35
                 {
                     hmcsPowerInteractableVRL.OnSetState.AddListener(helmetController.SetPower);
                 }
-                Debug.Log("SU35 OPSStartPatch 1.2.4.7.3");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.7.3");
                 GameObject visorButtonInteractable = AircraftAPI.GetChildWithName(Main.aircraftCustom, "visorButtonInteractable", true);
-                Debug.Log("SU35 OPSStartPatch 1.2.4.8");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.8");
 
                 VRInteractable visorButtonInteractableVRI = visorButtonInteractable.GetComponent<VRInteractable>();
                 visorButtonInteractableVRI.OnInteract.AddListener(helmetController.ToggleVisor);
-                Debug.Log("SU35 OPSStartPatch 1.2.4.9");
+                Debug.Log("GAV25B OPSStartPatch 1.2.4.9");
 
 
 
-                Debug.Log("SU35 OPSStartPatch 1.2.5");
-                Debug.Log("SU35 OPSStartPatch 1.2.6");
+                Debug.Log("GAV25B OPSStartPatch 1.2.5");
+                Debug.Log("GAV25B OPSStartPatch 1.2.6");
                 Main.aircraftCustom.SetActive(true);
                 //componentInChildren8.SetOpticalTargeter();
                 GameObject blackOutParent = AircraftAPI.GetChildWithName(Main.aircraftCustom, "blackoutParent", true);
@@ -859,7 +859,7 @@ namespace CustomAircraftTemplateSU35
                 
 
 
-                Debug.Log("SU35 OPSStartPatch 1.3");
+                Debug.Log("GAV25B OPSStartPatch 1.3");
 
                 GameObject screenFader = AircraftAPI.GetChildWithName(Main.aircraftCustom, "ScreenFader", false);
                 screenFader.SetActive(false);
@@ -867,61 +867,61 @@ namespace CustomAircraftTemplateSU35
                 Rigidbody ejectionSeatRB = f26EjectorSeat.GetComponent<Rigidbody>();
                 EjectionSeat ejectionSeatES = f26EjectorSeat.GetComponent<EjectionSeat>();
                 SeatAdjuster ejectionSeatSA = f26EjectorSeat.GetComponent<SeatAdjuster>();
-                Debug.Log("SU35 OPSStartPatch 1.4");
+                Debug.Log("GAV25B OPSStartPatch 1.4");
 
                 flybyCameraMFDPage.seatRb = ejectionSeatRB;
-                Debug.Log("SU35 OPSStartPatch 1.5");
+                Debug.Log("GAV25B OPSStartPatch 1.5");
 
                 ShipController CustomAircraftSC = Main.aircraftCustom.GetComponent<ShipController>();
                 CustomAircraftSC.ejectionSeat = ejectionSeatES;
-                Debug.Log("SU35 OPSStartPatch 1.6");
+                Debug.Log("GAV25B OPSStartPatch 1.6");
 
 
                 GameObject intFixedCamSeat = AircraftAPI.GetChildWithName(f26EjectorSeat, "int_fixedCam_Cockpit3", false);
                 if(intFixedCamSeat)
                 { flybyCameraMFDPage.fixedTransforms[5] = intFixedCamSeat.transform; }
                 
-                Debug.Log("SU35 OPSStartPatch 1.9");
+                Debug.Log("GAV25B OPSStartPatch 1.9");
 
                 GameObject riggedSuit2 = AircraftAPI.GetChildWithName(f26EjectorSeat, "RiggedSuit (2)", false);
                 if (!riggedSuit2)
                 { riggedSuit2 = AircraftAPI.GetChildWithName(f26EjectorSeat, "RiggedSuit (1)", false); }
                 TempPilotDetacher tempPilotDetacherComp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "TempPilotDetacher", false).GetComponent<TempPilotDetacher>();
                 tempPilotDetacherComp.pilotModel = riggedSuit2;
-                Debug.Log("SU35 OPSStartPatch 1.10");
+                Debug.Log("GAV25B OPSStartPatch 1.10");
 
                 PlayerVehicleSetup customPlayerVS = Main.aircraftCustom.GetComponent<PlayerVehicleSetup>();
                 customPlayerVS.hideObjectsOnConfig[2] = riggedSuit2;
-                Debug.Log("SU35 OPSStartPatch 1.11");
+                Debug.Log("GAV25B OPSStartPatch 1.11");
 
                 VehicleInputManager customPlayerVI = Main.aircraftCustom.GetComponent<VehicleInputManager>();
                 customPlayerVI.pyrOutputs[1] = riggedSuit2.GetComponent<RudderFootAnimator>();
-                Debug.Log("SU35 OPSStartPatch 1.12");
+                Debug.Log("GAV25B OPSStartPatch 1.12");
 
                 PilotColorSetup pilotColorSetupComp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "PilotColorApplier", false).GetComponent<PilotColorSetup>();
                 SkinnedMeshRenderer riggedSuit001SMComp = AircraftAPI.GetChildWithName(f26EjectorSeat, "RiggedSuit.001", false).GetComponent<SkinnedMeshRenderer>();
                 pilotColorSetupComp.pilotRenderers[3] = riggedSuit001SMComp;
-                Debug.Log("SU35 OPSStartPatch 1.13");
+                Debug.Log("GAV25B OPSStartPatch 1.13");
 
                 GameObject cameraRigParent = AircraftAPI.GetChildWithName(f26EjectorSeat, "CameraRigParent", false);
                 customPlayerVS.hideObjectsOnConfig[0] = cameraRigParent;
-                Debug.Log("SU35 OPSStartPatch 1.14");
+                Debug.Log("GAV25B OPSStartPatch 1.14");
 
                 GameObject cameraRigGO = AircraftAPI.GetChildWithName(f26EjectorSeat, "[CameraRig]", false);
                 tempPilotDetacherComp.cameraRig = cameraRigGO;
-                Debug.Log("SU35 OPSStartPatch 1.15");
+                Debug.Log("GAV25B OPSStartPatch 1.15");
 
                 CustomAircraftSC.cameraRig = cameraRigGO;
-                Debug.Log("SU35 OPSStartPatch 1.16");
+                Debug.Log("GAV25B OPSStartPatch 1.16");
 
                 GameObject playerGTrans = AircraftAPI.GetChildWithName(cameraRigGO, "PlayerGTransform", false);
-                Debug.Log("SU35 OPSStartPatch 1.16.1");
+                Debug.Log("GAV25B OPSStartPatch 1.16.1");
 
                 FlightInfo customFlightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
-                Debug.Log("SU35 OPSStartPatch 1.16.2");
+                Debug.Log("GAV25B OPSStartPatch 1.16.2");
 
                 //customFlightInfo.playerGTransform = playerGTrans.transform;
-                Debug.Log("SU35 OPSStartPatch 1.17");
+                Debug.Log("GAV25B OPSStartPatch 1.17");
 
                 GameObject controllerLeft = AircraftAPI.GetChildWithName(cameraRigParent, "Controller (left)", false);
                 GameObject swatglowerLeft = AircraftAPI.GetChildWithName(controllerLeft, "SWAT_glower_pivot.002", false);
@@ -930,13 +930,13 @@ namespace CustomAircraftTemplateSU35
 
 
                 pilotColorSetupComp.pilotRenderers[1] = swatglowerLeft.GetComponent<SkinnedMeshRenderer>();
-                Debug.Log("SU35 OPSStartPatch 1.18");
+                Debug.Log("GAV25B OPSStartPatch 1.18");
 
                 GameObject controllerRight = AircraftAPI.GetChildWithName(cameraRigParent, "Controller (right)", false);
                 GameObject swatglowerRight = AircraftAPI.GetChildWithName(controllerRight, "SWAT_glower_pivot.002", false);
 
                 pilotColorSetupComp.pilotRenderers[2] = swatglowerRight.GetComponent<SkinnedMeshRenderer>();
-                Debug.Log("SU35 OPSStartPatch 1.19");
+                Debug.Log("GAV25B OPSStartPatch 1.19");
 
                 MaterialSwitcher matSwitchLeft = swatglowerLeft.GetComponent<MaterialSwitcher>();
                 tempPilotDetacherComp.OnDetachPilot.AddListener(matSwitchLeft.SwitchToB);
@@ -946,41 +946,41 @@ namespace CustomAircraftTemplateSU35
 
 
 
-                Debug.Log("SU35 OPSStartPatch 1.20");
+                Debug.Log("GAV25B OPSStartPatch 1.20");
 
                 customPlayerVS.OnBeginRearming.AddListener(matSwitchLeft.SwitchToB);
                 customPlayerVS.OnBeginRearming.AddListener(matSwitchRight.SwitchToB);
                 customPlayerVS.OnEndRearming.AddListener(matSwitchLeft.SwitchToB);
                 customPlayerVS.OnEndRearming.AddListener(matSwitchRight.SwitchToB);
-                Debug.Log("SU35 OPSStartPatch 1.21");
+                Debug.Log("GAV25B OPSStartPatch 1.21");
 
                 GameObject cameraEyeHelmet = AircraftAPI.GetChildWithName(cameraRigParent, "Camera (eye) Helmet", false);
-                Debug.Log("SU35 OPSStartPatch 1.21.1");
+                Debug.Log("GAV25B OPSStartPatch 1.21.1");
 
                 ScreenMaskedColorRamp screenMaskedClrRamp = cameraEyeHelmet.GetComponent<ScreenMaskedColorRamp>();
-                Debug.Log("SU35 OPSStartPatch 1.21.2");
+                Debug.Log("GAV25B OPSStartPatch 1.21.2");
 
                 flybyCameraMFDPage.playerNVG = screenMaskedClrRamp;
-                Debug.Log("SU35 OPSStartPatch 1.22");
+                Debug.Log("GAV25B OPSStartPatch 1.22");
 
                 GameObject headSphere = AircraftAPI.GetChildWithName(cameraRigParent, "headSphere", false);
                 pilotColorSetupComp.pilotRenderers[0] = headSphere.GetComponent<MeshRenderer>();
-                Debug.Log("SU35 OPSStartPatch 1.23");
+                Debug.Log("GAV25B OPSStartPatch 1.23");
 
                 GameObject hqh = AircraftAPI.GetChildWithName(cameraRigParent, "hqh", false);
                 HelmetController hqhHCComp = hqh.GetComponent<HelmetController>();
                 componentInChildren8.helmet = hqhHCComp;
-                Debug.Log("SU35 OPSStartPatch 1.24");
+                Debug.Log("GAV25B OPSStartPatch 1.24");
 
                 GameObject nvgBIVL = AircraftAPI.GetChildWithName(Main.aircraftCustom, "nvgButtonInteractable", false);
                 VRInteractable nvgBIVLVRL = nvgBIVL.GetComponent<VRInteractable>();
                 nvgBIVLVRL.OnInteract.AddListener(hqhHCComp.ToggleNVG);
-                Debug.Log("SU35 OPSStartPatch 1.25");
+                Debug.Log("GAV25B OPSStartPatch 1.25");
 
                 GameObject visorBIVL = AircraftAPI.GetChildWithName(Main.aircraftCustom, "visorButtonInteractable", false);
                 VRInteractable visorBIVLVRL = visorBIVL.GetComponent<VRInteractable>();
                 visorBIVLVRL.OnInteract.AddListener(hqhHCComp.ToggleVisor);
-                Debug.Log("SU35 OPSStartPatch 1.26");
+                Debug.Log("GAV25B OPSStartPatch 1.26");
 
                 GameObject cockpitWindNoise = AircraftAPI.GetChildWithName(f26EjectorSeat, "cockpitWindNoise", false);
                 CockpitWindAudioController cockpitWindNoiseAC = cockpitWindNoise.GetComponent<CockpitWindAudioController>();
@@ -989,7 +989,7 @@ namespace CustomAircraftTemplateSU35
                 GameObject HMCSDisplays = AircraftAPI.GetChildWithName(cameraEye, "HMCSDisplays", true);
                 
                 WeaponManager wem = Main.aircraftCustom.GetComponent<WeaponManager>();
-                Debug.Log("SU35 OPSStartPatch 1.26.1 = " + wem.name);
+                Debug.Log("GAV25B OPSStartPatch 1.26.1 = " + wem.name);
 
                 GameObject WeaponInfo = AircraftAPI.GetChildWithName(HMCSDisplays, "WeaponInfo", true);
                 WeaponInfo.GetComponent<HMDWeaponInfo>().wm = wem;
@@ -1009,16 +1009,16 @@ namespace CustomAircraftTemplateSU35
                 HMCSAOA.flightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
 
                 GameObject GMHMCSInfo = AircraftAPI.GetChildWithName(HMCSDisplays, "Gtext", true);
-                Debug.Log("SU35 OPSStartPatch 1.27.2");
+                Debug.Log("GAV25B OPSStartPatch 1.27.2");
                 HUDGMeter HMCSGM = GMHMCSInfo.GetComponent<HUDGMeter>();
-                Debug.Log("SU35 OPSStartPatch 1.27.3");
+                Debug.Log("GAV25B OPSStartPatch 1.27.3");
                 HMCSGM.flightInfo = Main.aircraftCustom.GetComponent<FlightInfo>();
 
                 GameObject MMHMCSInfo = AircraftAPI.GetChildWithName(HMCSDisplays, "MText", true);
                 HUDVelocity HMCSMM = MMHMCSInfo.GetComponent<HUDVelocity>();
 
 
-                Debug.Log("SU35 OPSStartPatch 1.27");
+                Debug.Log("GAV25B OPSStartPatch 1.27");
                // MirageElements.SetUpGauges();
              // MirageElements.IdentifiedRadarTargetsSetup();
             }
@@ -1028,12 +1028,12 @@ namespace CustomAircraftTemplateSU35
     
     
     [HarmonyPatch(typeof(PlayerSpawn), "OnSpawnUnit")]
-    public class SU35_OSStartPatch
+    public class GAV25B_OSStartPatch
     {
        
             public static void Postfix(PlayerSpawn __instance)
         {
-            Debug.Log("SU35 Starting OSU 1.0");
+            Debug.Log("GAV25B Starting OSU 1.0");
             if (!Main.aircraftLoaded)
             { return ; }
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
@@ -1045,7 +1045,7 @@ namespace CustomAircraftTemplateSU35
 
 
     [HarmonyPatch(typeof(TargetingMFDPage), "CloseOut")]
-    public class SU35_TargetingMFDPagePatch
+    public class GAV25B_TargetingMFDPagePatch
     {
         public static bool Prefix(TargetingMFDPage __instance)
         {
@@ -1058,23 +1058,23 @@ namespace CustomAircraftTemplateSU35
             __instance.helmet = helmet;
             if (__instance.targetingCamera)
             {
-                Debug.Log("SU35 Part1TMFD");
+                Debug.Log("GAV25B Part1TMFD");
                 __instance.targetingCamera.enabled = false;
-                Debug.Log("SU35 Part1TMFD2");
+                Debug.Log("GAV25B Part1TMFD2");
 
             }
             if (__instance.helmet.tgpDisplayEnabled)
             {
-                Debug.Log("SU35 Part2TMFD");
+                Debug.Log("GAV25B Part2TMFD");
                 __instance.ToggleHelmetDisplay();
-                Debug.Log("SU35 Part2TMFD2");
+                Debug.Log("GAV25B Part2TMFD2");
 
             }
             if (__instance.tgpMode == TargetingMFDPage.TGPModes.HEAD)
             {
-                Debug.Log("SU35 Part3TMFD");
+                Debug.Log("GAV25B Part3TMFD");
                 __instance.MFDHeadButton();
-                Debug.Log("SU35 Part3TMFD2");
+                Debug.Log("GAV25B Part3TMFD2");
 
             }
             return false;
@@ -1083,7 +1083,7 @@ namespace CustomAircraftTemplateSU35
 
     
     [HarmonyPatch(typeof(WeaponManager), nameof(WeaponManager.Awake))]
-    public class SU35_PlayerSpawnAwakePatch
+    public class GAV25B_PlayerSpawnAwakePatch
     {
         private static GameObject SeatLocation;
         private static GameObject FA26Aircraft;
@@ -1099,10 +1099,10 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return;
             //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Awake prefix ran in wm!");
+            Debug.Log("GAV25B Awake prefix ran in wm!");
             
 
-            Debug.Log("SU35 Weapon Manager for : " + __instance.vm);
+            Debug.Log("GAV25B Weapon Manager for : " + __instance.vm);
 
 
            
@@ -1113,12 +1113,12 @@ namespace CustomAircraftTemplateSU35
                 Main.playerGameObject = __instance.gameObject;
                 FA26Aircraft = AircraftAPI.GetChildWithName(Main.playerGameObject, "FA-26B", false);
 
-                Debug.Log("SU35 0");
+                Debug.Log("GAV25B 0");
                 if (!FA26Aircraft) { return; }
                 
-                Debug.Log("SU35 001");
+                Debug.Log("GAV25B 001");
               
-                Debug.Log("SU35 PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
+                Debug.Log("GAV25B PL x:" + PlaneLocation.x + "PL y:" + PlaneLocation.y + "PL z:" + PlaneLocation.z);
 
                 UnityEngine.Object.Destroy(FA26Aircraft);
 
@@ -1134,11 +1134,11 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return;
             //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 pf1");
+            Debug.Log("GAV25B pf1");
             Traverse traverse = Traverse.Create(__instance);
-            Debug.Log("SU35 pf1.1");
+            Debug.Log("GAV25B pf1.1");
             HPEquippable[] hpEquippables = (HPEquippable[])traverse.Field("equips").GetValue();
-            Debug.Log("SU35 pf1.2");
+            Debug.Log("GAV25B pf1.2");
 
 
         }
@@ -1147,7 +1147,7 @@ namespace CustomAircraftTemplateSU35
     
 
     [HarmonyPatch(typeof(TargetingMFDPage), "Setup")]
-    public class SU35_TMFDStartPatch
+    public class GAV25B_TMFDStartPatch
     {
         public static bool Prefix(TargetingMFDPage __instance)
         {
@@ -1155,20 +1155,20 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
             //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 TargetingMFDPage Setup 1.0 : " + __instance.gameObject.transform.parent.transform.parent.transform.parent);
+            Debug.Log("GAV25B TargetingMFDPage Setup 1.0 : " + __instance.gameObject.transform.parent.transform.parent.transform.parent);
 
             Traverse traverseT1 = Traverse.Create(__instance);
             bool startedTMFD = (bool)traverseT1.Field("started").GetValue();
 
-            Debug.Log("SU35 TargetingMFDPage Setup 1.1");
+            Debug.Log("GAV25B TargetingMFDPage Setup 1.1");
 
             if (startedTMFD)
             {
-                Debug.Log("SU35 TargetingMFDPage Setup 1.2");
+                Debug.Log("GAV25B TargetingMFDPage Setup 1.2");
 
                 return false;
             }
-            Debug.Log("SU35 TargetingMFDPage Setup 1.3");
+            Debug.Log("GAV25B TargetingMFDPage Setup 1.3");
 
             startedTMFD = true;
             traverseT1.Field("started").SetValue(true);
@@ -1177,29 +1177,29 @@ namespace CustomAircraftTemplateSU35
             WeaponManager TMFDwm = (WeaponManager)traverseT1.Field("wm").GetValue();
 
 
-            Debug.Log("SU35 TargetingMFDPage Setup 1.4 +" + TMFDwm);
+            Debug.Log("GAV25B TargetingMFDPage Setup 1.4 +" + TMFDwm);
 
             if (!TMFDwm) { return false; }
 
             if (TMFDwm.opticalTargeter)
             {
-                Debug.Log("SU35 TargetingMFDPage Setup 1.5");
+                Debug.Log("GAV25B TargetingMFDPage Setup 1.5");
 
                 if (!__instance.targetingCamera)
                 {
-                    Debug.Log("SU35 TargetingMFDPage Setup 1.6");
+                    Debug.Log("GAV25B TargetingMFDPage Setup 1.6");
 
                     __instance.targetingCamera = TMFDwm.opticalTargeter.cameraTransform.GetComponent<Camera>();
                 }
                 if (!__instance.opticalTargeter)
                 {
-                    Debug.Log("SU35 TargetingMFDPage Setup 1.7");
+                    Debug.Log("GAV25B TargetingMFDPage Setup 1.7");
 
                     __instance.opticalTargeter = TMFDwm.opticalTargeter;
                 }
                 if (__instance.targetingCamera)
                 {
-                    Debug.Log("SU35 TargetingMFDPage Setup 1.8");
+                    Debug.Log("GAV25B TargetingMFDPage Setup 1.8");
 
                     LODManager.instance.tcam = __instance.targetingCamera;
                 }
@@ -1210,56 +1210,56 @@ namespace CustomAircraftTemplateSU35
                 return false;
             }
             string[] tgpModeLabelsT1 = (string[])traverseT1.Field("tgpModeLabels").GetValue();
-            Debug.Log("SU35 TargetingMFDPage Setup 1.9");
+            Debug.Log("GAV25B TargetingMFDPage Setup 1.9");
 
             if (__instance.mfdPage)
             {
-                Debug.Log("SU35 TargetingMFDPage Setup 1.10");
+                Debug.Log("GAV25B TargetingMFDPage Setup 1.10");
 
 
                 __instance.mfdPage.SetText("tgpMode", tgpModeLabelsT1[(int)__instance.tgpMode]);
             }
             else if (__instance.portalPage)
             {
-                Debug.Log("SU35 TargetingMFDPage Setup 1.11");
+                Debug.Log("GAV25B TargetingMFDPage Setup 1.11");
 
                 __instance.portalPage.SetText("tgpMode", tgpModeLabelsT1[(int)__instance.tgpMode]);
             }
             traverseT1.Field("gpsSystem").SetValue(TMFDwm.gpsSystem);
             if (__instance.limitLineRenderer)
             {
-                Debug.Log("SU35 TargetingMFDPage Setup 1.12");
+                Debug.Log("GAV25B TargetingMFDPage Setup 1.12");
 
                 __instance.SetupLimitLine();
             }
-            Debug.Log("SU35 TargetingMFDPage Setup 1.13");
+            Debug.Log("GAV25B TargetingMFDPage Setup 1.13");
 
             __instance.UpdateLimLineVisibility();
-            Debug.Log("SU35 TargetingMFDPage Setup");
+            Debug.Log("GAV25B TargetingMFDPage Setup");
             return false;
         }
     }
 
 
     //[HarmonyPatch(typeof(TargetingMFDPage), "SetSensorMode")]
-    //public class SU35_TMFDSSM
+    //public class GAV25B_TMFDSSM
     //{
     //    public static void Prefix(TargetingMFDPage __instance)
     //    {
-    //        Debug.Log("SU35 tmfdssm 1.1");
+    //        Debug.Log("GAV25B tmfdssm 1.1");
             
 
     //        Grayscale gs= __instance.targetingCamera.GetComponent<Grayscale>();
-    //        Debug.Log("SU35 tmfdssm 1.3.1 ro: " + gs.rampOffset);
+    //        Debug.Log("GAV25B tmfdssm 1.3.1 ro: " + gs.rampOffset);
 
     //        __instance.grayScaleEffect = gs;
-    //            Debug.Log("SU35 tmfdssm 1.4");
+    //            Debug.Log("GAV25B tmfdssm 1.4");
     //    }
     //}
 
 
     [HarmonyPatch(typeof(FlybyCameraMFDPage), "EnableCamera")]
-    public static class SU35_SCamPatch
+    public static class GAV25B_SCamPatch
     {
         public static void Prefix(FlybyCameraMFDPage __instance)
         {
@@ -1268,32 +1268,32 @@ namespace CustomAircraftTemplateSU35
                 return;
             //Debug.unityLogger.logEnabled = Main.logging;
             Traverse traverseF1 = Traverse.Create(__instance);
-            Debug.Log("SU35 Scamepatch 1.0");
+            Debug.Log("GAV25B Scamepatch 1.0");
             bool flyCamEnabledFBCMFD = (bool)traverseF1.Field("flyCamEnabled").GetValue();
             bool previewEnabledFBCMFD = (bool)traverseF1.Field("previewEnabled").GetValue();
-            Debug.Log("SU35 Scamepatch 1.1");
+            Debug.Log("GAV25B Scamepatch 1.1");
 
             if (flyCamEnabledFBCMFD)
             {
-                Debug.Log("SU35 Scamepatch 1.2");
+                Debug.Log("GAV25B Scamepatch 1.2");
                 __instance.SetupFlybyPosition((FlybyCameraMFDPage.SpectatorBehaviors)(-1));
                 return;
             }
-            Debug.Log("SU35 Scamepatch 1.3");
+            Debug.Log("GAV25B Scamepatch 1.3");
             if (previewEnabledFBCMFD)
             {
-                Debug.Log("SU35 Scamepatch 1.3.1");
+                Debug.Log("GAV25B Scamepatch 1.3.1");
                 __instance.previewObject.SetActive(true);
             }
-            Debug.Log("SU35 Scamepatch 1.4");
+            Debug.Log("GAV25B Scamepatch 1.4");
             traverseF1.Field("flyCamEnabled").SetValue(true);
 
             flyCamEnabledFBCMFD = true;
-            Debug.Log("SU35 Scamepatch 1.5");
+            Debug.Log("GAV25B Scamepatch 1.5");
             traverseF1.Field("cameraStartTime").SetValue(Time.time);
             __instance.flybyCam.gameObject.SetActive(true);
             __instance.flybyCam.transform.parent = null;
-            Debug.Log("SU35 Scamepatch 1.6");
+            Debug.Log("GAV25B Scamepatch 1.6");
             __instance.playerAudioListener.enabled = !__instance.cameraAudio;
             __instance.cameraAudioListener.enabled = __instance.cameraAudio;
             FloatingOrigin.instance.OnOriginShift += __instance.OnCamOriginShift;
@@ -1302,7 +1302,7 @@ namespace CustomAircraftTemplateSU35
     }
 
     [HarmonyPatch(typeof(FlybyCameraMFDPage.SCamNVGController), "OnPreCull")]
-    public static class SU35_PatchNVGPreCull
+    public static class GAV25B_PatchNVGPreCull
     {
         public static bool Prefix(FlybyCameraMFDPage.SCamNVGController __instance)
         {
@@ -1311,21 +1311,21 @@ namespace CustomAircraftTemplateSU35
                 return true;
             //Debug.unityLogger.logEnabled = Main.logging;
             Traverse traverse1 = Traverse.Create(__instance);
-            Debug.Log("SU35 PatchNVGPreCull 1.0");
+            Debug.Log("GAV25B PatchNVGPreCull 1.0");
 
             if (!__instance.specCamNVG) { return false; }
-            Debug.Log("SU35 PatchNVGPreCull 1.0.1");
+            Debug.Log("GAV25B PatchNVGPreCull 1.0.1");
             if (__instance.specCamNVG.enabled)
             {
-                Debug.Log("SU35 PatchNVGPreCull 1.1");
+                Debug.Log("GAV25B PatchNVGPreCull 1.1");
                 if (__instance.doIllum)
                 {
-                    Debug.Log("SU35 PatchNVGPreCull 1.2");
+                    Debug.Log("GAV25B PatchNVGPreCull 1.2");
                     traverse1.Field("illumEnabled").SetValue(true);
                     //__instance.illumEnabled = true;
-                    Debug.Log("SU35 PatchNVGPreCull 1.3");
+                    Debug.Log("GAV25B PatchNVGPreCull 1.3");
                     __instance.nvg.EnableIlluminator();
-                    Debug.Log("SU35 PatchNVGPreCull 1.4");
+                    Debug.Log("GAV25B PatchNVGPreCull 1.4");
 
                     return false;
                 }
@@ -1333,22 +1333,22 @@ namespace CustomAircraftTemplateSU35
             }
             else
             {
-                Debug.Log("SU35 PatchNVGPreCull 1.5");
+                Debug.Log("GAV25B PatchNVGPreCull 1.5");
 
                 traverse1.Field("hidNvg").SetValue(true);
                 //__instance.hidNvg = true;
-                Debug.Log("SU35 PatchNVGPreCull 1.6");
+                Debug.Log("GAV25B PatchNVGPreCull 1.6");
 
                 object nvgScaleIDPull = traverse1.Field("nvgScaleID").GetValue();
                 Shader.SetGlobalFloat(nvgScaleIDPull.ToString(), 0f);
-                Debug.Log("SU35 PatchNVGPreCull 1.7");
+                Debug.Log("GAV25B PatchNVGPreCull 1.7");
                 return false;
             }
         }
     }
 
     [HarmonyPatch(typeof(HPEquipGun), "Shake")]
-    public static class SU35_PatchHPEquipGun
+    public static class GAV25B_PatchHPEquipGun
     {
         public static bool Prefix(HPEquipGun __instance)
         {
@@ -1362,7 +1362,7 @@ namespace CustomAircraftTemplateSU35
     
    
     [HarmonyPatch(typeof(HUDMaskToggler), "SetMask")]
-    public static class SU35_HUDMaskTogglePatch
+    public static class GAV25B_HUDMaskTogglePatch
     {
         
         public static bool Prefix(bool maskEnabled, HUDMaskToggler __instance)
@@ -1371,72 +1371,72 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
             //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 SetMask 1.0");
+            Debug.Log("GAV25B SetMask 1.0");
             if (__instance.alwaysFPVOnly && maskEnabled)
             {
-                Debug.Log("SU35 SetMask 1.1");
+                Debug.Log("GAV25B SetMask 1.1");
                 return false;
             }
-            Debug.Log("SU35 SetMask 1.2");
+            Debug.Log("GAV25B SetMask 1.2");
             Traverse traverse = Traverse.Create(__instance);
             Transform[] displayObjectsP = (Transform[])traverse.Field("displayObjects").GetValue();
-            GameObject hudCanvas = CustomAircraftTemplateSU35.AircraftAPI.GetChildWithName(Main.aircraftCustom, "HUDCanvas", true);
+            GameObject hudCanvas = CustomAircraftTemplateGAV25B.AircraftAPI.GetChildWithName(Main.aircraftCustom, "HUDCanvas", true);
             Transform[] displayObjectsHUD = hudCanvas.GetComponentsInChildren<Transform>(true);
 
 
-            Debug.Log("SU35 SetMask 1.3");
+            Debug.Log("GAV25B SetMask 1.3");
 
             for (int i = 0; i < displayObjectsHUD.Length; i++)
             {
-                Debug.Log("SU35 SetMask 1.4");
+                Debug.Log("GAV25B SetMask 1.4");
                 if (displayObjectsHUD[i])
                 {
-                    Debug.Log("SU35 SetMask 1.5");
+                    Debug.Log("GAV25B SetMask 1.5");
                     if (__instance.alwaysFPVOnly)
                     {
-                        Debug.Log("SU35 SetMask 1.6");
+                        Debug.Log("GAV25B SetMask 1.6");
                         displayObjectsHUD[i].gameObject.layer = 28;
                     }
                     else
                     {
-                        Debug.Log("SU35 SetMask 1.7");
+                        Debug.Log("GAV25B SetMask 1.7");
                         displayObjectsHUD[i].gameObject.layer = (maskEnabled ? 5 : 28);
                     }
                 }
             }
             traverse.Field("displayObjects").SetValue(displayObjectsP);
-            Debug.Log("SU35 SetMask 1.8");
+            Debug.Log("GAV25B SetMask 1.8");
             for (int j = 0; j < __instance.masks.Length; j++)
             {
-                Debug.Log("SU35 SetMask 1.9");
+                Debug.Log("GAV25B SetMask 1.9");
                 if (__instance.masks[j])
                 {
-                    Debug.Log("SU35 SetMask 1.10");
+                    Debug.Log("GAV25B SetMask 1.10");
                     __instance.masks[j].enabled = maskEnabled;
                 }
             }
             for (int k = 0; k < __instance.images.Length; k++)
             {
-                Debug.Log("SU35 SetMask 1.11");
+                Debug.Log("GAV25B SetMask 1.11");
                 if (__instance.images[k])
                 {
-                    Debug.Log("SU35 SetMask 1.12");
+                    Debug.Log("GAV25B SetMask 1.12");
                     __instance.images[k].enabled = maskEnabled;
                 }
             }
             if (__instance.alwaysFPVOnly)
             {
-                Debug.Log("SU35 SetMask 1.13");
+                Debug.Log("GAV25B SetMask 1.13");
                 __instance.canvasObject.layer = 28;
             }
             else
             {
-                Debug.Log("SU35 SetMask 1.14");
+                Debug.Log("GAV25B SetMask 1.14");
                hudCanvas.layer = (maskEnabled ? 5 : 28);
             }
             //__instance.isMasked = maskEnabled;
             traverse.Field("isMasked").SetValue("maskEnabled");
-            Debug.Log("SU35 SetMask 1.15");
+            Debug.Log("GAV25B SetMask 1.15");
             return false;
         }
     }

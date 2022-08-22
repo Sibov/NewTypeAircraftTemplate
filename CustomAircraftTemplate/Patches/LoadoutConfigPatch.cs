@@ -7,12 +7,12 @@ using ModLoader;
 using VTOLVR.Multiplayer;
 using System.Reflection;
 
-namespace CustomAircraftTemplateSU35
+namespace CustomAircraftTemplateGAV25B
 {
 
 
     [HarmonyPatch(typeof(VehicleConfigSceneSetup), "Start")]
-    public class SU35_VehicleConfigStartPatch
+    public class GAV25B_VehicleConfigStartPatch
     {
 
 
@@ -21,9 +21,9 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
             { return; }
             PlayerVehicle currentVehicle = PilotSaveManager.currentVehicle;
-            Debug.Log("SU35 VCS1.0");
+            Debug.Log("GAV25B VCS1.0");
             Main.aircraftCustom = GameObject.Find(currentVehicle.vehicleName+"(Clone)");
-            Debug.Log("SU35 VCS1.1");
+            Debug.Log("GAV25B VCS1.1");
         }
     }
 
@@ -31,7 +31,7 @@ namespace CustomAircraftTemplateSU35
    
 
     [HarmonyPatch(typeof(LoadoutConfigurator), "Initialize")]
-    public static class SU35_LCInit
+    public static class GAV25B_LCInit
     {
         public static void Postfix(LoadoutConfigurator __instance)
         {
@@ -39,9 +39,9 @@ namespace CustomAircraftTemplateSU35
 
 
             Dictionary<string, EqInfo> allWeaponPrefabsOutput = new Dictionary<string, EqInfo>();
-            Debug.Log("SU35 LCI: 1.0 : ");
+            Debug.Log("GAV25B LCI: 1.0 : ");
             allWeaponPrefabsOutput = (Dictionary<string, EqInfo>)traverse2.Field("allWeaponPrefabs").GetValue();
-            Debug.Log("SU35 LCI: 1.1");
+            Debug.Log("GAV25B LCI: 1.1");
             traverse2.Field("unlockedWeaponPrefabs").SetValue(allWeaponPrefabsOutput);
 
         }
@@ -51,7 +51,7 @@ namespace CustomAircraftTemplateSU35
 
             
     [HarmonyPatch(typeof(LoadoutConfigurator), "EquipCompatibilityMask")]
-    public static class SU35_EquipCompatibilityPatch
+    public static class GAV25B_EquipCompatibilityPatch
     {
         public static bool Prefix(LoadoutConfigurator __instance, HPEquippable equip)
         {
@@ -61,17 +61,17 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
 
-            Debug.Log("SU35 Name:" + Main.customAircraftPV.vehicleName);
+            Debug.Log("GAV25B Name:" + Main.customAircraftPV.vehicleName);
 
             
             if (true) // fuck you c ; work on manners you ape
             {
-                Debug.Log("SU35 Section 11 New");
+                Debug.Log("GAV25B Section 11 New");
 
 
                 // this creates a dictionary of all the wepaons and where they can be mounted, just alter the second string per weapon according to the wepaon you want.
                 Dictionary<string, string> allowedhardpointbyweapon = new Dictionary<string, string>();
-                //allowedhardpointbyweapon.Add("fa26_gun", "0");
+                allowedhardpointbyweapon.Add("asf-srmx1", "9,10");
                 //allowedhardpointbyweapon.Add("GIAT30Gun", "0");
                 //allowedhardpointbyweapon.Add("asf30_gun", "0");
                 //allowedhardpointbyweapon.Add("fa26-cft", "");
@@ -79,7 +79,7 @@ namespace CustomAircraftTemplateSU35
                 //allowedhardpointbyweapon.Add("fa26_agm161", "4,5,9");
                 //allowedhardpointbyweapon.Add("fa26_aim9x2", "");
                 //allowedhardpointbyweapon.Add("fa26_aim9x3", "");
-                allowedhardpointbyweapon.Add("fa26_cagm-6", "1,2,4,5,7,8,9");
+                
                 //allowedhardpointbyweapon.Add("fa26_cbu97x1", "4,5,9");
                 //allowedhardpointbyweapon.Add("fa26_droptank", "4,5,9");
                 //allowedhardpointbyweapon.Add("fa26_droptankXL", "");
@@ -124,18 +124,18 @@ namespace CustomAircraftTemplateSU35
                 //allowedhardpointbyweapon.Add("h70-x14ld", "4,5");
                 
 
-                Debug.Log("SU35 Before Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
+                Debug.Log("GAV25B Before Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
 
                 
 
                 if (allowedhardpointbyweapon.ContainsKey(equip.name))
                 {
                     equip.allowedHardpoints = (string)allowedhardpointbyweapon[equip.name];
-                    Debug.Log("SU35 Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
+                    Debug.Log("GAV25B Equipment: " + equip.name + ", Allowed on" + equip.allowedHardpoints);
                 }
                 else
                 {
-                    Debug.Log("SU35 Equipment: " + equip.name + ", not in dictionary");
+                    Debug.Log("GAV25B Equipment: " + equip.name + ", not in dictionary");
                 }
                
 
@@ -152,176 +152,176 @@ namespace CustomAircraftTemplateSU35
 
     
     [HarmonyPatch(typeof(ReArmingPoint), "FinalBeginReArm")]
-    public static class SU35_RAPFBAPatch
+    public static class GAV25B_RAPFBAPatch
     {
         public static bool Prefix(ReArmingPoint __instance)
         {
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
 
-            Debug.Log("SU35 RAPFBAP 1.0");
+            Debug.Log("GAV25B RAPFBAP 1.0");
             AudioController.instance.SetExteriorOpening("rearming", 1f);
             PlayerVehicle currentVehicle = PilotSaveManager.currentVehicle;
-            Debug.Log("SU35 RAPFBAP 1.1");
+            Debug.Log("GAV25B RAPFBAP 1.1");
             Transform transform = __instance.transform;
             GameObject gameObject = Main.aircraftCustom;
             Vector3 b = Vector3.zero;
-            Debug.Log("SU35 RAPFBAP 1.2");
+            Debug.Log("GAV25B RAPFBAP 1.2");
             RaycastHit raycastHit;
-            Debug.Log("SU35 RAPFBAP 1.3");
+            Debug.Log("GAV25B RAPFBAP 1.3");
             if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out raycastHit, 100f, 1))
             {
-                Debug.Log("SU35 RAPFBAP 1.4");
+                Debug.Log("GAV25B RAPFBAP 1.4");
                 b = transform.InverseTransformPoint(raycastHit.point);
             }
-            Debug.Log("SU35 RAPFBAP 1.5");
+            Debug.Log("GAV25B RAPFBAP 1.5");
             FlightSceneManager.instance.playerActor.flightInfo.PauseGCalculations();
             gameObject.transform.position = transform.TransformPoint(currentVehicle.playerSpawnOffset + b);
             gameObject.transform.rotation = Quaternion.AngleAxis(currentVehicle.spawnPitch, transform.right) * transform.rotation;
-            Debug.Log("SU35 RAPFBAP 1.6");
+            Debug.Log("GAV25B RAPFBAP 1.6");
             gameObject.GetComponent<PlayerVehicleSetup>().LandVehicle(transform);
             WeaponManager component = gameObject.GetComponent<WeaponManager>();
-            Debug.Log("SU35 RAPFBAP 1.7");
+            Debug.Log("GAV25B RAPFBAP 1.7");
             Traverse trav2 = Traverse.Create(__instance);
             HPEquippable[] mpOriginEquips = (HPEquippable[])trav2.Field("mp_OrigEquips").GetValue();
-            Debug.Log("SU35 RAPFBAP 1.8");
+            Debug.Log("GAV25B RAPFBAP 1.8");
             if (VTOLMPUtils.IsMultiplayer())
             {
-                Debug.Log("SU35 RAPFBAP 1.9");
+                Debug.Log("GAV25B RAPFBAP 1.9");
                 if (mpOriginEquips == null || mpOriginEquips.Length != component.equipCount)
                 {
-                    Debug.Log("SU35 RAPFBAP 1.10");
+                    Debug.Log("GAV25B RAPFBAP 1.10");
                     mpOriginEquips = new HPEquippable[component.equipCount];
                 }
                 for (int i = 0; i < component.equipCount; i++)
                 {
-                    Debug.Log("SU35 RAPFBAP 1.11");
+                    Debug.Log("GAV25B RAPFBAP 1.11");
                     mpOriginEquips[i] = component.GetEquip(i);
                 }
-                Debug.Log("SU35 RAPFBAP 1.12");
+                Debug.Log("GAV25B RAPFBAP 1.12");
                 trav2.Field("mp_OrigEquips").SetValue(mpOriginEquips);
 
             }
-            Debug.Log("SU35 RAPFBAP 1.13");
+            Debug.Log("GAV25B RAPFBAP 1.13");
             //Transform TcamRigParent = (Transform)trav2.Field("camRigParent").GetValue();
 
-            Debug.Log("SU35 RAPFBAP 1.14" );
+            Debug.Log("GAV25B RAPFBAP 1.14" );
             Transform TcamRigParent = VRHead.instance.transform.parent.parent;
             trav2.Field("camRigParent").SetValue(TcamRigParent);
-            Debug.Log("SU35 RAPFBAP 1.15: x=" + TcamRigParent.position.x + ", y=" + TcamRigParent.position.y + ", z = " + TcamRigParent.position.z);
+            Debug.Log("GAV25B RAPFBAP 1.15: x=" + TcamRigParent.position.x + ", y=" + TcamRigParent.position.y + ", z = " + TcamRigParent.position.z);
             gameObject.SetActive(true);
             EjectionSeat componentInChildren = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EjectorSeat", false).GetComponent<EjectionSeat>();
-            Debug.Log("SU35 RAPFBAP 1.16");
+            Debug.Log("GAV25B RAPFBAP 1.16");
             if (componentInChildren)
             {
-                Debug.Log("SU35 RAPFBAP 1.17");
+                Debug.Log("GAV25B RAPFBAP 1.17");
                 if (componentInChildren.pilotModel)
                 {
                     componentInChildren.pilotModel.SetActive(false);
                 }
                 }
-            Debug.Log("SU35 RAPFBAP 1.18");
+            Debug.Log("GAV25B RAPFBAP 1.18");
             VTOLQuickStart componentInChildren2 = gameObject.GetComponentInChildren<VTOLQuickStart>();
-            Debug.Log("SU35 RAPFBAP 1.18.1");
+            Debug.Log("GAV25B RAPFBAP 1.18.1");
             if (componentInChildren2.throttle)
             {
-                Debug.Log("SU35 RAPFBAP 1.19");
+                Debug.Log("GAV25B RAPFBAP 1.19");
                 componentInChildren2.throttle.RemoteSetThrottle(0f);
             }
-            Debug.Log("SU35 RAPFBAP 1.20");
+            Debug.Log("GAV25B RAPFBAP 1.20");
             componentInChildren2.quickStopComponents.ApplySettings();
-            Debug.Log("SU35 RAPFBAP 1.21");
+            Debug.Log("GAV25B RAPFBAP 1.21");
             PlayerVehicleSetup TvehicleSetup = (PlayerVehicleSetup)trav2.Field("vehicleSetup").GetValue();
-            Debug.Log("SU35 RAPFBAP 1.22");
+            Debug.Log("GAV25B RAPFBAP 1.22");
             TvehicleSetup = gameObject.GetComponentInChildren<PlayerVehicleSetup>();
             if (TvehicleSetup && TvehicleSetup.OnBeginRearming != null)
             {
-                Debug.Log("SU35 RAPFBAP 1.23");
+                Debug.Log("GAV25B RAPFBAP 1.23");
                 TvehicleSetup.OnBeginRearming.Invoke();
             }
-            Debug.Log("SU35 RAPFBAP 1.24");
+            Debug.Log("GAV25B RAPFBAP 1.24");
             GameObject TconfigObject = (GameObject)trav2.Field("configObject").GetValue();
 
-            Debug.Log("SU35 RAPFBAP 1.25");
+            Debug.Log("GAV25B RAPFBAP 1.25");
             TconfigObject = UnityEngine.Object.Instantiate<GameObject>(currentVehicle.loadoutConfiguratorPrefab);
             TconfigObject.transform.parent = transform;
-            Debug.Log("SU35 RAPFBAP 1.26");
+            Debug.Log("GAV25B RAPFBAP 1.26");
             TconfigObject.transform.position = transform.position;
             TconfigObject.transform.rotation = transform.rotation;
-            Debug.Log("SU35 RAPFBAP 1.27");
+            Debug.Log("GAV25B RAPFBAP 1.27");
             TconfigObject.SetActive(true);
             trav2.Field("configObject").SetValue(TconfigObject);
-            Debug.Log("SU35 RAPFBAP 1.28");
+            Debug.Log("GAV25B RAPFBAP 1.28");
             LoadoutConfigurator Tconfig = (LoadoutConfigurator)trav2.Field("config").GetValue();
 
             Tconfig = TconfigObject.GetComponent<LoadoutConfigurator>();
-            Debug.Log("SU35 RAPFBAP 1.29");
+            Debug.Log("GAV25B RAPFBAP 1.29");
             Tconfig.wm = component;
             Tconfig.canRefuel = __instance.canRefuel;
-            Debug.Log("SU35 RAPFBAP 1.30");
+            Debug.Log("GAV25B RAPFBAP 1.30");
             Tconfig.canArm = __instance.canArm;
             trav2.Field("config").SetValue(Tconfig);
-            Debug.Log("SU35 RAPFBAP 1.31");
+            Debug.Log("GAV25B RAPFBAP 1.31");
             if (Tconfig.equipRigTf)
             {
-                Debug.Log("SU35 RAPFBAP 1.32");
+                Debug.Log("GAV25B RAPFBAP 1.32");
                 float z = currentVehicle.playerSpawnOffset.z - currentVehicle.loadoutSpawnOffset.z;
-                Debug.Log("SU35 RAPFBAP 1.33");
+                Debug.Log("GAV25B RAPFBAP 1.33");
                 Vector3 vector = Tconfig.equipRigTf.localPosition;
-                Debug.Log("SU35 RAPFBAP 1.34");
+                Debug.Log("GAV25B RAPFBAP 1.34");
                 vector += new Vector3(0f, 0f, z);
                 vector.y = 0f;
-                Debug.Log("SU35 RAPFBAP 1.35");
+                Debug.Log("GAV25B RAPFBAP 1.35");
                 Tconfig.equipRigTf.localPosition = vector;
             }
             trav2.Field("config").SetValue(Tconfig);
 
             if (TvehicleSetup)
             {
-                Debug.Log("SU35 RAPFBAP 1.36");
+                Debug.Log("GAV25B RAPFBAP 1.36");
                 TvehicleSetup.StartUsingConfigurator(Tconfig);
             }
             trav2.Field("vehicleSetup").SetValue(TvehicleSetup);
 
             foreach (VRHandController vrhandController in VRHandController.controllers)
             {
-                Debug.Log("SU35 RAPFBAP 1.37");
+                Debug.Log("GAV25B RAPFBAP 1.37");
                 if (vrhandController.activeInteractable)
                 {
-                    Debug.Log("SU35 RAPFBAP 1.38");
+                    Debug.Log("GAV25B RAPFBAP 1.38");
                     vrhandController.ReleaseFromInteractable();
                 }
             }
-            Debug.Log("SU35 RAPFBAP 1.39");
+            Debug.Log("GAV25B RAPFBAP 1.39");
             VRHead.instance.transform.parent.parent = Tconfig.seatTransform;
-            Debug.Log("SU35 RAPFBAP 1.40");
+            Debug.Log("GAV25B RAPFBAP 1.40");
             VRHead.instance.transform.parent.localPosition = VRHead.playAreaPosition;
-            Debug.Log("SU35 RAPFBAP 1.41");
+            Debug.Log("GAV25B RAPFBAP 1.41");
             VRHead.instance.transform.parent.localRotation = VRHead.playAreaRotation;
-            Debug.Log("SU35 RAPFBAP 1.42");
+            Debug.Log("GAV25B RAPFBAP 1.42");
             CampaignSave campaignSave = PilotSaveManager.current.GetVehicleSave(PilotSaveManager.currentVehicle.vehicleName).GetCampaignSave(PilotSaveManager.currentCampaign.campaignID);
 
-            Debug.Log("SU35 RAPFBAP 1.43");
+            Debug.Log("GAV25B RAPFBAP 1.43");
             Tconfig.availableEquipStrings = new List<string>();
             List<string> availableWeapons = campaignSave.availableWeapons;
-            Debug.Log("SU35 RAPFBAP 1.44");
+            Debug.Log("GAV25B RAPFBAP 1.44");
             if (VTOLMPUtils.IsMultiplayer())
             {
-                Debug.Log("SU35 RAPFBAP 1.45");
+                Debug.Log("GAV25B RAPFBAP 1.45");
                 PlayerInfo localPlayer = VTOLMPSceneManager.instance.localPlayer;
                 List<string> equipment = VTOLMPSceneManager.instance.GetMPSpawn(localPlayer.team, localPlayer.selectedSlot).equipment.equipment;
-                Debug.Log("SU35 RAPFBAP 1.46");
+                Debug.Log("GAV25B RAPFBAP 1.46");
                 using (List<GameObject>.Enumerator enumerator2 = PilotSaveManager.currentVehicle.allEquipPrefabs.GetEnumerator())
                 {
-                    Debug.Log("SU35 RAPFBAP 1.47");
+                    Debug.Log("GAV25B RAPFBAP 1.47");
 
                     while (enumerator2.MoveNext())
                     {
-                        Debug.Log("SU35 RAPFBAP 1.48");
+                        Debug.Log("GAV25B RAPFBAP 1.48");
                         GameObject gameObject2 = enumerator2.Current;
                         if (!equipment.Contains(gameObject2.gameObject.name))
                         {
-                            Debug.Log("SU35 RAPFBAP 1.49");
+                            Debug.Log("GAV25B RAPFBAP 1.49");
                             Tconfig.availableEquipStrings.Add(gameObject2.gameObject.name);
                         }
                     }
@@ -329,12 +329,12 @@ namespace CustomAircraftTemplateSU35
                 }
             }
             trav2.Field("config").SetValue(Tconfig);
-            Debug.Log("SU35 RAPFBAP 1.50");
+            Debug.Log("GAV25B RAPFBAP 1.50");
             foreach (string item in campaignSave.availableWeapons)
             {
                 if (!(VTScenario.current.gameVersion > new GameVersion(1, 3, 0, 30, GameVersion.ReleaseTypes.Testing)) || VTScenario.current.allowedEquips.Contains(item))
                 {
-                    Debug.Log("SU35 RAPFBAP 1.51");
+                    Debug.Log("GAV25B RAPFBAP 1.51");
                     Tconfig.availableEquipStrings.Add(item);
                 }
             }
@@ -343,18 +343,18 @@ namespace CustomAircraftTemplateSU35
             Tconfig.Initialize(campaignSave, true);
             if (PilotSaveManager.currentScenario.forcedEquips != null)
             {
-                Debug.Log("SU35 RAPFBAP 1.52");
+                Debug.Log("GAV25B RAPFBAP 1.52");
                 foreach (CampaignScenario.ForcedEquip forcedEquip in PilotSaveManager.currentScenario.forcedEquips)
                 {
-                    Debug.Log("SU35 RAPFBAP 1.53");
+                    Debug.Log("GAV25B RAPFBAP 1.53");
                     Tconfig.Attach(forcedEquip.weaponName, forcedEquip.hardpointIdx);
                     Tconfig.lockedHardpoints.Add(forcedEquip.hardpointIdx);
                 }
             }
-            Debug.Log("SU35 RAPFBAP 1.54");
+            Debug.Log("GAV25B RAPFBAP 1.54");
             trav2.Field("config").SetValue(Tconfig);
             Tconfig.UpdateNodes();
-            Debug.Log("SU35 RAPFBAP 1.5");
+            Debug.Log("GAV25B RAPFBAP 1.5");
             trav2.Field("config").SetValue(Tconfig);
             __instance.StartCoroutine(__instance.SetRearmAnchorDelayed());
             return false;
@@ -362,11 +362,11 @@ namespace CustomAircraftTemplateSU35
     }
 
     [HarmonyPatch(typeof(ReArmingPoint), "FinalEndReArm")]
-    public static class SU35_RAPFERPatch
+    public static class GAV25B_RAPFERPatch
     {
         public static bool Prefix(ReArmingPoint __instance)
         {
-            Debug.Log("SU35 RAPFFER 1.0");
+            Debug.Log("GAV25B RAPFFER 1.0");
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return true;
             Traverse trav3 = Traverse.Create(__instance);
@@ -380,49 +380,49 @@ namespace CustomAircraftTemplateSU35
             UnityEngine.Object trav3active = (UnityEngine.Object)trav3.Field("active").GetValue();
             PlayerVehicleSetup trav3pvSetup = (PlayerVehicleSetup)trav3.Field("vehicleSetup").GetValue();
             HPEquippable[] trav3mp_OrigEquips = (HPEquippable[])trav3.Field("mp_OrigEquips").GetValue();
-            Debug.Log("SU35 RAPFFER 1.1");
+            Debug.Log("GAV25B RAPFFER 1.1");
             float totalFlightCost = trav3config.GetTotalFlightCost();
             AudioController.instance.SetExteriorOpening("rearming", 0f);
-            Debug.Log("SU35 RAPFFER 1.2");
+            Debug.Log("GAV25B RAPFFER 1.2");
             PilotSaveManager.currentScenario.inFlightSpending += totalFlightCost;
-            Debug.Log("SU35 RAPFFER 1.2.1:");
-            Debug.Log("SU35 x =" + trav3camrigParent.position.x + ", y=" + trav3camrigParent.position.y + ", z = " + trav3camrigParent.position.z);
+            Debug.Log("GAV25B RAPFFER 1.2.1:");
+            Debug.Log("GAV25B x =" + trav3camrigParent.position.x + ", y=" + trav3camrigParent.position.y + ", z = " + trav3camrigParent.position.z);
             VRHead.instance.transform.parent.parent = trav3camrigParent;
             VRHead.instance.transform.parent.localPosition = VRHead.playAreaPosition;
             VRHead.instance.transform.parent.localRotation = VRHead.playAreaRotation;
-            Debug.Log("SU35 RAPFFER 1.3");
+            Debug.Log("GAV25B RAPFFER 1.3");
             GameObject gameObject = FlightSceneManager.instance.playerActor.gameObject;
             //GameObject gameObject = Main.aircraftCustom;
-            Debug.Log("SU35 RAPFFER 1.3.1 : " + gameObject.name);
+            Debug.Log("GAV25B RAPFFER 1.3.1 : " + gameObject.name);
 
 
             EjectionSeat componentInChildren = AircraftAPI.GetChildWithName(Main.aircraftCustom, "EjectorSeat", false).GetComponent<EjectionSeat>();
             if (componentInChildren)
             {
-                Debug.Log("SU35 RAPFFER 1.3.2 ");
+                Debug.Log("GAV25B RAPFFER 1.3.2 ");
                 componentInChildren.pilotModel.SetActive(true);
             }
-            Debug.Log("SU35 RAPFFER 1.4");
+            Debug.Log("GAV25B RAPFFER 1.4");
             CommRadioSource componentInChildren2 = gameObject.GetComponentInChildren<CommRadioSource>();
             if (componentInChildren2)
             {
-                Debug.Log("SU35 RAPFFER 1.4.1 : ");
+                Debug.Log("GAV25B RAPFFER 1.4.1 : ");
                 componentInChildren2.SetAsRadioSource();
             }
-            Debug.Log("SU35 RAPFFER 1.5");
+            Debug.Log("GAV25B RAPFFER 1.5");
             foreach (VRHandController vrhandController in VRHandController.controllers)
             {
-                Debug.Log("SU35 RAPFFER 1.5.1");
+                Debug.Log("GAV25B RAPFFER 1.5.1");
                 if (vrhandController.activeInteractable)
                 {
-                    Debug.Log("SU35 RAPFFER 1.5.2");
+                    Debug.Log("GAV25B RAPFFER 1.5.2");
                     vrhandController.ReleaseFromInteractable();
                 }
             }
-            Debug.Log("SU35 RAPFFER 1.6");
+            Debug.Log("GAV25B RAPFFER 1.6");
             UnityEngine.Object.Destroy(trav3configObject);
             trav4.Field("active").SetValue(null);
-            Debug.Log("SU35 RAPFFER 1.7");
+            Debug.Log("GAV25B RAPFFER 1.7");
             if (FlightSceneManager.instance)
             {
                 FlightSceneManager.instance.OnExitScene -= __instance.Instance_OnExitScene;
@@ -435,7 +435,7 @@ namespace CustomAircraftTemplateSU35
                 }
                 trav3pvSetup.EndUsingConfigurator(trav3config);
             }
-            Debug.Log("SU35 RAPFFER 1.8");
+            Debug.Log("GAV25B RAPFFER 1.8");
             //if (__instance.OnEndRearm != null)
             //{
             //    __instance.OnEndRearm();
@@ -452,12 +452,12 @@ namespace CustomAircraftTemplateSU35
 
                 if (FlightSceneManager.instance.playerActor)
             {
-                Debug.Log("SU35 RAPFFER 1.8.1");
+                Debug.Log("GAV25B RAPFFER 1.8.1");
                 __instance.voiceProfile.PlayMessage(GroundCrewVoiceProfile.GroundCrewMessages.ReturnedToVehicle);
-                Debug.Log("SU35 RAPFFER 1.8.1");
+                Debug.Log("GAV25B RAPFFER 1.8.1");
                 FlightSceneManager.instance.playerActor.flightInfo.UnpauseGCalculations();
             }
-            Debug.Log("SU35 RAPFFER 1.9");
+            Debug.Log("GAV25B RAPFFER 1.9");
             if (VTOLMPUtils.IsMultiplayer() && gameObject)
             {
                 WeaponManagerSync componentInChildren3 = gameObject.GetComponentInChildren<WeaponManagerSync>();

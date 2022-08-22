@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
 
-namespace CustomAircraftTemplateSU35
+namespace CustomAircraftTemplateGAV25B
 {
     
 	

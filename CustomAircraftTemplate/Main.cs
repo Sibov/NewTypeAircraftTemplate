@@ -12,7 +12,7 @@ using Unity;
 using TMPro;
 using UnityEngine.UI;
 
-namespace CustomAircraftTemplateSU35
+namespace CustomAircraftTemplateGAV25B
 {
     public class Main : VTOLMOD
     {
@@ -59,24 +59,28 @@ namespace CustomAircraftTemplateSU35
             //Debug.unityLogger.logEnabled = Main.logging;
             instance = this;
 
-            Debug.Log("SU35 ML3");
+            Debug.Log("F35 ML3" + AircraftInfo.AircraftAssetbundleName);
 
             pathToBundle = Path.Combine(instance.ModFolder, AircraftInfo.AircraftAssetbundleName);
+            Debug.Log("F35 ML3" + pathToBundle);
             AssetBundle bundleLoad = FileLoader.GetAssetBundleAsGameObject(pathToBundle, AircraftInfo.AircraftAssetbundleName);
+
             aircraftPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftPrefabName);
+            Debug.Log("F35 ML3" + AircraftInfo.AircraftPrefabName);
             //magic2Prefab = FileLoader.GetPrefabAsGameObject(bundleLoad, "m2-srmx1.prefab");
 
+            Debug.Log("F35 ML3" + AircraftInfo.AircraftLoadoutConfigurator);
             aircraftLoadoutConfiguratorPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftLoadoutConfigurator);
             customAircraftPV = FileLoader.GetPrefabAsPlayerVehicle(bundleLoad, AircraftInfo.customAircraftPV);
             customBICampaigns = FileLoader.GetPrefabAsBICampaigns(bundleLoad, "Campaigns.asset");
-            Debug.Log("SU35 ML3.1");
+            Debug.Log("GAV25B ML3.1");
             int count = Enum.GetValues(typeof(MultiplayerSpawn.Vehicles)).Length;
-            Debug.Log("SU35 ML3.2 : " + count);
+            Debug.Log("GAV25B ML3.2 : " + count);
             aircraftMSVId = (MultiplayerSpawn.Vehicles)AircraftInfo.AircraftMPIdentifier;
             VTNetworking.VTNetworkManager.RegisterOverrideResource(customAircraftPV.resourcePath, aircraftPrefab);
           
 
-            Debug.Log("SU35 ML1");
+            Debug.Log("GAV25B ML1");
 
 
 
@@ -85,22 +89,22 @@ namespace CustomAircraftTemplateSU35
             harmonyInstance.PatchAll();
            
 
-            Debug.Log("SU35 ML2");
+            Debug.Log("GAV25B ML2");
             
 
-            Debug.Log("SU35 ML4");
+            Debug.Log("GAV25B ML4");
             //Debug.Log(pathToBundle);
             
            
            
-            Debug.Log("SU35 ML5");
+            Debug.Log("GAV25B ML5");
 
-            Debug.Log("SU35 Got " + aircraftPrefab.name);
+            Debug.Log("GAV25B Got " + aircraftPrefab.name);
 
            
 
             //This is an event the VTOLAPI calls when the game is done loading a scene
-            VTOLAPI.SceneLoaded += SceneLoaded;
+            //VTOLAPI.SceneLoaded += SceneLoaded;
             base.ModLoaded();
 
             
@@ -122,11 +126,7 @@ namespace CustomAircraftTemplateSU35
         //This method is like update but it's framerate independent. This means it gets called at a set time interval instead of every frame. This is useful for physics calculations
         void FixedUpdate()
         {
-            if (aircraftLoaded)
-            {
-               
-                //Main.HMCSAltText.GetComponent<Text>().text = Main.aircraftCustom.GetComponent<FlightInfo>().radarAltitude.ToString();
-            } 
+           
         }
 
         //This function is called every time a scene is loaded. this behaviour is defined in Awake().
@@ -139,13 +139,13 @@ namespace CustomAircraftTemplateSU35
             {
                 
                 case VTOLScenes.VehicleConfiguration:
-                    Debug.Log("SU35 Reload the configurator");
+                    Debug.Log("GAV25B Reload the configurator");
                     StartCoroutine(InitWaiter());
                     
 
                     break;
                 default:
-                    Debug.Log("SU35 In scene: " + scene);
+                    Debug.Log("GAV25B In scene: " + scene);
 
                     break;
 
@@ -157,7 +157,7 @@ namespace CustomAircraftTemplateSU35
         private IEnumerator InitWaiter()
         {
         //Debug.unityLogger.logEnabled = Main.logging;
-        Debug.Log("SU35 InitWaiter Started");
+        Debug.Log("GAV25B InitWaiter Started");
             yield return new WaitForSeconds(3f);
           
             yield break;

@@ -11,7 +11,7 @@ using TMPro;
 
 
 
-namespace CustomAircraftTemplateSU35
+namespace CustomAircraftTemplateGAV25B
 {
     public class MirageElements : MonoBehaviour
     {
@@ -38,34 +38,34 @@ namespace CustomAircraftTemplateSU35
             if (PilotSaveManager.currentVehicle.vehicleName != Main.customAircraftPV.vehicleName)
                 return;
             //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Setup Arming Text");
+            Debug.Log("GAV25B Setup Arming Text");
 
             WeaponManager wm = Main.aircraftCustom.GetComponent<WeaponManager>();
             int aircraftNodeLength = wm.hardpointTransforms.Length;
-            Debug.Log("SU35 Setup Arming Text 1.0: Length = " + aircraftNodeLength);
+            Debug.Log("GAV25B Setup Arming Text 1.0: Length = " + aircraftNodeLength);
             GameObject aircraft = AircraftAPI.GetChildWithName(Main.aircraftCustom, "WeaponArmingButtons", false);
-            Debug.Log("SU35 Setup Arming Text 1.1");
+            Debug.Log("GAV25B Setup Arming Text 1.1");
             for (int i = 0; i < aircraftNodeLength; i++)
             {
                 string textArmingItem = "Text" + i;
                 equippedItem = wm.GetEquip(i);
-                Debug.Log("SU35 Setup Arming Text 1.1.1");
+                Debug.Log("GAV25B Setup Arming Text 1.1.1");
 
 
                 GameObject textItem = AircraftAPI.GetChildWithName(aircraft, textArmingItem, false);
-                Debug.Log("SU35 Setup Arming Text 1.1.2");
+                Debug.Log("GAV25B Setup Arming Text 1.1.2");
                 if (equippedItem != null && equippedItem.armable)
                 {
-                    Debug.Log("SU35 Setup Arming Text 1.2: " + i + " , Item: " + equippedItem.shortName);
+                    Debug.Log("GAV25B Setup Arming Text 1.2: " + i + " , Item: " + equippedItem.shortName);
                     nameLength = equippedItem.shortName.Length;
                     shortenedEquipName = equippedItem.shortName.Substring(0, 1) + equippedItem.shortName.Substring(nameLength - 2, 2);
                 }
                 else
                 {
-                    Debug.Log("SU35 Setup Arming Text 1.2.2 ");
+                    Debug.Log("GAV25B Setup Arming Text 1.2.2 ");
                     shortenedEquipName = "NON";
                 }
-                Debug.Log("SU35 Setup Arming Text 1.3");
+                Debug.Log("GAV25B Setup Arming Text 1.3");
                 Text textComponentItem = textItem.GetComponent<Text>();
                 textComponentItem.text = shortenedEquipName;
 
@@ -126,15 +126,15 @@ namespace CustomAircraftTemplateSU35
 
         public static void IdentifiedRadarTargetsSetup()
         {
-            Debug.Log("SU35 IRTS 1.1");
+            Debug.Log("GAV25B IRTS 1.1");
             Main.miniicp = AircraftAPI.GetChildWithName(Main.aircraftCustom, "MiniMFDICP", false);
-            Debug.Log("SU35 IRTS 1.2");
+            Debug.Log("GAV25B IRTS 1.2");
             radarcontactlistobj = AircraftAPI.GetChildWithName(Main.miniicp, "RadarContactList", false);
             Main.radarcontactlist = radarcontactlistobj.GetComponent<TextMeshPro>();
-            Debug.Log("SU35 IRTS 1.3");
+            Debug.Log("GAV25B IRTS 1.3");
             GameObject radarObject = AircraftAPI.GetChildWithName(Main.aircraftCustom, "Radar2", false);
             Main.radar = radarObject.GetComponentInChildren<Radar>();
-            Debug.Log("SU35 IRTS 1.4");
+            Debug.Log("GAV25B IRTS 1.4");
 
         }
         public static void IdentifiedRadarTargets()
@@ -142,12 +142,12 @@ namespace CustomAircraftTemplateSU35
 
             i = 0;
             oldcumText = "";
-            Debug.Log("SU35 IRT 1.1");
+            Debug.Log("GAV25B IRT 1.1");
             foreach (Actor unit in Main.radar.detectedUnits)
             {
-                Debug.Log("SU35 unit: " + unit);
+                Debug.Log("GAV25B unit: " + unit);
                 text = i + ": " + unit.actorName + " \n";
-                Debug.Log("SU35 text: " + text);
+                Debug.Log("GAV25B text: " + text);
                 cumText = oldcumText + text;
                 oldcumText = cumText;
                 i++;
@@ -175,7 +175,7 @@ namespace CustomAircraftTemplateSU35
 
             if (clockDisplayLocalTextComp != null)
             {
-                Debug.Log("SU35 found text mesh");
+                Debug.Log("GAV25B found text mesh");
                 clockDisplayLocalTextComp.text = timeNow;
             }
         }
