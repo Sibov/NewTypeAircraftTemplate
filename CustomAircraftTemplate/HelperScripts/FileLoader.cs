@@ -5,23 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomAircraftTemplateSU35
+namespace CAT
 {
-    static class FileLoader
+    internal static class FileLoader
     {
         //PUBLIC LOADING METHODS
         //Thanks Baan/GentleLeviathan!!!!
         public static AssetBundle GetAssetBundleAsGameObject(string path, string name)
         {
             //Debug.Log("AssetBundleLoader: Attempting to load AssetBundle...");
-            AssetBundle bundle = null;
             try
             {
-                bundle = AssetBundle.LoadFromFile(path);
+                var bundle = AssetBundle.LoadFromFile(path);
                 //Debug.Log("AssetBundleLoader: Success.");
-                return (AssetBundle)bundle;
+                return bundle;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Debug.Log("AssetBundleLoader: Couldn't load AssetBundle from path: '" + path + "'. Exception details: e: " + e.Message);
                 return null;

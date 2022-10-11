@@ -1,106 +1,54 @@
 ﻿using Harmony;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using UnityEngine;
-using UnityEngine.Networking;
 
-namespace CustomAircraftTemplateSU35
+namespace CAT
 {
-    class AircraftAPI
-    {
-        public static GameObject SEAT_ADJUST_POSE_BOUNDS;
-        private static Texture2D MenuTexture;
-
-       
+    //internal class AircraftApi
+    //{
+    //    public static GameObject SeatAdjustPoseBounds;
         
+    //    /// <summary>
+    //    /// This method is executed after <see cref="PilotSaveManager"/> loads all vehicles for the base game.
+    //    /// </summary>
+    //    public static void VehicleListUpdate()
+    //    {
+    //        // private static field = Traverse babyyyyy
+    //        var t1 = Traverse.Create<PilotSaveManager>();
+    //        // yoink the existing vars that PilotSaveManager uses
+    //        var vehicles = t1.Field("vehicles").GetValue<Dictionary<string, PlayerVehicle>>();
+    //        var vehicleList = t1.Field("vehicleList").GetValue<List<PlayerVehicle>>();
+    //        if (vehicles.ContainsKey(Main.CustomAircraftPv.vehicleName))
+    //            return;
 
-        public static void VehicleListUpdate()
-        {
+    //        // then add our vehicle to the list
+    //        vehicles.Add(Main.CustomAircraftPv.vehicleName, Main.CustomAircraftPv);
+    //        vehicleList.Add(Main.CustomAircraftPv);
+
+    //        Main.PlayerVehicleList = vehicleList;
             
-            //Debug.unityLogger.logEnabled = Main.logging;
-            // this all executes after PilotSaveManager loads all the vehicles from base game
+    //        // and set them back with our fancy updated data structures
+    //        t1.Field("vehicles").SetValue(vehicles);
+    //        t1.Field("vehicleList").SetValue(vehicleList);
 
-            // private static field = Traverse babyyyyy
-            //Debug.Log("VLU1.0");
-            Traverse trav = Traverse.Create<PilotSaveManager>();
-            // yoink the existing vars that PilotSaveManager uses
-            //Debug.Log("VLU1.1");
-            var vehicles = trav.Field("vehicles").GetValue<Dictionary<string, PlayerVehicle>>();
-            //Debug.Log("VLU1.1.1");
-            var vehicleList = trav.Field("vehicleList").GetValue<List<PlayerVehicle>>();
-            //Debug.Log("VLU1.1.2");
-            if (vehicles.ContainsKey(Main.customAircraftPV.vehicleName))
-            {
-                //Debug.Log("VLU1.1.3");
-                return;
-            }
-            // then add our vehicle to the list
-            //Debug.Log("VLU1.3");
-
-            //Debug.Log("VLU2.0");
-
-
-            
-            vehicles.Add(Main.customAircraftPV.vehicleName, Main.customAircraftPV);
-            vehicleList.Add(Main.customAircraftPV);
-
-            Main.playerVehicleList = vehicleList;
-
-            foreach (PlayerVehicle vehicle in vehicleList)
-            {
-                //Debug.Log("VLU2.1 : " + vehicle.vehicleName);
-            }
-
-            //Debug.Log("VLU3.0");
-            // and set them back with our fancy updated data structures
-            trav.Field("vehicles").SetValue(vehicles);
-            trav.Field("vehicleList").SetValue(vehicleList);
-            //Debug.Log("VLU3.1");
-            VTResources.LoadPlayerVehicles();
-            PilotSaveManager.LoadPilotsFromFile();
-
-
-            Main.checkPVListFull = true;
-        }
-
-
-      
-        public static GameObject GetChildWithName(GameObject obj, string name, bool check)
-        {
-
-            //Debug.unityLogger.logEnabled = Main.logging;
-            Transform[] children = obj.GetComponentsInChildren<Transform>(true);
-            foreach (Transform child in children)
-            {
-                if (check) {
-                    //Debug.Log("Looking for:" + name + ", Found:" + child.name); 
-                }
-                if (child.name == name || child.name == (name + "(Clone)"))
-                {
-                    return child.gameObject;
-                }
-            }
-
-
-            return null;
-
-        }
-
-       
+    //        VTResources.LoadPlayerVehicles();
+    //        PilotSaveManager.LoadPilotsFromFile();
+    //    }
         
-       
-
-
-
-       
-    }
-
-
-
-
+    //    /// <summary>
+    //    /// Returns the first child <see cref="GameObject"/> with the given name from the parent, else <c>null</c>.
+    //    /// This search includes names with any number of "<c>(Clone)</c>" strings bolted to the end.
+    //    /// </summary>
+    //    /// <param name="parent">The parent game object to search through</param>
+    //    /// <param name="name">The name of the child game object to locate</param>
+    //    /// <param name="check">Deprecated parameter previously used for logging</param>
+    //    public static GameObject GetChildWithName(GameObject parent, string name, bool check = false, bool matchClone = true)
+    //    {
+    //        var children = parent.GetComponentsInChildren<Transform>(true);
+    //        var nameRegex = @"^" + name + (matchClone ? @"(\s*\(Clone\))*$" : @"$");
+    //        return (from child in children where Regex.IsMatch(child.name, nameRegex) select child.gameObject).FirstOrDefault();
+    //    }
+    //}
 }

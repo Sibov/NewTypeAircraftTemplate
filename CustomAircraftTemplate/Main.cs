@@ -5,164 +5,165 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
-using Unity;
 using TMPro;
-using UnityEngine.UI;
 
-namespace CustomAircraftTemplateSU35
+namespace CAT
 {
     public class Main : VTOLMOD
     {
+        private const string ConfigFileName = "cat.json";
+
+        public static Main Instance;
+        public static AircraftConfig Config;
         
-        
-        public static Main instance;
+        public static string PathToBundle;
 
-        //Stores a prefab of the aircraft in order to spawn it in whenever you want
-        public static GameObject aircraftPrefab;
-        public static GameObject magic2Prefab;
-        public static PlayerVehicle customAircraftPV;
-        public static BuiltInCampaigns customBICampaigns;
-        public static GameObject aircraftLoadoutConfiguratorPrefab;
-        public static GameObject DebugTools;
-        public static GameObject aircraftCustom;
-        public static GameObject BOQuad;
-        public static Single currentGAlpha;
-        public static GameObject customAircraftPVobject;
-        public static bool checkPVListFull = false;
-        public static MultiplayerSpawn.Vehicles aircraftMSVId;
-        public static int unitListCount = 1;
-
-        
-
-        public static int i=0;
-
-        public static GameObject playerGameObject;
-       
-        public static string pathToBundle;
-        public static bool logging = true;
-        public static List<Campaign> campaignslist;
-        public static String unitList;
-        internal static List<PlayerVehicle> playerVehicleList;
-        public static bool aircraftLoaded = false;
-        public static TextMeshPro radarcontactlist;
-        public static GameObject miniicp;
-        internal static Radar radar;
-        internal static GameObject HMCSAltText;
-
-        // This method is run once, when the Mod Loader is done initialising this game object
+        // This method is run once, when the Mod Loader is done initializing this game object
         public override void ModLoaded()
         {
-            
-            //Debug.unityLogger.logEnabled = Main.logging;
-            instance = this;
+            Instance = this;
 
-            Debug.Log("SU35 ML3");
-
-            pathToBundle = Path.Combine(instance.ModFolder, AircraftInfo.AircraftAssetbundleName);
-            AssetBundle bundleLoad = FileLoader.GetAssetBundleAsGameObject(pathToBundle, AircraftInfo.AircraftAssetbundleName);
-            aircraftPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftPrefabName);
-            //magic2Prefab = FileLoader.GetPrefabAsGameObject(bundleLoad, "m2-srmx1.prefab");
-
-            aircraftLoadoutConfiguratorPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftLoadoutConfigurator);
-            customAircraftPV = FileLoader.GetPrefabAsPlayerVehicle(bundleLoad, AircraftInfo.customAircraftPV);
-            customBICampaigns = FileLoader.GetPrefabAsBICampaigns(bundleLoad, "Campaigns.asset");
-            Debug.Log("SU35 ML3.1");
-            int count = Enum.GetValues(typeof(MultiplayerSpawn.Vehicles)).Length;
-            Debug.Log("SU35 ML3.2 : " + count);
-            aircraftMSVId = (MultiplayerSpawn.Vehicles)AircraftInfo.AircraftMPIdentifier;
-            VTNetworking.VTNetworkManager.RegisterOverrideResource(customAircraftPV.resourcePath, aircraftPrefab);
-          
-
-            Debug.Log("SU35 ML1");
-
-
-
-            HarmonyInstance harmonyInstance = HarmonyInstance.Create(AircraftInfo.HarmonyId);
-            
-            harmonyInstance.PatchAll();
-           
-
-            Debug.Log("SU35 ML2");
-            
-
-            Debug.Log("SU35 ML4");
-            //Debug.Log(pathToBundle);
-            
-           
-           
-            Debug.Log("SU35 ML5");
-
-            Debug.Log("SU35 Got " + aircraftPrefab.name);
-
-           
-
-            //This is an event the VTOLAPI calls when the game is done loading a scene
-            VTOLAPI.SceneLoaded += SceneLoaded;
-            base.ModLoaded();
-
-            
-
-            AircraftAPI.VehicleListUpdate();
-            
-        }
-
-       
-
-
-        //This method is called every frame by Unity. Here you'll probably put most of your code
-        void Update()
-        {
-            
-        }
-
-
-        //This method is like update but it's framerate independent. This means it gets called at a set time interval instead of every frame. This is useful for physics calculations
-        void FixedUpdate()
-        {
-            if (aircraftLoaded)
+            var configPath = Path.Combine(Instance.ModFolder, ConfigFileName);
+            try
             {
-               
-                //Main.HMCSAltText.GetComponent<Text>().text = Main.aircraftCustom.GetComponent<FlightInfo>().radarAltitude.ToString();
-            } 
-        }
-
-        //This function is called every time a scene is loaded. this behaviour is defined in Awake().
-        private void SceneLoaded(VTOLScenes scene)
-        {
-            //If you want something to happen in only one (or more) scenes, this is where you define it.
-            //Debug.unityLogger.logEnabled = Main.logging;
-            //For example, lets say you're making a mod which only does something in the ready room and the loading scene. This is how your code could look:
-            switch (scene)
+                Config = AircraftInfo.LoadFromFile(configPath);
+            }
+            catch (Exception exc)
             {
-                
-                case VTOLScenes.VehicleConfiguration:
-                    Debug.Log("SU35 Reload the configurator");
-                    StartCoroutine(InitWaiter());
-                    
-
-                    break;
-                default:
-                    Debug.Log("SU35 In scene: " + scene);
-
-                    break;
-
+                Debug.LogError("[CAT] Could not load CAT config file (invalid cat.json?):");
+                Debug.LogException(exc);
+                enabled = false;
+                return;
             }
 
+            PathToBundle = Path.Combine(Instance.ModFolder, Config.AssetBundleName);
 
+            VTResources.OnLoadingPlayerVehicles += () =>
+                VTResources.LoadExternalVehicle(PathToBundle, Config.PrefabName);
+            
+            var harmonyInstance = HarmonyInstance.Create(Config.HarmonyId);
+            harmonyInstance.PatchAll();
+
+            VTOLAPI.SceneLoaded += SceneLoaded;
+            base.ModLoaded();
         }
 
-        private IEnumerator InitWaiter()
+        /// <summary>
+        /// This function is called every time a scene is loaded. This behaviour is defined in the <c>Awake()</c> call time step.
+        /// </summary>
+        private static void SceneLoaded(VTOLScenes scene)
         {
-        //Debug.unityLogger.logEnabled = Main.logging;
-        Debug.Log("SU35 InitWaiter Started");
-            yield return new WaitForSeconds(3f);
-          
-            yield break;
+            switch (scene)
+            {
+                case VTOLScenes.VehicleConfiguration:
+                case VTOLScenes.SplashScene:
+                case VTOLScenes.SamplerScene:
+                case VTOLScenes.ReadyRoom:
+                case VTOLScenes.MeshTerrain:
+                case VTOLScenes.LoadingScene:
+                case VTOLScenes.OpenWater:
+                case VTOLScenes.Akutan:
+                case VTOLScenes.VTEditMenu:
+                case VTOLScenes.VTEditLoadingScene:
+                case VTOLScenes.VTMapEditMenu:
+                case VTOLScenes.CustomMapBase:
+                case VTOLScenes.CommRadioTest:
+                case VTOLScenes.ShaderVariantsScene:
+                case VTOLScenes.CustomMapBase_OverCloud:
+                case VTOLScenes.LocalizationScene:
+                default:
+                    break;
+            }
         }
+    }
 
+    //public class Main : VTOLMOD
+    //{
+    //    public static Main Instance;
+
+    //    //Stores a prefab of the aircraft in order to spawn it in whenever you want
+    //    public static GameObject AircraftPrefab;
+    //    public static PlayerVehicle CustomAircraftPv;
+    //    public static BuiltInCampaigns CustomBiCampaigns;
+    //    public static GameObject AircraftLoadoutConfiguratorPrefab;
+
+    //    public static GameObject AircraftCustom;
+    //    public static GameObject BoQuad;
+    //    public static float CurrentGAlpha;
+        
+    //    public static int IsEotsSetUp=0;
+
+    //    public static GameObject PlayerGameObject;
        
-    }
-    }
+    //    public static string PathToBundle;
+    //    public static bool Logging = true;
+
+    //    internal static List<PlayerVehicle> PlayerVehicleList;
+    //    public static bool AircraftLoaded = false;
+    //    public static TextMeshPro RadarContactList;
+    //    public static GameObject MiniIcp;
+    //    internal static Radar RadarRef;
+    //    internal static GameObject HmcsAltText;
+
+    //    // This method is run once, when the Mod Loader is done initialising this game object
+    //    public override void ModLoaded()
+    //    {
+    //        Instance = this;
+            
+    //        PathToBundle = Path.Combine(Instance.ModFolder, AircraftInfo.AircraftAssetBundleName);
+    //        var bundleLoad = FileLoader.GetAssetBundleAsGameObject(PathToBundle, AircraftInfo.AircraftAssetBundleName);
+    //        AircraftPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftPrefabName);
+
+    //        AircraftLoadoutConfiguratorPrefab = FileLoader.GetPrefabAsGameObject(bundleLoad, AircraftInfo.AircraftLoadoutConfigurator);
+    //        CustomAircraftPv = FileLoader.GetPrefabAsPlayerVehicle(bundleLoad, AircraftInfo.CustomAircraftPv);
+    //        CustomBiCampaigns = FileLoader.GetPrefabAsBICampaigns(bundleLoad, "Campaigns.asset");
+    //        VTNetworking.VTNetworkManager.RegisterOverrideResource(CustomAircraftPv.resourcePath, AircraftPrefab);
+          
+    //        var harmonyInstance = HarmonyInstance.Create(AircraftInfo.HarmonyId);
+            
+    //        harmonyInstance.PatchAll();
+            
+    //        VTOLAPI.SceneLoaded += SceneLoaded;
+    //        base.ModLoaded();
+    //        AircraftApi.VehicleListUpdate();
+    //    }
+
+    //    /// <summary>
+    //    /// This function is called every time a scene is loaded. This behaviour is defined in the <c>Awake()</c> call time step.
+    //    /// </summary>
+    //    private void SceneLoaded(VTOLScenes scene)
+    //    {
+    //        switch (scene)
+    //        {
+    //            case VTOLScenes.VehicleConfiguration:
+    //            {
+    //                StartCoroutine(InitWaiter());
+    //            }
+    //                break;
+    //            case VTOLScenes.SplashScene:
+    //            case VTOLScenes.SamplerScene:
+    //            case VTOLScenes.ReadyRoom:
+    //            case VTOLScenes.MeshTerrain:
+    //            case VTOLScenes.LoadingScene:
+    //            case VTOLScenes.OpenWater:
+    //            case VTOLScenes.Akutan:
+    //            case VTOLScenes.VTEditMenu:
+    //            case VTOLScenes.VTEditLoadingScene:
+    //            case VTOLScenes.VTMapEditMenu:
+    //            case VTOLScenes.CustomMapBase:
+    //            case VTOLScenes.CommRadioTest:
+    //            case VTOLScenes.ShaderVariantsScene:
+    //            case VTOLScenes.CustomMapBase_OverCloud:
+    //            case VTOLScenes.LocalizationScene:
+    //            default:
+    //                break;
+    //        }
+    //    }
+
+    //    private static IEnumerator InitWaiter()
+    //    {
+    //        yield return new WaitForSeconds(3f);
+    //    }
+    //}
+}

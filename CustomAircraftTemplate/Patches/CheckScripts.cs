@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomAircraftTemplateSU35
+namespace CAT
 {
     /*
     [HarmonyPatch(typeof(LoadoutConfigurator), "AttachImmediate")]
@@ -74,38 +74,36 @@ namespace CustomAircraftTemplateSU35
         }
     }
     */
-    [HarmonyPatch(typeof(LoadoutConfigurator), "DetachRoutine")]
-    public class SU35_DetachRoutinePatch
-    {
-        public static bool Prefix(LoadoutConfigurator __instance, int hpIdx)
-        {
-            //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Running DetachRoutine");
-            return true;
-        }
-    }
+    //[HarmonyPatch(typeof(LoadoutConfigurator), "DetachRoutine")]
+    //public class SU35_DetachRoutinePatch
+    //{
+    //    public static bool Prefix(LoadoutConfigurator __instance, int hpIdx)
+    //    {
+    //        //Debug.unityLogger.logEnabled = Main.logging;
+    //        Debug.Log("SU35 Running DetachRoutine");
+    //        return true;
+    //    }
+    //}
 
-    [HarmonyPatch(typeof(LoadoutConfigurator), "AttachRoutine")]
-    public class SU35_AttachRoutinePatch2
-    {
-        public static void Prefix(LoadoutConfigurator __instance, int hpIdx)
-        {
-            //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Running AttachRoutine");
-        }
-    }
+    //[HarmonyPatch(typeof(LoadoutConfigurator), "AttachRoutine")]
+    //public class SU35_AttachRoutinePatch2
+    //{
+    //    public static void Prefix(LoadoutConfigurator __instance, int hpIdx)
+    //    {
+    //        //Debug.unityLogger.logEnabled = Main.logging;
+    //        Debug.Log("SU35 Running AttachRoutine");
+    //    }
+    //}
 
-    [HarmonyPatch(typeof(LoadoutConfigurator), "Attach")]
-    public class SU35_AttachPatch
-    {
-        public static bool Prefix(LoadoutConfigurator __instance, string weaponName, int hpIdx)
-        {
-            //Debug.unityLogger.logEnabled = Main.logging;
-            Debug.Log("SU35 Running AttachRoutine");
-            return true;
+    //[HarmonyPatch(typeof(LoadoutConfigurator), "Attach")]
+    //public class SU35_AttachPatch
+    //{
+    //    public static bool Prefix(LoadoutConfigurator __instance, string weaponName, int hpIdx)
+    //    {
+    //        //Debug.unityLogger.logEnabled = Main.logging;
+    //        Debug.Log("SU35 Running AttachRoutine");
+    //        return true;
             
-        }
-    }
-
- 
+    //    }
+    //}
 }
